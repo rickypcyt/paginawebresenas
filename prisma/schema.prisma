@@ -1,11 +1,14 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
-  // url  	    = env("DATABASE_URL")
-  // uncomment next line if you use Prisma <5.10
-  // directUrl = env("DATABASE_URL_UNPOOLED")
+  provider = "postgresql"
+}
+
+model Test {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
 }
