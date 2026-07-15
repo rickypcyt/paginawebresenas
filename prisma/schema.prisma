@@ -8,6 +8,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  user
+  business
+  admin
+}
+
 model Test {
   id        String   @id @default(cuid())
   name      String
@@ -15,18 +21,221 @@ model Test {
 }
 
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          Role       @default(user)
+  xp            Int        @default(0)
+  reputation    Int        @default(0)
+  points        Int        @default(0)
+  loginStreak   Int        @default(0)
+  lastActiveAt  DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   sessions      Session[]
   accounts      Account[]
+  reviews       Review[]
+  reviewVotes   ReviewVote[]
+  businesses    Business[] @relation("BusinessOwner")
+  favorites     Favorite[]
+  collections   Collection[]
+  redemptions   OfferRedemption[]
+  visits        Visit[]
+  followers     Follower[]
+  badges        UserBadge[]
+  businessRequests BusinessRequest[]
+  requestSupports BusinessRequestSupporter[]
 
   @@unique([email])
   @@map("user")
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
+  icon        String?
+  imageUrl    String?
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  businesses  Business[]
+}
+
+enum BusinessStatus {
+  community
+  claim_pending
+  verified
+  premium
+}
+
+model Business {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  imageUrl    String?
+  categoryId  String?
+  category    Category?        @relation(fields: [categoryId], references: [id])
+  ownerId     String?
+  owner       User?            @relation("BusinessOwner", fields: [ownerId], references: [id])
+  address     String?
+  city        String?
+  phone       String?
+  website     String?
+  instagram   String?
+  hours       String?
+  description String?
+  latitude    Float?
+  longitude   Float?
+  status      BusinessStatus   @default(community)
+  featured    Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  reviews     Review[]
+  offers      Offer[]
+  photos      BusinessPhoto[]
+  visits      Visit[]
+  followers   Follower[]
+  favorites   Favorite[]
+  collections CollectionItem[]
+}
+
+enum ReviewVerification {
+  none
+  location
+  qr
+  integration
+}
+
+model Review {
+  id            String             @id @default(cuid())
+  title         String
+  content       String
+  rating        Int
+  verification  ReviewVerification @default(none)
+  visitId       String?            @unique
+  visit         Visit?             @relation(fields: [visitId], references: [id], onDelete: SetNull)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime         @updatedAt
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId    String
+  business      Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  votes         ReviewVote[]
+
+  @@index([userId])
+  @@index([businessId])
+  @@index([visitId])
+}
+
+model Visit {
+  id            String             @id @default(cuid())
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId    String
+  business      Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  latitude      Float?
+  longitude     Float?
+  verification  ReviewVerification
+  token         String?
+  expiresAt     DateTime?
+  createdAt     DateTime           @default(now())
+  review        Review?
+
+  @@index([userId])
+  @@index([businessId])
+  @@index([createdAt])
+  @@map("visit")
+}
+
+model Offer {
+  id            String            @id @default(cuid())
+  title         String
+  description   String?
+  conditions    String?
+  discountType  String?
+  discountValue String?
+  startDate     DateTime?
+  endDate       DateTime?
+  featured      Boolean           @default(false)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  businessId    String
+  business      Business          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  redemptions   OfferRedemption[]
+
+  @@index([businessId])
+}
+
+model OfferRedemption {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offerId   String
+  offer     Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, offerId])
+  @@index([offerId])
+}
+
+model Favorite {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, businessId])
+  @@index([businessId])
+}
+
+model Collection {
+  id        String           @id @default(cuid())
+  name      String
+  icon      String?
+  createdAt DateTime         @default(now())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CollectionItem[]
+}
+
+model CollectionItem {
+  id           String     @id @default(cuid())
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  businessId   String
+  business     Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, businessId])
+  @@index([businessId])
+}
+
+model BusinessPhoto {
+  id         String   @id @default(cuid())
+  url        String
+  caption    String?
+  createdAt  DateTime @default(now())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
+}
+
+model Follower {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, businessId])
+  @@index([businessId])
+  @@map("follower")
 }
 
 model Session {
@@ -75,4 +284,86 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  icon        String?
+  description String?
+  createdAt   DateTime    @default(now())
+  users       UserBadge[]
+
+  @@map("badge")
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@map("userBadge")
+}
+
+model ReviewVote {
+  id        String   @id @default(cuid())
+  value     Int
+  createdAt DateTime @default(now())
+  reviewId  String
+  userId    String
+  review    Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, userId])
+  @@index([reviewId])
+  @@index([userId])
+  @@map("reviewVote")
+}
+
+enum BusinessRequestStatus {
+  pending
+  invited
+  registered
+  rejected
+}
+
+model BusinessRequest {
+  id                   String                    @id @default(cuid())
+  name                 String
+  address              String?
+  city                 String?
+  categoryId           String?
+  categoryName         String?
+  description          String?
+  requesterId          String
+  requester            User                      @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  status               BusinessRequestStatus     @default(pending)
+  supporters           BusinessRequestSupporter[]
+  registeredBusinessId String?                  @unique
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+
+  @@index([status])
+  @@index([requesterId])
+  @@map("businessRequest")
+}
+
+model BusinessRequestSupporter {
+  id        String           @id @default(cuid())
+  requestId String
+  userId    String
+  request   BusinessRequest  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime         @default(now())
+
+  @@unique([requestId, userId])
+  @@index([requestId])
+  @@index([userId])
+  @@map("businessRequestSupporter")
 }

@@ -132,8 +132,130 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  role: 'role',
+  xp: 'xp',
+  reputation: 'reputation',
+  points: 'points',
+  loginStreak: 'loginStreak',
+  lastActiveAt: 'lastActiveAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  icon: 'icon',
+  imageUrl: 'imageUrl',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BusinessScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  imageUrl: 'imageUrl',
+  categoryId: 'categoryId',
+  ownerId: 'ownerId',
+  address: 'address',
+  city: 'city',
+  phone: 'phone',
+  website: 'website',
+  instagram: 'instagram',
+  hours: 'hours',
+  description: 'description',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  status: 'status',
+  featured: 'featured',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReviewScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  rating: 'rating',
+  verification: 'verification',
+  visitId: 'visitId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  businessId: 'businessId'
+};
+
+exports.Prisma.VisitScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  businessId: 'businessId',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  verification: 'verification',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.OfferScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  conditions: 'conditions',
+  discountType: 'discountType',
+  discountValue: 'discountValue',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  featured: 'featured',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  businessId: 'businessId'
+};
+
+exports.Prisma.OfferRedemptionScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  offerId: 'offerId'
+};
+
+exports.Prisma.FavoriteScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  businessId: 'businessId'
+};
+
+exports.Prisma.CollectionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  icon: 'icon',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
+exports.Prisma.CollectionItemScalarFieldEnum = {
+  id: 'id',
+  collectionId: 'collectionId',
+  businessId: 'businessId'
+};
+
+exports.Prisma.BusinessPhotoScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  caption: 'caption',
+  createdAt: 'createdAt',
+  businessId: 'businessId'
+};
+
+exports.Prisma.FollowerScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  businessId: 'businessId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -172,6 +294,52 @@ exports.Prisma.VerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BadgeScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  icon: 'icon',
+  description: 'description',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.UserBadgeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  badgeId: 'badgeId',
+  earnedAt: 'earnedAt'
+};
+
+exports.Prisma.ReviewVoteScalarFieldEnum = {
+  id: 'id',
+  value: 'value',
+  createdAt: 'createdAt',
+  reviewId: 'reviewId',
+  userId: 'userId'
+};
+
+exports.Prisma.BusinessRequestScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  address: 'address',
+  city: 'city',
+  categoryId: 'categoryId',
+  categoryName: 'categoryName',
+  description: 'description',
+  requesterId: 'requesterId',
+  status: 'status',
+  registeredBusinessId: 'registeredBusinessId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BusinessRequestSupporterScalarFieldEnum = {
+  id: 'id',
+  requestId: 'requestId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -186,14 +354,55 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  user: 'user',
+  business: 'business',
+  admin: 'admin'
+};
 
+exports.BusinessStatus = exports.$Enums.BusinessStatus = {
+  community: 'community',
+  claim_pending: 'claim_pending',
+  verified: 'verified',
+  premium: 'premium'
+};
+
+exports.ReviewVerification = exports.$Enums.ReviewVerification = {
+  none: 'none',
+  location: 'location',
+  qr: 'qr',
+  integration: 'integration'
+};
+
+exports.BusinessRequestStatus = exports.$Enums.BusinessRequestStatus = {
+  pending: 'pending',
+  invited: 'invited',
+  registered: 'registered',
+  rejected: 'rejected'
+};
 
 exports.Prisma.ModelName = {
   Test: 'Test',
   User: 'User',
+  Category: 'Category',
+  Business: 'Business',
+  Review: 'Review',
+  Visit: 'Visit',
+  Offer: 'Offer',
+  OfferRedemption: 'OfferRedemption',
+  Favorite: 'Favorite',
+  Collection: 'Collection',
+  CollectionItem: 'CollectionItem',
+  BusinessPhoto: 'BusinessPhoto',
+  Follower: 'Follower',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Badge: 'Badge',
+  UserBadge: 'UserBadge',
+  ReviewVote: 'ReviewVote',
+  BusinessRequest: 'BusinessRequest',
+  BusinessRequestSupporter: 'BusinessRequestSupporter'
 };
 
 /**

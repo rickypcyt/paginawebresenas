@@ -1,34 +1,41 @@
 "use client";
 
-import { signIn, signOut, useSession } from "@/lib/auth-client";
+import { signOut, useSession } from "@/lib/auth-client";
+import { useAuthModal } from "./AuthModalProvider";
 
-export function AuthButton() {
+export function AuthButton({ variant = "solid" }: { variant?: "solid" | "outline" }) {
   const { data: session, isPending } = useSession();
+  const { open } = useAuthModal();
 
   if (isPending) {
-    return <p className="text-gray-400">Cargando sesión...</p>;
+    return (
+      <span className="text-sm text-[var(--muted-foreground)]">
+        Cargando...
+      </span>
+    );
   }
 
   if (session) {
     return (
-      <div className="flex items-center gap-4">
-        <span className="text-sm text-gray-300">{session.user.email}</span>
-        <button
-          onClick={() => signOut()}
-          className="rounded bg-red-600 px-4 py-2 font-semibold hover:bg-red-500"
-        >
-          Cerrar sesión
-        </button>
-      </div>
+      <button
+        onClick={() => signOut()}
+        className="rounded-lg bg-[var(--destructive)] px-4 py-2 text-sm font-semibold text-[var(--destructive-foreground)] hover:opacity-90"
+      >
+        Cerrar sesión
+      </button>
     );
   }
 
+  const base =
+    "rounded-lg px-4 py-2 text-sm font-semibold transition-colors";
+  const styles =
+    variant === "outline"
+      ? "border border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary-light)]"
+      : "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-dark)]";
+
   return (
-    <button
-      onClick={() => signIn.social({ provider: "google" })}
-      className="rounded bg-blue-600 px-4 py-2 font-semibold hover:bg-blue-500"
-    >
-      Iniciar sesión con Google
+    <button onClick={open} className={`${base} ${styles}`}>
+      Iniciar sesión
     </button>
   );
 }

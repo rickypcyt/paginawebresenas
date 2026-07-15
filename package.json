@@ -7,7 +7,8 @@
     "prebuild": "prisma generate",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "prisma db seed"
   },
   "dependencies": {
     "@better-auth/infra": "^0.3.6",
@@ -16,14 +17,17 @@
     "@prisma/client": "^7.8.0",
     "better-auth": "^1.6.23",
     "dotenv": "^17.4.2",
+    "leaflet": "^1.9.4",
     "next": "16.2.10",
     "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-leaflet": "^5.0.0",
     "ws": "^8.21.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
