@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 export default function HowItWorksPage() {
   const steps = [
     { icon: "🔍", title: "Descubre", desc: "Encuentra negocios y lee reseñas reales de la comunidad." },

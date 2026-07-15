@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 import { BusinessCard } from "@/app/components/BusinessCard";
 import { EmptyState } from "@/app/components/EmptyState";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 interface CityPageProps {
   params: Promise<{ slug: string }>;

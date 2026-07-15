@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { BusinessCard } from "../components/BusinessCard";
 import { CategoryCard } from "../components/CategoryCard";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function LandingPage() {
   const [categories, featuredBusinesses] = await Promise.all([

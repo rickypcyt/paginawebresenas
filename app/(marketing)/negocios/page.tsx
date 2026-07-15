@@ -5,7 +5,7 @@ import { BusinessCard } from "@/app/components/BusinessCard";
 import { CategoryCard } from "@/app/components/CategoryCard";
 import { EmptyState } from "@/app/components/EmptyState";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Negocios verificados — Descubre Local",

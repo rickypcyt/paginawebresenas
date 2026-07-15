@@ -9,7 +9,7 @@ import { OfferCard } from "@/app/components/OfferCard";
 import { ReviewCard } from "@/app/components/ReviewCard";
 import { EmptyState } from "@/app/components/EmptyState";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 type WithReviews = { reviews: { rating: number }[] };
 

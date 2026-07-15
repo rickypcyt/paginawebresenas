@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { OfferCard } from "@/app/components/OfferCard";
 import { EmptyState } from "@/app/components/EmptyState";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Ofertas disponibles — Descubre Local",

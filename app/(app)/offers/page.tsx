@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { OfferCard } from "@/app/components/OfferCard";
 import { SectionHeader } from "@/app/components/SectionHeader";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function OffersPage() {
   const now = new Date();
