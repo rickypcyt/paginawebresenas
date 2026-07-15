@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { ReviewCard } from "@/app/components/ReviewCard";
 
+export const revalidate = 3600;
+
 interface PublicProfilePageProps {
   params: Promise<{ username: string }>;
 }

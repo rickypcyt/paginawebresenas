@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { SearchBar } from "@/app/components/SearchBar";
 import { BusinessCard } from "@/app/components/BusinessCard";
 
+export const dynamic = "force-dynamic";
+
 interface SearchPageProps {
   searchParams: Promise<{ q?: string }>;
 }

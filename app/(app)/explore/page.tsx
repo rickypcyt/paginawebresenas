@@ -5,6 +5,8 @@ import { SearchBar } from "@/app/components/SearchBar";
 import { BusinessCard } from "@/app/components/BusinessCard";
 import { FilterSelect } from "@/app/components/FilterSelect";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Explorar Negocios - Reseñas y Ofertas Locales",
   description: "Descubre negocios verificados, lee reseñas reales y aprovecha ofertas cerca de ti.",
