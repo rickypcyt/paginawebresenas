@@ -1,3 +1,5 @@
+import { AuthButton } from "@/app/components/AuthButton";
+
 export default async function Home() {
   const res = await fetch("http://localhost:3000/api/db", { cache: "no-store" });
   const data = await res.json();
@@ -5,6 +7,10 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-black p-8 text-white">
       <h1 className="mb-8 text-4xl font-bold">Tests desde Prisma</h1>
+
+      <div className="mb-8">
+        <AuthButton />
+      </div>
 
       {data.connected ? (
         <ul className="max-w-md space-y-2">
