@@ -48,20 +48,7 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   };
 }
 
-export async function generateStaticParams() {
-  const cities = await prisma.business.findMany({
-    where: { city: { not: null }, status: { in: ["community", "verified", "premium"] } },
-    select: { city: true },
-    distinct: ["city"],
-  });
-
-  return cities
-    .map((b) => b.city)
-    .filter((c): c is string => Boolean(c))
-    .map((city) => ({
-      slug: city.toLowerCase().replace(/\s+/g, "-"),
-    }));
-}
+export const dynamicParams = true;
 
 export default async function CityPage({ params }: CityPageProps) {
   const { slug } = await params;
