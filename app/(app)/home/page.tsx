@@ -81,7 +81,7 @@ export default async function HomePage() {
           <p className="mx-auto mb-6 max-w-lg text-base text-[var(--muted-foreground)]">
             Negocios verificados, ofertas reales y experiencias que puedes ganar.
           </p>
-          <div className="mx-auto max-w-xl rounded-2xl bg-white p-2 shadow-[var(--shadow)]">
+          <div className="mx-auto max-w-xl">
             <SearchBar />
           </div>
         </div>

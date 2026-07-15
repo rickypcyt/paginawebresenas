@@ -40,10 +40,6 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
             Descubre<span className="text-[var(--foreground)]">Local</span>
           </Link>
 
-          <div className="hidden min-w-0 flex-1 md:block">
-            <SearchBar />
-          </div>
-
           <nav className="hidden shrink-0 items-center gap-4 lg:gap-5 xl:flex">
             {topLinks.map((link) => (
               <Link
@@ -59,6 +55,10 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
               </Link>
             ))}
           </nav>
+
+          <div className="hidden w-72 shrink-0 md:block lg:w-96 xl:w-[28rem]">
+            <SearchBar />
+          </div>
 
           <Link
             href="/profile"

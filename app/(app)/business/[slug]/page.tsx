@@ -157,7 +157,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
             )}
             {business.category && (
               <Link
-                href={`/category/${business.category.slug}`}
+                href={`/categoria/${business.category.slug}`}
                 className="rounded-full bg-[var(--accent)] px-2.5 py-0.5 text-xs font-medium text-[var(--accent-foreground)] hover:bg-[var(--primary-light)]"
               >
                 {business.category.name}

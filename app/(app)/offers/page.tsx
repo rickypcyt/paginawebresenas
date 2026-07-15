@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { OfferCard } from "@/app/components/OfferCard";
 import { SectionHeader } from "@/app/components/SectionHeader";
+import { EmptyState } from "@/app/components/EmptyState";
 
 export const dynamic = "force-dynamic";
 
@@ -62,6 +63,16 @@ export default async function OffersPage() {
             ))}
           </div>
         </section>
+      )}
+
+      {featured.length === 0 && endingSoon.length === 0 && popular.length === 0 && (
+        <EmptyState
+          icon="🎁"
+          title="No hay ofertas activas"
+          description="Cuando los negocios publiquen promociones, aparecerán aquí para que las aproveches."
+          actionLabel="Explorar negocios"
+          actionHref="/explore"
+        />
       )}
     </div>
   );

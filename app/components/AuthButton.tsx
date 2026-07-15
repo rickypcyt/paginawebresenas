@@ -1,6 +1,7 @@
 "use client";
 
-import { signOut, useSession } from "@/lib/auth-client";
+import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
 import { useAuthModal } from "./AuthModalProvider";
 
 export function AuthButton({ variant = "solid" }: { variant?: "solid" | "outline" }) {
@@ -17,12 +18,12 @@ export function AuthButton({ variant = "solid" }: { variant?: "solid" | "outline
 
   if (session) {
     return (
-      <button
-        onClick={() => signOut()}
-        className="rounded-lg bg-[var(--destructive)] px-4 py-2 text-sm font-semibold text-[var(--destructive-foreground)] hover:opacity-90"
+      <Link
+        href="/home"
+        className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] transition-colors hover:bg-[var(--primary-dark)]"
       >
-        Cerrar sesión
-      </button>
+        Ir a la app
+      </Link>
     );
   }
 

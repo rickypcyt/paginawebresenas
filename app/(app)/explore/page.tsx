@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import { SearchBar } from "@/app/components/SearchBar";
 import { BusinessCard } from "@/app/components/BusinessCard";
 import { FilterSelect } from "@/app/components/FilterSelect";
+import { BusinessMap } from "@/app/components/BusinessMap";
 
 export const dynamic = "force-dynamic";
 
@@ -145,12 +146,8 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
       </div>
 
       <div className="mb-4 grid gap-6 lg:grid-cols-3">
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-6 text-center lg:col-span-1">
-          <p className="text-sm text-[var(--muted-foreground)]">Mapa</p>
-          <p className="mt-2 text-3xl">🗺️</p>
-          <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-            Disponible próximamente
-          </p>
+        <div className="lg:col-span-1">
+          <BusinessMap businesses={withStats.filter((b) => b.latitude && b.longitude).map((b) => ({ id: b.id, name: b.name, slug: b.slug, latitude: b.latitude!, longitude: b.longitude! }))} />
         </div>
 
         <div className="lg:col-span-2">
