@@ -31,10 +31,10 @@ export function LoginModal() {
           ×
         </button>
         <h2 className="mb-2 text-2xl font-bold text-[var(--foreground)]">
-          Inicia sesión
+          Únete a la comunidad
         </h2>
         <p className="mb-6 text-sm text-[var(--muted-foreground)]">
-          Necesitas una cuenta para continuar.
+          Inicia sesión para reseñar, ganar puntos y aprovechar ofertas.
         </p>
         <button
           onClick={handleGoogleLogin}

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit, rateLimitResponse } from "@/lib/api-utils";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -6,6 +7,11 @@ export async function GET(request: Request) {
 
   if (!q) {
     return NextResponse.json({ error: "Query requerida" }, { status: 400 });
+  }
+
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "anonymous";
+  if (!rateLimit(`geocode:${ip}`, 5, 60_000)) {
+    return rateLimitResponse();
   }
 
   try {

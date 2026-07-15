@@ -1,6 +1,14 @@
 import crypto from "crypto";
 
-const QR_SECRET = process.env.QR_SECRET || "dev-secret-change-me";
+const QR_SECRET: string =
+  process.env.QR_SECRET ||
+  (process.env.NODE_ENV === "production"
+    ? ""
+    : "dev-secret-change-me");
+
+if (!QR_SECRET) {
+  throw new Error("QR_SECRET must be set in production");
+}
 
 export function getDistanceInMeters(
   lat1: number,
@@ -57,8 +65,8 @@ export function verifyQrToken(
   window: "day" | "30s" = "day"
 ): boolean {
   const expected = generateQrToken(businessId, window);
-  return crypto.timingSafeEqual(
-    Buffer.from(expected),
-    Buffer.from(token.toUpperCase())
-  );
+  const expectedBuf = Buffer.from(expected);
+  const tokenBuf = Buffer.from(token.toUpperCase());
+  if (expectedBuf.length !== tokenBuf.length) return false;
+  return crypto.timingSafeEqual(expectedBuf, tokenBuf);
 }

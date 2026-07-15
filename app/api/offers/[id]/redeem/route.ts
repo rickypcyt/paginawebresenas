@@ -1,41 +1,31 @@
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { awardAction } from "@/lib/gamification";
+import { requireSession, withErrorHandler, RouteContext } from "@/lib/api-utils";
 
-export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await auth.api.getSession({ headers: await headers() });
+export const POST = withErrorHandler(async (
+  _request: Request,
+  { params }: RouteContext<{ id: string }>
+) => {
+  const result = await requireSession();
+  if ("error" in result) return result.error;
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
-  }
-
+  const { user } = result.session;
   const { id } = await params;
 
-  try {
-    const existing = await prisma.offerRedemption.findUnique({
-      where: { userId_offerId: { userId: session.user.id, offerId: id } },
-    });
+  const existing = await prisma.offerRedemption.findUnique({
+    where: { userId_offerId: { userId: user.id, offerId: id } },
+  });
 
-    if (existing) {
-      return NextResponse.json({ redemption: existing });
-    }
-
-    const redemption = await prisma.offerRedemption.create({
-      data: { userId: session.user.id, offerId: id },
-    });
-
-    await awardAction(session.user.id, "redeem_offer");
-
-    return NextResponse.json({ redemption });
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Error desconocido" },
-      { status: 500 }
-    );
+  if (existing) {
+    return NextResponse.json({ redemption: existing });
   }
-}
+
+  const redemption = await prisma.offerRedemption.create({
+    data: { userId: user.id, offerId: id },
+  });
+
+  await awardAction(user.id, "redeem_offer");
+
+  return NextResponse.json({ redemption });
+});

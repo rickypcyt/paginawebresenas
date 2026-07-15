@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 import { generateQrToken } from "@/lib/verification";
+import { requireSession, withErrorHandler, RouteContext } from "@/lib/api-utils";
+import { isAdmin } from "@/lib/roles";
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
-  }
+export const GET = withErrorHandler(async (
+  _request: Request,
+  { params }: RouteContext<{ id: string }>
+) => {
+  const result = await requireSession();
+  if ("error" in result) return result.error;
 
+  const { user } = result.session;
   const { id } = await params;
 
   const business = await prisma.business.findUnique({
@@ -24,12 +23,7 @@ export async function GET(
     return NextResponse.json({ error: "Negocio no encontrado" }, { status: 404 });
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { role: true },
-  });
-
-  if (business.ownerId !== session.user.id && user?.role !== "admin") {
+  if (business.ownerId !== user.id && !isAdmin(user.role)) {
     return NextResponse.json({ error: "No autorizado" }, { status: 403 });
   }
 
@@ -41,4 +35,4 @@ export async function GET(
     dynamic,
     expiresIn: 30,
   });
-}
+});

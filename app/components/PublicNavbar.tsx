@@ -9,43 +9,42 @@ export function PublicNavbar() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { href: "/explore", label: "Explorar" },
-    { href: "/business-requests", label: "Solicitar" },
+    { href: "/home", label: "Explorar" },
     { href: "/categories", label: "Categorías" },
     { href: "/offers", label: "Ofertas" },
-    { href: "/how-it-works", label: "¿Cómo funciona?" },
+    { href: "/business-requests", label: "Solicitar negocio" },
   ];
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold text-[var(--primary)]">
-          Logo
+      <div className="flex h-16 w-full items-center justify-between gap-4 px-4 lg:px-8">
+        <Link href="/home" className="shrink-0 text-xl font-extrabold tracking-tight text-[var(--primary)]">
+          Descubre<span className="text-[var(--foreground)]">Local</span>
         </Link>
 
-        <div className="hidden max-w-md flex-1 px-6 md:block">
+        <div className="hidden min-w-0 flex-1 md:block">
           <SearchBar />
         </div>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden shrink-0 items-center gap-4 lg:gap-5 xl:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-[var(--foreground)] hover:text-[var(--primary)]"
+              className="whitespace-nowrap text-sm font-medium text-[var(--foreground)] hover:text-[var(--primary)]"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden shrink-0 md:block">
           <AuthButton />
         </div>
 
         <button
           onClick={() => setOpen(!open)}
-          className="rounded p-2 text-[var(--foreground)] md:hidden"
+          className="shrink-0 rounded p-2 text-[var(--foreground)] xl:hidden"
           aria-label="Abrir menú"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -53,7 +52,7 @@ export function PublicNavbar() {
       </div>
 
       {open && (
-        <div className="border-t border-[var(--border)] px-4 pb-4 md:hidden">
+        <div className="border-t border-[var(--border)] px-4 pb-4 xl:hidden">
           <div className="pt-4">
             <SearchBar />
           </div>

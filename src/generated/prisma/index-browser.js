@@ -120,12 +120,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.TestScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -374,6 +368,13 @@ exports.ReviewVerification = exports.$Enums.ReviewVerification = {
   integration: 'integration'
 };
 
+exports.DiscountType = exports.$Enums.DiscountType = {
+  percentage: 'percentage',
+  fixed: 'fixed',
+  bogo: 'bogo',
+  other: 'other'
+};
+
 exports.BusinessRequestStatus = exports.$Enums.BusinessRequestStatus = {
   pending: 'pending',
   invited: 'invited',
@@ -382,7 +383,6 @@ exports.BusinessRequestStatus = exports.$Enums.BusinessRequestStatus = {
 };
 
 exports.Prisma.ModelName = {
-  Test: 'Test',
   User: 'User',
   Category: 'Category',
   Business: 'Business',

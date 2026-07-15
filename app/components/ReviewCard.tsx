@@ -14,16 +14,25 @@ interface ReviewCardProps {
   };
 }
 
+const verificationLabels: Record<string, { icon: string; label: string }> = {
+  location: { icon: "📍", label: "Visita verificada por ubicación" },
+  qr: { icon: "📱", label: "Visita verificada por QR" },
+  integration: { icon: "✓", label: "Visita verificada" },
+};
+
 export function ReviewCard({ review }: ReviewCardProps) {
+  const isVerified = review.verification && review.verification !== "none";
+  const verification = isVerified ? verificationLabels[review.verification!] : null;
+
   return (
-    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 shadow-sm">
-      <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--muted)] text-sm font-bold text-[var(--muted-foreground)]">
+    <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--primary-light)] text-sm font-bold text-[var(--primary-dark)]">
             {review.user?.name?.charAt(0).toUpperCase() || "👤"}
           </div>
           <div>
-            <p className="text-sm font-medium text-[var(--foreground)]">
+            <p className="text-sm font-semibold text-[var(--foreground)]">
               {review.user?.name || "Usuario"}
             </p>
             {review.business && (
@@ -35,28 +44,24 @@ export function ReviewCard({ review }: ReviewCardProps) {
         </div>
         <StarRating rating={review.rating} />
       </div>
-      <h4 className="mb-1 font-semibold text-[var(--foreground)]">{review.title}</h4>
-      <p className="mb-3 text-sm text-[var(--muted-foreground)]">{review.content}</p>
-      <div className="mt-2 flex items-center gap-2 text-xs text-[var(--muted-foreground)]">
-        {review.verification && review.verification !== "none" ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 font-medium text-green-700">
-            <span>✓</span>
-            {review.verification === "location" && "Visita verificada por ubicación"}
-            {review.verification === "qr" && "Visita verificada por QR"}
-            {review.verification === "integration" && "Visita verificada"}
-            {review.visit && (
-              <span className="ml-1 text-green-600">
-                {new Date(review.visit.createdAt).toLocaleDateString("es-ES")}
-              </span>
-            )}
+
+      <h4 className="mb-1 text-sm font-bold text-[var(--foreground)]">{review.title}</h4>
+      <p className="mb-3 text-sm leading-relaxed text-[var(--muted-foreground)]">{review.content}</p>
+
+      <div className="flex items-center gap-2 text-xs">
+        {verification ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--accent)] px-2.5 py-0.5 font-medium text-[var(--accent-foreground)]">
+            <span>{verification.icon}</span>
+            {verification.label}
           </span>
         ) : (
-          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-gray-600">
-            Reseña no verificada
+          <span className="rounded-full bg-[var(--muted)] px-2.5 py-0.5 text-[var(--muted-foreground)]">
+            Sin verificación
           </span>
         )}
-        <span>·</span>
-        <span>{new Date(review.createdAt).toLocaleDateString("es-ES")}</span>
+        <span className="text-[var(--muted-foreground)]">
+          · {new Date(review.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })}
+        </span>
       </div>
     </div>
   );

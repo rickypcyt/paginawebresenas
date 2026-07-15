@@ -2,23 +2,26 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #1f2937;
+  --foreground: #111827;
   --card: #ffffff;
-  --card-foreground: #1f2937;
+  --card-foreground: #111827;
   --popover: #ffffff;
-  --popover-foreground: #1f2937;
+  --popover-foreground: #111827;
   --primary: #05a660;
   --primary-foreground: #ffffff;
-  --primary-light: #e6f9ef;
-  --primary-dark: #04884f;
+  --primary-light: #ecfdf5;
+  --primary-dark: #047857;
   --secondary: #f3f4f6;
-  --secondary-foreground: #1f2937;
+  --secondary-foreground: #111827;
   --muted: #f9fafb;
   --muted-foreground: #6b7280;
-  --accent: #e6f9ef;
-  --accent-foreground: #04783d;
+  --accent: #ecfdf5;
+  --accent-foreground: #047857;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #ffffff;
+  --warning-light: #fffbeb;
   --border: #e5e7eb;
   --input: #e5e7eb;
   --ring: #05a660;
@@ -47,6 +50,9 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-light: var(--warning-light);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -63,4 +69,41 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.25s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+.animate-pulse-success {
+  animation: pulse-success 0.5s ease-out;
 }

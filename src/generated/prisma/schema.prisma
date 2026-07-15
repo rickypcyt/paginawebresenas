@@ -13,12 +13,6 @@ enum Role {
   admin
 }
 
-model Test {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-}
-
 model User {
   id               String                     @id
   name             String
@@ -99,6 +93,10 @@ model Business {
   followers   Follower[]
   favorites   Favorite[]
   collections CollectionItem[]
+
+  @@index([status])
+  @@index([featured])
+  @@index([city])
 }
 
 enum ReviewVerification {
@@ -149,13 +147,20 @@ model Visit {
   @@map("visit")
 }
 
+enum DiscountType {
+  percentage
+  fixed
+  bogo
+  other
+}
+
 model Offer {
   id            String            @id @default(cuid())
   title         String
   description   String?
   conditions    String?
-  discountType  String?
-  discountValue String?
+  discountType  DiscountType?
+  discountValue Float?
   startDate     DateTime?
   endDate       DateTime?
   featured      Boolean           @default(false)
@@ -166,6 +171,8 @@ model Offer {
   redemptions   OfferRedemption[]
 
   @@index([businessId])
+  @@index([featured])
+  @@index([endDate])
 }
 
 model OfferRedemption {

@@ -4,6 +4,14 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST() {
+  const adminInitKey = process.env.ADMIN_INIT_KEY;
+  if (!adminInitKey || adminInitKey.length < 16) {
+    return NextResponse.json(
+      { error: "Endpoint deshabilitado. Define ADMIN_INIT_KEY para usarlo." },
+      { status: 403 }
+    );
+  }
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });

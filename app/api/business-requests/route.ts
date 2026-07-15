@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getSession } from "@/lib/session";
+import { requireSession, withErrorHandler, rateLimit, rateLimitResponse } from "@/lib/api-utils";
 
 export async function GET() {
   const requests = await prisma.businessRequest.findMany({
@@ -16,36 +16,34 @@ export async function GET() {
   return NextResponse.json({ requests });
 }
 
-export async function POST(request: Request) {
-  const session = await getSession();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+export const POST = withErrorHandler(async (request: Request) => {
+  const result = await requireSession();
+  if ("error" in result) return result.error;
+
+  const { user } = result.session;
+
+  if (!rateLimit(`create-request:${user.id}`, 5, 60_000)) {
+    return rateLimitResponse();
   }
 
-  try {
-    const { name, address, city, categoryId, categoryName, description } = await request.json();
+  const body = await request.json();
+  const name = typeof body.name === "string" ? body.name.trim() : "";
 
-    if (!name || typeof name !== "string") {
-      return NextResponse.json({ error: "El nombre es obligatorio" }, { status: 400 });
-    }
-
-    const businessRequest = await prisma.businessRequest.create({
-      data: {
-        name: name.trim(),
-        address: address?.trim() || null,
-        city: city?.trim() || null,
-        categoryId: categoryId || null,
-        categoryName: categoryName?.trim() || null,
-        description: description?.trim() || null,
-        requesterId: session.user.id,
-      },
-    });
-
-    return NextResponse.json({ businessRequest });
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Error desconocido" },
-      { status: 500 }
-    );
+  if (!name) {
+    return NextResponse.json({ error: "El nombre es obligatorio" }, { status: 400 });
   }
-}
+
+  const businessRequest = await prisma.businessRequest.create({
+    data: {
+      name,
+      address: typeof body.address === "string" ? body.address.trim() || null : null,
+      city: typeof body.city === "string" ? body.city.trim() || null : null,
+      categoryId: typeof body.categoryId === "string" ? body.categoryId || null : null,
+      categoryName: typeof body.categoryName === "string" ? body.categoryName.trim() || null : null,
+      description: typeof body.description === "string" ? body.description.trim() || null : null,
+      requesterId: user.id,
+    },
+  });
+
+  return NextResponse.json({ businessRequest });
+});

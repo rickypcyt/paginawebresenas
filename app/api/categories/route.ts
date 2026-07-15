@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
-import { getSession } from "@/lib/session";
-import { isAdmin } from "@/lib/roles";
+import { requireAdmin, withErrorHandler } from "@/lib/api-utils";
 import { generateUniqueSlug, slugify } from "@/lib/slug";
 
 export async function GET() {
@@ -10,37 +8,34 @@ export async function GET() {
   return NextResponse.json({ categories });
 }
 
-export async function POST(request: Request) {
-  const session = await getSession();
-  if (!isAdmin(session?.user?.role)) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+export const POST = withErrorHandler(async (request: Request) => {
+  const result = await requireAdmin();
+  if ("error" in result) return result.error;
+
+  const body = await request.json();
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+
+  if (!name) {
+    return NextResponse.json({ error: "El nombre es obligatorio" }, { status: 400 });
   }
 
-  try {
-    const { name, icon, description } = await request.json();
+  const baseSlug = slugify(name);
+  const existingSlugs = (
+    await prisma.category.findMany({
+      where: { slug: { startsWith: baseSlug } },
+      select: { slug: true },
+    })
+  ).map((c) => c.slug);
+  const slug = generateUniqueSlug(name, existingSlugs);
 
-    if (!name || typeof name !== "string") {
-      return NextResponse.json({ error: "El nombre es obligatorio" }, { status: 400 });
-    }
+  const category = await prisma.category.create({
+    data: {
+      name,
+      slug,
+      icon: typeof body.icon === "string" ? body.icon.trim() || "🏷️" : "🏷️",
+      description: typeof body.description === "string" ? body.description.trim() || null : null,
+    },
+  });
 
-    const existing = await prisma.category.findMany({ select: { slug: true } });
-    const existingSlugs = existing.map((c) => c.slug);
-    const slug = generateUniqueSlug(name, existingSlugs);
-
-    const category = await prisma.category.create({
-      data: {
-        name: name.trim(),
-        slug,
-        icon: icon?.trim() || "🏷️",
-        description: description?.trim() || null,
-      },
-    });
-
-    return NextResponse.json({ category });
-  } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Error desconocido" },
-      { status: 500 }
-    );
-  }
-}
+  return NextResponse.json({ category });
+});

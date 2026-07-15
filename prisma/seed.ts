@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { generateUniqueSlug } from "@/lib/slug";
+import type { BusinessStatus } from "@/src/generated/prisma";
 
 const categories = [
   { name: "Restaurantes", slug: "restaurantes", icon: "🍽️", imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop", description: "Restaurantes de todo tipo" },
@@ -41,7 +42,19 @@ async function main() {
   const existing = await prisma.business.findMany({ select: { slug: true } });
   const slugs = existing.map((b) => b.slug);
 
-  const sampleBusinesses = [
+  const sampleBusinesses: Array<{
+    name: string;
+    categorySlug: string;
+    city: string;
+    address: string;
+    description: string;
+    hours: string;
+    status: BusinessStatus;
+    featured: boolean;
+    imageUrl: string;
+    latitude: number;
+    longitude: number;
+  }> = [
     {
       name: "Café del Río",
       categorySlug: "cafeterias",
@@ -142,7 +155,7 @@ async function main() {
         address: sample.address,
         description: sample.description,
         hours: sample.hours,
-        status: sample.status as any,
+        status: sample.status,
         featured: sample.featured,
         imageUrl: sample.imageUrl,
         latitude: sample.latitude,

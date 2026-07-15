@@ -1,22 +1,27 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 import { isWithinRadius } from "@/lib/verification";
+import { requireSession, withErrorHandler, rateLimit, rateLimitResponse, RouteContext } from "@/lib/api-utils";
 
-export async function POST(
+export const POST = withErrorHandler(async (
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+  { params }: RouteContext<{ id: string }>
+) => {
+  const result = await requireSession();
+  if ("error" in result) return result.error;
+
+  const { user } = result.session;
+  const { id } = await params;
+
+  if (!rateLimit(`visit-location:${user.id}`, 10, 60_000)) {
+    return rateLimitResponse();
   }
 
-  const { id } = await params;
-  const { latitude, longitude } = await request.json();
+  const body = await request.json();
+  const latitude = typeof body.latitude === "number" ? body.latitude : null;
+  const longitude = typeof body.longitude === "number" ? body.longitude : null;
 
-  if (typeof latitude !== "number" || typeof longitude !== "number") {
+  if (latitude === null || longitude === null) {
     return NextResponse.json({ error: "Coordenadas inválidas" }, { status: 400 });
   }
 
@@ -38,7 +43,7 @@ export async function POST(
 
   const visit = await prisma.visit.create({
     data: {
-      userId: session.user.id,
+      userId: user.id,
       businessId: id,
       latitude,
       longitude,
@@ -47,4 +52,4 @@ export async function POST(
   });
 
   return NextResponse.json({ visit, message: "Visita verificada por ubicación" });
-}
+});
