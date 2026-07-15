@@ -6,8 +6,11 @@ const QR_SECRET: string =
     ? ""
     : "dev-secret-change-me");
 
-if (!QR_SECRET) {
-  throw new Error("QR_SECRET must be set in production");
+function getQrSecret(): string {
+  if (!QR_SECRET) {
+    throw new Error("QR_SECRET must be set in production");
+  }
+  return QR_SECRET;
 }
 
 export function getDistanceInMeters(
@@ -52,7 +55,7 @@ export function generateQrToken(
   window: "day" | "30s" = "day"
 ): string {
   return crypto
-    .createHmac("sha256", QR_SECRET)
+    .createHmac("sha256", getQrSecret())
     .update(`${businessId}:${window}:${timeWindow(window)}`)
     .digest("hex")
     .slice(0, 8)
