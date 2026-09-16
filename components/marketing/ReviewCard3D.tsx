@@ -58,7 +58,6 @@ function FrontFace() {
 
 export function ReviewCard3D() {
   const cardRef = useRef<HTMLDivElement>(null);
-  const shineRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
   const hovering = useRef(false);
   const targetRotation = useRef({ x: 0, y: 0 });
@@ -78,7 +77,7 @@ export function ReviewCard3D() {
           currentRotation.current = { x: 0, y: 0 };
           cardRef.current.style.transform = "none";
         } else {
-          cardRef.current.style.transform = `translateZ(18px) rotateX(${currentRotation.current.x}deg) rotateY(${currentRotation.current.y}deg) scale(1.015)`;
+          cardRef.current.style.transform = `rotateX(${currentRotation.current.x}deg) rotateY(${currentRotation.current.y}deg)`;
         }
       }
       frame = requestAnimationFrame(animate);
@@ -92,10 +91,6 @@ export function ReviewCard3D() {
     const horizontal = (event.clientX - bounds.left) / bounds.width - 0.5;
     const vertical = (event.clientY - bounds.top) / bounds.height - 0.5;
     targetRotation.current = { x: -vertical * 18, y: horizontal * 22 };
-    if (shineRef.current) {
-      shineRef.current.style.background = `radial-gradient(circle at ${(horizontal + 0.5) * 100}% ${(vertical + 0.5) * 100}%, rgba(255,255,255,0.75), rgba(255,255,255,0.12) 28%, transparent 58%)`;
-      shineRef.current.style.opacity = "1";
-    }
     if (shadowRef.current) {
       shadowRef.current.style.transform = `translate(${horizontal * -24}px, ${18 + vertical * -10}px) scale(${1 - Math.abs(horizontal) * 0.08})`;
     }
@@ -104,7 +99,6 @@ export function ReviewCard3D() {
   function handleMouseLeave() {
     hovering.current = false;
     targetRotation.current = { x: 0, y: 0 };
-    if (shineRef.current) shineRef.current.style.opacity = "0";
     if (shadowRef.current) shadowRef.current.style.transform = "translate(0, 18px) scale(1)";
   }
 
@@ -125,7 +119,6 @@ export function ReviewCard3D() {
           <div className="absolute bottom-4 right-[-10px] top-4 w-5 bg-gradient-to-r from-[#ecece9] to-[#c5c5c1] [transform:rotateY(90deg)]" aria-hidden="true" />
           <div className="absolute inset-0 overflow-hidden rounded-[1.75rem]" style={{ transform: "translateZ(10px)" }}>
             <FrontFace />
-            <div ref={shineRef} className="pointer-events-none absolute inset-0 rounded-[1.75rem] opacity-0 mix-blend-screen transition-opacity duration-300" aria-hidden="true" />
           </div>
         </div>
       </div>
