@@ -34,7 +34,7 @@ export function LoginModal() {
           Únete a la comunidad
         </h2>
         <p className="mb-6 text-sm text-[var(--muted-foreground)]">
-          Inicia sesión para reseñar, ganar puntos y aprovechar ofertas.
+          Inicia sesión para gestionar tus NFCs y tus reseñas.
         </p>
         <button
           onClick={handleGoogleLogin}

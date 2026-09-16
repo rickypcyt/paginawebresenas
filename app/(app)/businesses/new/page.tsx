@@ -6,7 +6,7 @@ import { BusinessForm } from "./BusinessForm";
 export default async function NewBusinessPage() {
   const session = await getSession();
   if (!session?.user?.id) {
-    redirect("/explore");
+    redirect("/");
   }
 
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });

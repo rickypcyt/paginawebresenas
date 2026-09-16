@@ -1,13 +1,6 @@
 import Link from "next/link";
 import { AuthButton } from "../auth/AuthButton";
 
-const links = [
-  { href: "/como-funciona", label: "Cómo funciona" },
-  { href: "/negocios", label: "Negocios" },
-  { href: "/ofertas", label: "Ofertas" },
-  { href: "/#faq", label: "FAQ" },
-];
-
 export function MarketingNavbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/80 backdrop-blur">
@@ -16,24 +9,12 @@ export function MarketingNavbar() {
           Descubre<span className="text-[var(--foreground)]">Local</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)]"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
         <div className="flex items-center gap-3">
           <Link
             href="/business-requests"
-            className="hidden rounded-xl px-4 py-2 text-sm font-semibold text-[var(--primary)] transition-colors hover:bg-[var(--primary-light)] sm:block"
+            className="hidden rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white shadow-[var(--shadow)] transition hover:bg-[var(--primary-dark)] sm:block"
           >
-            Solicitar negocio
+            Solicitar NFCs
           </Link>
           <AuthButton />
         </div>

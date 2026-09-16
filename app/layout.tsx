@@ -5,11 +5,11 @@ import { LoginModal } from "@/components/auth/LoginModal";
 
 export const metadata: Metadata = {
   title: {
-    default: "Descubre Local — Negocios, reseñas y ofertas verificadas",
+    default: "Descubre Local — Gestión de reseñas con NFC",
     template: "%s | Descubre Local",
   },
   description:
-    "Descubre negocios verificados, lee reseñas reales y aprovecha ofertas cerca de ti. Gana puntos visitando locales y compartiendo experiencias.",
+    "Plataforma para gestionar NFCs que llevan a los clientes a reseñas de Google o a valorar a empleados.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),

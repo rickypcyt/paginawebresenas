@@ -7,8 +7,7 @@ const links = [
   { href: "/dashboard", label: "Inicio", icon: "🏠" },
   { href: "/dashboard/business", label: "Mi negocio", icon: "🏪" },
   { href: "/dashboard/reviews", label: "Reseñas", icon: "💬" },
-  { href: "/dashboard/campaigns", label: "Ofertas", icon: "🎁" },
-  { href: "/dashboard/stats", label: "Estadísticas", icon: "📊" },
+  { href: "/dashboard/stats", label: "Rendimiento NFC", icon: "📊" },
   { href: "/dashboard/customers", label: "Clientes", icon: "👥" },
   { href: "/dashboard/settings", label: "Configuración", icon: "⚙️" },
 ];
