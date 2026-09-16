@@ -11,7 +11,7 @@ export function LoginButton({ children, className }: LoginButtonProps) {
   const { open } = useAuthModal();
 
   return (
-    <button onClick={open} className={className}>
+    <button onClick={() => open()} className={className}>
       {children}
     </button>
   );

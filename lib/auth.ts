@@ -12,13 +12,12 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-  plugins: [dash()],
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    },
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 4,
   },
+  plugins: [dash()],
+  socialProviders: {},
   trustedOrigins: [
     "http://localhost:3000",
     "http://localhost:3001",

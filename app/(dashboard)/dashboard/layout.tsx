@@ -2,14 +2,22 @@ import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/navigation/Sidebar";
 import { getSession } from "@/lib/session";
 import { isBusiness } from "@/lib/roles";
+import {
+  LayoutDashboard,
+  MousePointerClick,
+  Users,
+  Tag,
+  MessageSquareText,
+  SmartphoneNfc,
+} from "lucide-react";
 
 const links = [
-  { href: "/dashboard", label: "Inicio", icon: "🏠" },
-  { href: "/dashboard/business", label: "Mi negocio", icon: "🏪" },
-  { href: "/dashboard/reviews", label: "Reseñas", icon: "💬" },
-  { href: "/dashboard/stats", label: "Rendimiento NFC", icon: "📊" },
-  { href: "/dashboard/customers", label: "Clientes", icon: "👥" },
-  { href: "/dashboard/settings", label: "Configuración", icon: "⚙️" },
+  { href: "/dashboard/taps", label: "Toque", icon: <MousePointerClick className="h-4 w-4" /> },
+  { href: "/dashboard", label: "Resumen", icon: <LayoutDashboard className="h-4 w-4" /> },
+  { href: "/dashboard/team", label: "Personal y ranking", icon: <Users className="h-4 w-4" /> },
+  { href: "/dashboard/nfc-tags", label: "Tags NFC", icon: <Tag className="h-4 w-4" /> },
+  { href: "/dashboard/reviews", label: "Reseñas", icon: <MessageSquareText className="h-4 w-4" /> },
+  { href: "/dashboard/simulator", label: "Simulador de tap", icon: <SmartphoneNfc className="h-4 w-4" /> },
 ];
 
 export default async function DashboardLayout({
@@ -24,7 +32,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 md:flex-row">
-      <Sidebar title="Tu panel" items={links} />
+      <Sidebar title="Panel del dueño" items={links} />
       <div className="flex-1">{children}</div>
     </div>
   );

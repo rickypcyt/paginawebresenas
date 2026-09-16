@@ -20,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
           "/dashboard",
           "/profile",
           "/favorites",
-          "/home",
+          "/",
           "/explore",
           "/search",
           "/business-requests",

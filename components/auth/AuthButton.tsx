@@ -19,10 +19,10 @@ export function AuthButton({ variant = "solid" }: { variant?: "solid" | "outline
   if (session) {
     return (
       <Link
-        href="/home"
+        href="/"
         className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] transition-colors hover:bg-[var(--primary-dark)]"
       >
-        Ir a la app
+        Acceder a la app
       </Link>
     );
   }
@@ -35,7 +35,7 @@ export function AuthButton({ variant = "solid" }: { variant?: "solid" | "outline
       : "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-dark)]";
 
   return (
-    <button onClick={open} className={`${base} ${styles}`}>
+    <button onClick={() => open()} className={`${base} ${styles}`}>
       Iniciar sesión
     </button>
   );

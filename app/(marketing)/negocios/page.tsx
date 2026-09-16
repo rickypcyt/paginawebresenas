@@ -97,7 +97,7 @@ export default async function NegociosPage() {
           Usa la búsqueda dentro de la aplicación para filtrar por ciudad, valoración y ofertas.
         </p>
         <Link
-          href="/home"
+          href="/"
           className="inline-block rounded-xl bg-[var(--primary)] px-6 py-2.5 text-sm font-bold text-[var(--primary-foreground)] transition-colors hover:bg-[var(--primary-dark)]"
         >
           Abrir aplicación

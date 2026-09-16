@@ -2,20 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "@/lib/auth-client";
-
-const topLinks = [
-  { href: "/home", label: "🏠 Inicio" },
-  { href: "/explore", label: "🔍 Explorar" },
-  { href: "/business-requests", label: "📝 Solicitar negocio" },
-  { href: "/favorites", label: "❤️ Guardados" },
-];
+import { useSession, signOut } from "@/lib/auth-client";
+import { isBusiness } from "@/lib/roles";
+import { useState, useRef, useEffect } from "react";
 
 const bottomLinks = [
-  { href: "/home", label: "Inicio", icon: "🏠" },
+  { href: "/", label: "Inicio", icon: "🏠" },
   { href: "/explore", label: "Explorar", icon: "🔍" },
   { href: "/favorites", label: "Guardados", icon: "❤️" },
   { href: "/profile", label: "Perfil", icon: "👤" },
+];
+
+const menuLinks = [
+  { href: "/profile", label: "Tu perfil" },
+  { href: "/dashboard", label: "Panel de negocio" },
+  { href: "/businesses/new", label: "Registrar negocio" },
 ];
 
 interface UserNavbarProps {
@@ -26,46 +27,83 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const user = session?.user ?? initialUser;
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/80 backdrop-blur">
-        <div className="flex h-16 w-full items-center gap-4 px-4 lg:px-8">
-          <Link href="/home" className="shrink-0 text-xl font-extrabold tracking-tight text-[var(--primary)]">
-            Descubre<span className="text-[var(--foreground)]">Local</span>
+      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 lg:px-8">
+          <Link href="/" className="shrink-0 text-lg font-semibold tracking-tight text-[var(--foreground)]">
+            DescubreLocal
           </Link>
 
-          <nav className="hidden flex-1 items-center justify-center gap-4 overflow-x-auto sm:flex lg:gap-5">
-            {topLinks.map((link) => (
+          <div className="flex items-center gap-3">
+            {isBusiness((user as { role?: string | null })?.role) && (
               <Link
-                key={link.href}
-                href={link.href}
-                className={`whitespace-nowrap text-sm font-medium transition-colors ${
-                  pathname === link.href
-                    ? "text-[var(--primary)]"
-                    : "text-[var(--foreground)] hover:text-[var(--primary)]"
-                }`}
+                href="/dashboard"
+                className="hidden rounded-full bg-[var(--primary)] px-4 py-1.5 text-sm font-medium text-[var(--primary-foreground)] transition hover:bg-[var(--primary-dark)] md:block"
               >
-                {link.label}
+                Panel
               </Link>
-            ))}
-          </nav>
+            )}
+            <div ref={ref} className="relative">
+              <button
+                onClick={() => setOpen(!open)}
+                className="flex shrink-0 items-center gap-2 rounded-full bg-[var(--secondary)] px-3 py-1.5 transition hover:bg-[var(--border)]"
+              >
+              <span className="hidden max-w-[120px] truncate text-sm font-medium text-[var(--foreground)] sm:inline">
+                {user?.name || "Tu cuenta"}
+              </span>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--primary)] text-xs font-medium text-[var(--primary-foreground)]">
+                {user?.name?.charAt(0).toUpperCase() || "👤"}
+              </span>
+            </button>
 
-          <Link
-            href="/profile"
-            className="ml-auto hidden shrink-0 items-center gap-2 rounded-2xl border border-[var(--border)] bg-[var(--card)] px-3 py-1.5 transition hover:border-[var(--primary)] hover:shadow-sm md:flex"
-          >
-            <span className="max-w-[120px] truncate text-sm font-medium text-[var(--foreground)]">
-              {user?.name || "Tu cuenta"}
-            </span>
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[var(--primary)] text-sm font-bold text-white">
-              {user?.name?.charAt(0).toUpperCase() || "👤"}
-            </span>
-          </Link>
+            {open && (
+              <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-[var(--border)] bg-[var(--background)] p-2 shadow-[var(--shadow-lg)]">
+                <div className="border-b border-[var(--border)] px-3 py-2">
+                  <p className="truncate text-sm font-medium text-[var(--foreground)]">{user?.name || "Tu cuenta"}</p>
+                  <p className="truncate text-xs text-[var(--muted-foreground)]">{user?.email || ""}</p>
+                </div>
+                <nav className="flex flex-col py-1">
+                  {menuLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="rounded-lg px-3 py-2 text-sm text-[var(--foreground)] transition hover:bg-[var(--secondary)]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="border-t border-[var(--border)] pt-1">
+                  <button
+                    onClick={() => signOut()}
+                    className="w-full rounded-lg px-3 py-2 text-left text-sm text-[var(--destructive)] transition hover:bg-[var(--secondary)]"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+      </div>
       </header>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-white pb-safe md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--background)] pb-safe md:hidden">
         <div className="flex w-full justify-around py-2">
           {bottomLinks.map((link) => {
             const active = pathname === link.href;
@@ -75,7 +113,7 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
                 href={link.href}
                 className={`flex flex-col items-center gap-1 px-3 py-1 text-xs ${
                   active
-                    ? "text-[var(--primary)]"
+                    ? "text-[var(--foreground)]"
                     : "text-[var(--muted-foreground)]"
                 }`}
               >

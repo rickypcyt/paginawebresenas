@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
     request.cookies.get("__Secure-better-auth.session_token");
 
   if (!sessionCookie) {
-    const loginUrl = new URL("/home", request.url);
+    const loginUrl = new URL("/", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }

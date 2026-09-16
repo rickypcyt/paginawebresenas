@@ -29,7 +29,7 @@ export function RegisterBusinessButton({
   }
 
   return (
-    <button onClick={open} className={className}>
+    <button onClick={() => open("/businesses/new")} className={className}>
       {children ?? "Registrar mi negocio"}
     </button>
   );

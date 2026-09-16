@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { generateUniqueSlug } from "@/lib/slug";
+import { hashPassword } from "better-auth/crypto";
 import type { BusinessStatus } from "@/src/generated/prisma";
 
 const categories = [
@@ -162,6 +163,52 @@ async function main() {
         longitude: sample.longitude,
       },
     });
+  }
+
+  const adminEmail = process.env.SEED_ADMIN_EMAIL;
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD;
+
+  if (adminEmail && adminPassword) {
+    const existingAdmin = await prisma.user.findUnique({
+      where: { email: adminEmail },
+    });
+
+    if (!existingAdmin) {
+      const userId = crypto.randomUUID();
+      const now = new Date();
+      const hashedPassword = await hashPassword(adminPassword);
+
+      await prisma.$transaction([
+        prisma.user.create({
+          data: {
+            id: userId,
+            name: "Admin",
+            email: adminEmail,
+            emailVerified: true,
+            role: "admin",
+            createdAt: now,
+            updatedAt: now,
+          },
+        }),
+        prisma.account.create({
+          data: {
+            id: crypto.randomUUID(),
+            accountId: userId,
+            providerId: "credential",
+            userId,
+            password: hashedPassword,
+            createdAt: now,
+            updatedAt: now,
+          },
+        }),
+      ]);
+
+      console.log(`Usuario admin ${adminEmail} creado.`);
+    } else {
+      console.log(`Usuario admin ${adminEmail} ya existe.`);
+    }
+  } else {
+    console.log("SEED_ADMIN_EMAIL y SEED_ADMIN_PASSWORD no definidos. Saltando admin.");
   }
 
   console.log("Seed completado.");

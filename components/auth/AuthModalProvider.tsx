@@ -4,7 +4,8 @@ import { createContext, useCallback, useContext, useState } from "react";
 
 interface AuthModalContextValue {
   isOpen: boolean;
-  open: () => void;
+  redirectTo: string | null;
+  open: (redirectTo?: string) => void;
   close: () => void;
 }
 
@@ -12,12 +13,19 @@ const AuthModalContext = createContext<AuthModalContextValue | null>(null);
 
 export function AuthModalProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
-  const open = useCallback(() => setIsOpen(true), []);
-  const close = useCallback(() => setIsOpen(false), []);
+  const open = useCallback((to?: string) => {
+    setRedirectTo(to ?? null);
+    setIsOpen(true);
+  }, []);
+  const close = useCallback(() => {
+    setIsOpen(false);
+    setRedirectTo(null);
+  }, []);
 
   return (
-    <AuthModalContext.Provider value={{ isOpen, open, close }}>
+    <AuthModalContext.Provider value={{ isOpen, redirectTo, open, close }}>
       {children}
     </AuthModalContext.Provider>
   );

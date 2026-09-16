@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Check, MessageSquare, Package, Smartphone, Star, Store } from "lucide-react";
-import { RegisterBusinessButton } from "@/components/auth/RegisterBusinessButton";
+import { Check, MessageSquare, Package, Smartphone, Store, Star } from "lucide-react";
 
 const steps = [
   {
@@ -20,6 +19,19 @@ const steps = [
   },
 ];
 
+const products = [
+  {
+    icon: Store,
+    title: "NFC Google Reviews",
+    desc: "Colócalo en caja, entrada o mesa. El cliente acerca el móvil y abre la página de reseñas de Google de tu negocio.",
+  },
+  {
+    icon: Star,
+    title: "NFC del equipo",
+    desc: "Un NFC por empleado. El cliente deja feedback sobre la atención recibida, identificada y medible.",
+  },
+];
+
 const benefits = [
   "Aumenta tus reseñas de Google",
   "Separa la opinión del negocio y la atención del empleado",
@@ -29,29 +41,44 @@ const benefits = [
 
 export default function LandingPage() {
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-[var(--primary-light)] via-white to-[#d1fae5] px-4 py-12">
-      <div className="mx-auto w-full max-w-4xl rounded-3xl border border-[var(--border)] bg-white/90 p-6 pb-4 shadow-[var(--shadow-lg)] backdrop-blur md:p-10 md:pb-5">
+    <main className="min-h-[calc(100vh-4rem)] bg-[var(--background)] px-6 py-16 md:py-24">
+      <div className="mx-auto w-full max-w-4xl">
+        <section className="mb-20 text-center">
+          <h1 className="mx-auto mb-6 max-w-3xl text-4xl font-semibold tracking-tight text-[var(--foreground)] md:text-6xl">
+            Convierte cada atención en una reseña.
+          </h1>
+          <p className="mx-auto mb-8 max-w-2xl text-lg leading-relaxed text-[var(--muted-foreground)] md:text-xl">
+            NFCs para negocios: uno lleva a tus clientes a las reseñas de Google; otro les permite valorar a quien les atendió.
+          </p>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/business-requests"
+              className="rounded-full bg-[var(--foreground)] px-7 py-3 text-sm font-medium text-[var(--background)] transition hover:opacity-90"
+            >
+              Solicitar NFCs para mi negocio
+            </Link>
+            <Link
+              href="/"
+              className="rounded-full px-7 py-3 text-sm font-medium text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
+            >
+              Acceder a la app
+            </Link>
+          </div>
+        </section>
 
-
-        <h1 className="mb-4 text-3xl font-extrabold leading-tight tracking-tight text-[var(--foreground)] md:text-5xl">
-          Convierte cada atención en una reseña.
-        </h1>
-
-        <p className="mb-8 max-w-2xl text-base leading-relaxed text-[var(--muted-foreground)] md:text-lg">
-          Vendemos NFCs para negocios: uno lleva al cliente directamente a tus reseñas de Google; otro le permite valorar a la persona que le atendió.
-        </p>
-
-        <div className="mb-8 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-5">
-          <h2 className="mb-4 text-lg font-bold text-[var(--foreground)]">¿Cómo funciona?</h2>
-          <div className="grid gap-4 sm:grid-cols-3">
+        <section className="mb-20 rounded-3xl bg-[var(--secondary)] p-8 md:p-12">
+          <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+            ¿Cómo funciona?
+          </h2>
+          <div className="grid gap-8 sm:grid-cols-3">
             {steps.map((step, i) => {
               const Icon = step.icon;
               return (
-                <div key={step.title} className="flex flex-col gap-2">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--primary)] text-white">
-                    <Icon className="h-4 w-4" />
+                <div key={step.title} className="flex flex-col items-center text-center">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--primary)] text-white">
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-sm font-semibold text-[var(--foreground)]">
+                  <h3 className="mb-2 text-sm font-semibold text-[var(--muted-foreground)]">
                     {i + 1}. {step.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">{step.desc}</p>
@@ -59,44 +86,39 @@ export default function LandingPage() {
               );
             })}
           </div>
-        </div>
+        </section>
 
-        <div className="mb-8 grid gap-4 md:grid-cols-2">
-          <div className="flex gap-4 rounded-2xl bg-[var(--primary-light)] p-5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-[var(--primary)]">
-              <Store className="h-6 w-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-[var(--foreground)]">NFC Google Reviews</h2>
-              <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
-                Colócalo en caja, entrada o mesa. El cliente acerca el móvil y abre la página de reseñas de Google de tu negocio.
-              </p>
-            </div>
+        <section className="mb-20 grid gap-6 md:grid-cols-2">
+          {products.map((product) => {
+            const Icon = product.icon;
+            return (
+              <div
+                key={product.title}
+                className="flex flex-col gap-5 rounded-3xl border border-[var(--border)] bg-[var(--background)] p-8"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary)]">
+                  <Icon className="h-6 w-6" />
+                </div>
+                <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">{product.title}</h2>
+                <p className="leading-relaxed text-[var(--muted-foreground)]">{product.desc}</p>
+              </div>
+            );
+          })}
+        </section>
+
+        <section className="rounded-3xl border border-[var(--border)] p-8 md:p-12">
+          <h2 className="mb-8 text-center text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+            Todo lo que necesitas
+          </h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {benefits.map((item) => (
+              <div key={item} className="flex items-center gap-3 text-[var(--foreground)]">
+                <Check className="h-5 w-5 shrink-0 text-[var(--primary)]" />
+                <span className="text-sm md:text-base">{item}</span>
+              </div>
+            ))}
           </div>
-
-          <div className="flex gap-4 rounded-2xl bg-[var(--muted)] p-5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-[var(--primary)]">
-              <Star className="h-6 w-6" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-[var(--foreground)]">NFC del equipo</h2>
-              <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
-                Un NFC por empleado. El cliente deja feedback sobre la atención recibida, identificada y medible.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-8 grid gap-3 sm:grid-cols-2">
-          {benefits.map((item) => (
-            <div key={item} className="flex items-center gap-2 text-sm text-[var(--foreground)] md:text-base">
-              <Check className="h-5 w-5 shrink-0 text-[var(--primary)]" />
-              {item}
-            </div>
-          ))}
-        </div>
-
-
+        </section>
       </div>
     </main>
   );
