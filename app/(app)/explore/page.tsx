@@ -1,10 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
-import { SearchBar } from "@/app/components/SearchBar";
-import { BusinessCard } from "@/app/components/BusinessCard";
-import { FilterSelect } from "@/app/components/FilterSelect";
-import { BusinessMap } from "@/app/components/BusinessMap";
+import { SearchBar } from "@/components/search/SearchBar";
+import { BusinessCard } from "@/components/business/BusinessCard";
+import { FilterSelect } from "@/components/ui/FilterSelect";
+import { BusinessMap } from "@/components/business/BusinessMap";
 
 export const dynamic = "force-dynamic";
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
-import { useAuthModal } from "@/app/components/AuthModalProvider";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
 
 export function OfferRedeemButton({
   offerId,

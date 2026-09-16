@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { CategoryCard } from "@/app/components/CategoryCard";
+import { CategoryCard } from "@/components/categories/CategoryCard";
 
 export const dynamic = "force-dynamic";
 

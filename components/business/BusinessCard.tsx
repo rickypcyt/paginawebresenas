@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { StarRating } from "./StarRating";
+import { StarRating } from "../ui/StarRating";
 
 interface BusinessCardProps {
   business: {

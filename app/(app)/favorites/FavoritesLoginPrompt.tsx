@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginButton } from "@/app/components/LoginButton";
+import { LoginButton } from "@/components/auth/LoginButton";
 
 export function FavoritesLoginPrompt() {
   return (

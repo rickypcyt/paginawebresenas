@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function ReviewForm({
+export function ReviewComposer({
   onCreated,
   businessId,
 }: {

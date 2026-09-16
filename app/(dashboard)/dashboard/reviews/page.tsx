@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { ReviewCard } from "@/app/components/ReviewCard";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
 
 export default async function DashboardReviewsPage() {
   const session = await getSession();

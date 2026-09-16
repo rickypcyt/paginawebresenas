@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import { StarRating } from "@/app/components/StarRating";
-import { useAuthModal } from "@/app/components/AuthModalProvider";
+import { StarRating } from "@/components/ui/StarRating";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
 import { useSession } from "@/lib/auth-client";
 
 interface VisitLandingProps {

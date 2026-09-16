@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { OfferCard } from "@/app/components/OfferCard";
+import { OfferCard } from "@/components/offers/OfferCard";
 
 export default async function AdminCampaignsPage() {
   const offers = await prisma.offer.findMany({

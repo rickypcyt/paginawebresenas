@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { AuthModalProvider } from "./components/AuthModalProvider";
-import { LoginModal } from "./components/LoginModal";
+import { AuthModalProvider } from "@/components/auth/AuthModalProvider";
+import { LoginModal } from "@/components/auth/LoginModal";
 
 export const metadata: Metadata = {
   title: {

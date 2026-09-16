@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { ReviewCard } from "@/app/components/ReviewCard";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
 
 export const dynamic = "force-dynamic";
 

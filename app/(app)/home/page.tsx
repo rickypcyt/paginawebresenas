@@ -1,13 +1,13 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { SearchBar } from "@/app/components/SearchBar";
-import { SectionHeader } from "@/app/components/SectionHeader";
-import { BusinessCard } from "@/app/components/BusinessCard";
-import { CategoryCard } from "@/app/components/CategoryCard";
-import { OfferCard } from "@/app/components/OfferCard";
-import { ReviewCard } from "@/app/components/ReviewCard";
-import { EmptyState } from "@/app/components/EmptyState";
+import { SearchBar } from "@/components/search/SearchBar";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { BusinessCard } from "@/components/business/BusinessCard";
+import { CategoryCard } from "@/components/categories/CategoryCard";
+import { OfferCard } from "@/components/offers/OfferCard";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 

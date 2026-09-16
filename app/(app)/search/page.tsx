@@ -1,7 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { SearchBar } from "@/app/components/SearchBar";
-import { BusinessCard } from "@/app/components/BusinessCard";
+import { SearchBar } from "@/components/search/SearchBar";
+import { BusinessCard } from "@/components/business/BusinessCard";
 
 export const dynamic = "force-dynamic";
 

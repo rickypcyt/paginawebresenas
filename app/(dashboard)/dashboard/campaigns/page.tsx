@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { OfferCard } from "@/app/components/OfferCard";
+import { OfferCard } from "@/components/offers/OfferCard";
 
 export default async function DashboardCampaignsPage() {
   const session = await getSession();

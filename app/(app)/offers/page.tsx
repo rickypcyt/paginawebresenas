@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
-import { OfferCard } from "@/app/components/OfferCard";
-import { SectionHeader } from "@/app/components/SectionHeader";
-import { EmptyState } from "@/app/components/EmptyState";
+import { OfferCard } from "@/components/offers/OfferCard";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 

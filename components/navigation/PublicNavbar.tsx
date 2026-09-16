@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { AuthButton } from "./AuthButton";
-import { SearchBar } from "./SearchBar";
+import { AuthButton } from "../auth/AuthButton";
+import { SearchBar } from "../search/SearchBar";
 
 export function PublicNavbar() {
   const [open, setOpen] = useState(false);

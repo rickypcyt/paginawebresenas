@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { ReviewForm } from "./ReviewForm";
+import { BusinessReviewForm } from "./BusinessReviewForm";
 import { ReviewLoginPrompt } from "./ReviewLoginPrompt";
 
 interface ReviewPageProps {
@@ -29,7 +29,7 @@ export default async function BusinessReviewPage({ params }: ReviewPageProps) {
       <p className="mb-6 text-[var(--muted-foreground)]">
         Sobre <span className="font-medium text-[var(--foreground)]">{business.name}</span>
       </p>
-      {session?.user?.id ? <ReviewForm business={business} /> : <ReviewLoginPrompt />}
+      {session?.user?.id ? <BusinessReviewForm business={business} /> : <ReviewLoginPrompt />}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
-import { OfferCard } from "@/app/components/OfferCard";
-import { EmptyState } from "@/app/components/EmptyState";
+import { OfferCard } from "@/components/offers/OfferCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 

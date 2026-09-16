@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { useState } from "react";
-import { SearchBar } from "./SearchBar";
+import { SearchBar } from "../search/SearchBar";
 
 const topLinks = [
   { href: "/home", label: "🏠 Inicio" },

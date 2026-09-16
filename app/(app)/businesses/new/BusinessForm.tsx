@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MapPicker } from "@/app/components/MapPicker";
+import { MapPicker } from "@/components/business/MapPicker";
 import { BusinessHoursInput } from "./BusinessHoursInput";
 
 export function BusinessForm({ categories }: { categories: { id: string; name: string; slug: string }[] }) {

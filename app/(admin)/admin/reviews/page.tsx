@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ReviewCard } from "@/app/components/ReviewCard";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
 
 export default async function AdminReviewsPage() {
   const reviews = await prisma.review.findMany({

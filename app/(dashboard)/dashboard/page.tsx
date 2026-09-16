@@ -1,7 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { EmptyState } from "@/app/components/EmptyState";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default async function DashboardHomePage() {
   const session = await getSession();

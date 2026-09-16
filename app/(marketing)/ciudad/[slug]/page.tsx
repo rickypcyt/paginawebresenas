@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
-import { BusinessCard } from "@/app/components/BusinessCard";
-import { EmptyState } from "@/app/components/EmptyState";
+import { BusinessCard } from "@/components/business/BusinessCard";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const dynamic = "force-dynamic";
 

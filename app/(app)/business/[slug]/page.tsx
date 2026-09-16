@@ -3,11 +3,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { StarRating } from "@/app/components/StarRating";
-import { ReviewCard } from "@/app/components/ReviewCard";
-import { OfferCard } from "@/app/components/OfferCard";
-import { MapView } from "@/app/components/MapView";
-import { EmptyState } from "@/app/components/EmptyState";
+import { StarRating } from "@/components/ui/StarRating";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
+import { OfferCard } from "@/components/offers/OfferCard";
+import { MapView } from "@/components/business/MapView";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { computeReviewWeight } from "@/lib/gamification";
 import { VerifyVisitButtons } from "./VerifyVisitButtons";
 

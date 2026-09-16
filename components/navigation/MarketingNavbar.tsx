@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AuthButton } from "./AuthButton";
+import { AuthButton } from "../auth/AuthButton";
 
 const links = [
   { href: "/como-funciona", label: "Cómo funciona" },

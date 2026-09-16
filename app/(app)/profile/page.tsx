@@ -2,12 +2,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
-import { ReviewCard } from "@/app/components/ReviewCard";
-import { OfferCard } from "@/app/components/OfferCard";
-import { BusinessCard } from "@/app/components/BusinessCard";
-import { SectionHeader } from "@/app/components/SectionHeader";
-import { AuthButton } from "@/app/components/AuthButton";
-import { EmptyState } from "@/app/components/EmptyState";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
+import { OfferCard } from "@/components/offers/OfferCard";
+import { BusinessCard } from "@/components/business/BusinessCard";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { AuthButton } from "@/components/auth/AuthButton";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { getLevel, getNextLevelXp } from "@/lib/gamification";
 
 export default async function ProfilePage() {

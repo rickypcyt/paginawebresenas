@@ -1,7 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { BusinessCard } from "../components/BusinessCard";
-import { CategoryCard } from "../components/CategoryCard";
+import { BusinessCard } from "@/components/business/BusinessCard";
+import { CategoryCard } from "@/components/categories/CategoryCard";
 import {
   QrCode,
   MapPin,

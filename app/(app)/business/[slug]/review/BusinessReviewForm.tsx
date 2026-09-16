@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { StarRating } from "@/app/components/StarRating";
+import { StarRating } from "@/components/ui/StarRating";
 
 interface ReviewFormProps {
   business: {
@@ -15,8 +14,7 @@ interface ReviewFormProps {
   };
 }
 
-export function ReviewForm({ business }: ReviewFormProps) {
-  const router = useRouter();
+export function BusinessReviewForm({ business }: ReviewFormProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(5);
