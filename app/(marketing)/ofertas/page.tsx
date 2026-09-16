@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Ofertas disponibles — Descubre Local",
+  title: "Ofertas disponibles — Toque",
   description:
     "Aprovecha ofertas exclusivas en negocios verificados. Descuentos, promociones y beneficios para usuarios de la comunidad.",
   alternates: {

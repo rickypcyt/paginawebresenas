@@ -10,7 +10,7 @@ export function PublicNavbar() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 lg:px-8">
         <Link href="/" className="shrink-0 text-lg font-semibold tracking-tight text-[var(--foreground)]">
-          DescubreLocal
+          Toque
         </Link>
 
         <div className="flex shrink-0 items-center gap-3">

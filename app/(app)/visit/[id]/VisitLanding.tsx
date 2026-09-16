@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import { StarRating } from "@/components/ui/StarRating";
@@ -23,7 +22,6 @@ interface VisitLandingProps {
 }
 
 export function VisitLanding({ business, token, mode }: VisitLandingProps) {
-  const router = useRouter();
   const { data: session } = useSession();
   const { open } = useAuthModal();
   const [loading, setLoading] = useState(false);

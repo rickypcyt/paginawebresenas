@@ -2,7 +2,8 @@ import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Star, TrendingUp } from "lucide-react";
+import { Star, TrendingUp, UserPlus } from "lucide-react";
+import { EmployeeJoinRequestActions } from "@/components/dashboard/EmployeeJoinRequestActions";
 
 export default async function DashboardTeamPage() {
   const session = await getSession();
@@ -15,6 +16,11 @@ export default async function DashboardTeamPage() {
         include: {
           reviews: { select: { id: true, rating: true, createdAt: true } },
         },
+      },
+      employeeJoinRequests: {
+        where: { status: "pending" },
+        include: { user: { select: { name: true, email: true, image: true } } },
+        orderBy: { createdAt: "asc" },
       },
     },
     orderBy: { createdAt: "desc" },
@@ -34,6 +40,13 @@ export default async function DashboardTeamPage() {
       </div>
     );
   }
+
+  const pendingRequests = businesses.flatMap((business) =>
+    business.employeeJoinRequests.map((request) => ({
+      ...request,
+      businessName: business.name,
+    }))
+  );
 
   const employees = businesses.flatMap((b) =>
     b.employees.map((e) => {
@@ -68,6 +81,28 @@ export default async function DashboardTeamPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-[var(--foreground)]">Personal y ranking</h1>
+
+      {pendingRequests.length > 0 && (
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <UserPlus className="h-5 w-5 text-[var(--primary-dark)]" />
+            <h2 className="font-semibold text-[var(--foreground)]">Solicitudes de ingreso</h2>
+            <span className="rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-xs font-semibold text-[var(--primary-dark)]">{pendingRequests.length}</span>
+          </div>
+          <div className="space-y-3">
+            {pendingRequests.map((request) => (
+              <div key={request.id} className="flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">{request.user.name}</p>
+                  <p className="truncate text-xs text-[var(--muted-foreground)]">{request.user.email}</p>
+                  <p className="mt-1 text-xs text-[var(--muted-foreground)]">{request.businessName}{request.jobTitle ? ` · ${request.jobTitle}` : ""}</p>
+                </div>
+                <EmployeeJoinRequestActions requestId={request.id} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {ranked.length === 0 ? (
         <p className="text-[var(--muted-foreground)]">

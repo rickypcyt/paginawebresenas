@@ -50,7 +50,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       {query && (
         <p className="mb-4 text-sm text-[var(--muted-foreground)]">
-          {results.length} resultado{results.length === 1 ? "" : "s"} para "{params.q}"
+          {results.length} resultado{results.length === 1 ? "" : "s"} para &quot;{params.q}&quot;
         </p>
       )}
 

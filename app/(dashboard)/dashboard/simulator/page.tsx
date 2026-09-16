@@ -18,7 +18,7 @@ export default function DashboardSimulatorPage() {
           Prueba la experiencia de un cliente
         </h2>
         <p className="mx-auto mb-6 max-w-md text-sm text-[var(--muted-foreground)]">
-          Toca el botón para simular que un cliente acerca su móvil a un NFC. Verás qué destino se abre según el tipo de tag.
+          Toca el botón para simular que un cliente acerca su teléfono a un NFC. Verás qué destino se abre según el tipo de tag.
         </p>
 
         {simulated ? (

@@ -5,8 +5,8 @@ import { LoginModal } from "@/components/auth/LoginModal";
 
 export const metadata: Metadata = {
   title: {
-    default: "Descubre Local — Gestión de reseñas con NFC",
-    template: "%s | Descubre Local",
+    default: "Toque — Deja tu reseña en un Toque",
+    template: "%s | Toque",
   },
   description:
     "Plataforma para gestionar NFCs que llevan a los clientes a reseñas de Google o a valorar a empleados.",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_ES",
-    siteName: "Descubre Local",
+    siteName: "Toque",
   },
 };
 

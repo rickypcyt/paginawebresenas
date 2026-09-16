@@ -10,6 +10,7 @@ datasource db {
 
 enum Role {
   user
+  employee
   business
   admin
 }
@@ -41,6 +42,8 @@ model User {
   badges        UserBadge[]
   businessRequests BusinessRequest[]
   requestSupports BusinessRequestSupporter[]
+  employee Employee?
+  employeeJoinRequests EmployeeJoinRequest[]
 
   @@unique([email])
   @@map("user")
@@ -97,6 +100,7 @@ model Business {
   followers   Follower[]
   favorites   Favorite[]
   collections CollectionItem[]
+  employeeJoinRequests EmployeeJoinRequest[]
 
   @@index([status])
   @@index([featured])
@@ -116,6 +120,8 @@ model Employee {
   name       String
   role       String?
   active     Boolean  @default(true)
+  userId     String?  @unique
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   reviews    Review[]
@@ -124,6 +130,29 @@ model Employee {
   updatedAt  DateTime @updatedAt
 
   @@index([businessId])
+}
+
+enum EmployeeJoinRequestStatus {
+  pending
+  approved
+  rejected
+}
+
+model EmployeeJoinRequest {
+  id         String                    @id @default(cuid())
+  userId     String
+  user       User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business                  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  jobTitle   String?
+  status     EmployeeJoinRequestStatus @default(pending)
+  reviewedAt DateTime?
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+
+  @@unique([userId, businessId])
+  @@index([businessId, status])
+  @@index([userId, status])
 }
 
 enum NfcTagType {

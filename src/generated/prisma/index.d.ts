@@ -34,6 +34,11 @@ export type Business = $Result.DefaultSelection<Prisma.$BusinessPayload>
  */
 export type Employee = $Result.DefaultSelection<Prisma.$EmployeePayload>
 /**
+ * Model EmployeeJoinRequest
+ * 
+ */
+export type EmployeeJoinRequest = $Result.DefaultSelection<Prisma.$EmployeeJoinRequestPayload>
+/**
  * Model NfcTag
  * 
  */
@@ -130,6 +135,7 @@ export type BusinessRequestSupporter = $Result.DefaultSelection<Prisma.$Business
 export namespace $Enums {
   export const Role: {
   user: 'user',
+  employee: 'employee',
   business: 'business',
   admin: 'admin'
 };
@@ -156,6 +162,15 @@ export const ReviewVerification: {
 };
 
 export type ReviewVerification = (typeof ReviewVerification)[keyof typeof ReviewVerification]
+
+
+export const EmployeeJoinRequestStatus: {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected'
+};
+
+export type EmployeeJoinRequestStatus = (typeof EmployeeJoinRequestStatus)[keyof typeof EmployeeJoinRequestStatus]
 
 
 export const NfcTagType: {
@@ -198,6 +213,10 @@ export const BusinessStatus: typeof $Enums.BusinessStatus
 export type ReviewVerification = $Enums.ReviewVerification
 
 export const ReviewVerification: typeof $Enums.ReviewVerification
+
+export type EmployeeJoinRequestStatus = $Enums.EmployeeJoinRequestStatus
+
+export const EmployeeJoinRequestStatus: typeof $Enums.EmployeeJoinRequestStatus
 
 export type NfcTagType = $Enums.NfcTagType
 
@@ -371,6 +390,16 @@ export class PrismaClient<
     * ```
     */
   get employee(): Prisma.EmployeeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.employeeJoinRequest`: Exposes CRUD operations for the **EmployeeJoinRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmployeeJoinRequests
+    * const employeeJoinRequests = await prisma.employeeJoinRequest.findMany()
+    * ```
+    */
+  get employeeJoinRequest(): Prisma.EmployeeJoinRequestDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.nfcTag`: Exposes CRUD operations for the **NfcTag** model.
@@ -989,6 +1018,7 @@ export namespace Prisma {
     Category: 'Category',
     Business: 'Business',
     Employee: 'Employee',
+    EmployeeJoinRequest: 'EmployeeJoinRequest',
     NfcTag: 'NfcTag',
     Review: 'Review',
     Visit: 'Visit',
@@ -1022,7 +1052,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "category" | "business" | "employee" | "nfcTag" | "review" | "visit" | "offer" | "offerRedemption" | "favorite" | "collection" | "collectionItem" | "businessPhoto" | "follower" | "session" | "account" | "verification" | "badge" | "userBadge" | "reviewVote" | "businessRequest" | "businessRequestSupporter"
+      modelProps: "user" | "category" | "business" | "employee" | "employeeJoinRequest" | "nfcTag" | "review" | "visit" | "offer" | "offerRedemption" | "favorite" | "collection" | "collectionItem" | "businessPhoto" | "follower" | "session" | "account" | "verification" | "badge" | "userBadge" | "reviewVote" | "businessRequest" | "businessRequestSupporter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1319,6 +1349,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EmployeeCountArgs<ExtArgs>
             result: $Utils.Optional<EmployeeCountAggregateOutputType> | number
+          }
+        }
+      }
+      EmployeeJoinRequest: {
+        payload: Prisma.$EmployeeJoinRequestPayload<ExtArgs>
+        fields: Prisma.EmployeeJoinRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmployeeJoinRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmployeeJoinRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.EmployeeJoinRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmployeeJoinRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>
+          }
+          findMany: {
+            args: Prisma.EmployeeJoinRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>[]
+          }
+          create: {
+            args: Prisma.EmployeeJoinRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>
+          }
+          createMany: {
+            args: Prisma.EmployeeJoinRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmployeeJoinRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.EmployeeJoinRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>
+          }
+          update: {
+            args: Prisma.EmployeeJoinRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.EmployeeJoinRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmployeeJoinRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmployeeJoinRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.EmployeeJoinRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeeJoinRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.EmployeeJoinRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmployeeJoinRequest>
+          }
+          groupBy: {
+            args: Prisma.EmployeeJoinRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmployeeJoinRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmployeeJoinRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<EmployeeJoinRequestCountAggregateOutputType> | number
           }
         }
       }
@@ -2766,6 +2870,7 @@ export namespace Prisma {
     category?: CategoryOmit
     business?: BusinessOmit
     employee?: EmployeeOmit
+    employeeJoinRequest?: EmployeeJoinRequestOmit
     nfcTag?: NfcTagOmit
     review?: ReviewOmit
     visit?: VisitOmit
@@ -2877,6 +2982,7 @@ export namespace Prisma {
     badges: number
     businessRequests: number
     requestSupports: number
+    employeeJoinRequests: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2893,6 +2999,7 @@ export namespace Prisma {
     badges?: boolean | UserCountOutputTypeCountBadgesArgs
     businessRequests?: boolean | UserCountOutputTypeCountBusinessRequestsArgs
     requestSupports?: boolean | UserCountOutputTypeCountRequestSupportsArgs
+    employeeJoinRequests?: boolean | UserCountOutputTypeCountEmployeeJoinRequestsArgs
   }
 
   // Custom InputTypes
@@ -2997,6 +3104,13 @@ export namespace Prisma {
     where?: BusinessRequestSupporterWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEmployeeJoinRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeJoinRequestWhereInput
+  }
+
 
   /**
    * Count Type CategoryCountOutputType
@@ -3043,6 +3157,7 @@ export namespace Prisma {
     followers: number
     favorites: number
     collections: number
+    employeeJoinRequests: number
   }
 
   export type BusinessCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3055,6 +3170,7 @@ export namespace Prisma {
     followers?: boolean | BusinessCountOutputTypeCountFollowersArgs
     favorites?: boolean | BusinessCountOutputTypeCountFavoritesArgs
     collections?: boolean | BusinessCountOutputTypeCountCollectionsArgs
+    employeeJoinRequests?: boolean | BusinessCountOutputTypeCountEmployeeJoinRequestsArgs
   }
 
   // Custom InputTypes
@@ -3129,6 +3245,13 @@ export namespace Prisma {
    */
   export type BusinessCountOutputTypeCountCollectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CollectionItemWhereInput
+  }
+
+  /**
+   * BusinessCountOutputType without action
+   */
+  export type BusinessCountOutputTypeCountEmployeeJoinRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeJoinRequestWhereInput
   }
 
 
@@ -3618,6 +3741,8 @@ export namespace Prisma {
     badges?: boolean | User$badgesArgs<ExtArgs>
     businessRequests?: boolean | User$businessRequestsArgs<ExtArgs>
     requestSupports?: boolean | User$requestSupportsArgs<ExtArgs>
+    employee?: boolean | User$employeeArgs<ExtArgs>
+    employeeJoinRequests?: boolean | User$employeeJoinRequestsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3684,6 +3809,8 @@ export namespace Prisma {
     badges?: boolean | User$badgesArgs<ExtArgs>
     businessRequests?: boolean | User$businessRequestsArgs<ExtArgs>
     requestSupports?: boolean | User$requestSupportsArgs<ExtArgs>
+    employee?: boolean | User$employeeArgs<ExtArgs>
+    employeeJoinRequests?: boolean | User$employeeJoinRequestsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3705,6 +3832,8 @@ export namespace Prisma {
       badges: Prisma.$UserBadgePayload<ExtArgs>[]
       businessRequests: Prisma.$BusinessRequestPayload<ExtArgs>[]
       requestSupports: Prisma.$BusinessRequestSupporterPayload<ExtArgs>[]
+      employee: Prisma.$EmployeePayload<ExtArgs> | null
+      employeeJoinRequests: Prisma.$EmployeeJoinRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4127,6 +4256,8 @@ export namespace Prisma {
     badges<T extends User$badgesArgs<ExtArgs> = {}>(args?: Subset<T, User$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserBadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     businessRequests<T extends User$businessRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$businessRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     requestSupports<T extends User$requestSupportsArgs<ExtArgs> = {}>(args?: Subset<T, User$requestSupportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessRequestSupporterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    employee<T extends User$employeeArgs<ExtArgs> = {}>(args?: Subset<T, User$employeeArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    employeeJoinRequests<T extends User$employeeJoinRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$employeeJoinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4871,6 +5002,49 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BusinessRequestSupporterScalarFieldEnum | BusinessRequestSupporterScalarFieldEnum[]
+  }
+
+  /**
+   * User.employee
+   */
+  export type User$employeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    where?: EmployeeWhereInput
+  }
+
+  /**
+   * User.employeeJoinRequests
+   */
+  export type User$employeeJoinRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    where?: EmployeeJoinRequestWhereInput
+    orderBy?: EmployeeJoinRequestOrderByWithRelationInput | EmployeeJoinRequestOrderByWithRelationInput[]
+    cursor?: EmployeeJoinRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmployeeJoinRequestScalarFieldEnum | EmployeeJoinRequestScalarFieldEnum[]
   }
 
   /**
@@ -6339,6 +6513,7 @@ export namespace Prisma {
     followers?: boolean | Business$followersArgs<ExtArgs>
     favorites?: boolean | Business$favoritesArgs<ExtArgs>
     collections?: boolean | Business$collectionsArgs<ExtArgs>
+    employeeJoinRequests?: boolean | Business$employeeJoinRequestsArgs<ExtArgs>
     _count?: boolean | BusinessCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["business"]>
 
@@ -6428,6 +6603,7 @@ export namespace Prisma {
     followers?: boolean | Business$followersArgs<ExtArgs>
     favorites?: boolean | Business$favoritesArgs<ExtArgs>
     collections?: boolean | Business$collectionsArgs<ExtArgs>
+    employeeJoinRequests?: boolean | Business$employeeJoinRequestsArgs<ExtArgs>
     _count?: boolean | BusinessCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BusinessIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6453,6 +6629,7 @@ export namespace Prisma {
       followers: Prisma.$FollowerPayload<ExtArgs>[]
       favorites: Prisma.$FavoritePayload<ExtArgs>[]
       collections: Prisma.$CollectionItemPayload<ExtArgs>[]
+      employeeJoinRequests: Prisma.$EmployeeJoinRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6880,6 +7057,7 @@ export namespace Prisma {
     followers<T extends Business$followersArgs<ExtArgs> = {}>(args?: Subset<T, Business$followersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FollowerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     favorites<T extends Business$favoritesArgs<ExtArgs> = {}>(args?: Subset<T, Business$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     collections<T extends Business$collectionsArgs<ExtArgs> = {}>(args?: Subset<T, Business$collectionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CollectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    employeeJoinRequests<T extends Business$employeeJoinRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Business$employeeJoinRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7584,6 +7762,30 @@ export namespace Prisma {
   }
 
   /**
+   * Business.employeeJoinRequests
+   */
+  export type Business$employeeJoinRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    where?: EmployeeJoinRequestWhereInput
+    orderBy?: EmployeeJoinRequestOrderByWithRelationInput | EmployeeJoinRequestOrderByWithRelationInput[]
+    cursor?: EmployeeJoinRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmployeeJoinRequestScalarFieldEnum | EmployeeJoinRequestScalarFieldEnum[]
+  }
+
+  /**
    * Business without action
    */
   export type BusinessDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7617,6 +7819,7 @@ export namespace Prisma {
     name: string | null
     role: string | null
     active: boolean | null
+    userId: string | null
     businessId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7627,6 +7830,7 @@ export namespace Prisma {
     name: string | null
     role: string | null
     active: boolean | null
+    userId: string | null
     businessId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7637,6 +7841,7 @@ export namespace Prisma {
     name: number
     role: number
     active: number
+    userId: number
     businessId: number
     createdAt: number
     updatedAt: number
@@ -7649,6 +7854,7 @@ export namespace Prisma {
     name?: true
     role?: true
     active?: true
+    userId?: true
     businessId?: true
     createdAt?: true
     updatedAt?: true
@@ -7659,6 +7865,7 @@ export namespace Prisma {
     name?: true
     role?: true
     active?: true
+    userId?: true
     businessId?: true
     createdAt?: true
     updatedAt?: true
@@ -7669,6 +7876,7 @@ export namespace Prisma {
     name?: true
     role?: true
     active?: true
+    userId?: true
     businessId?: true
     createdAt?: true
     updatedAt?: true
@@ -7752,6 +7960,7 @@ export namespace Prisma {
     name: string
     role: string | null
     active: boolean
+    userId: string | null
     businessId: string
     createdAt: Date
     updatedAt: Date
@@ -7779,9 +7988,11 @@ export namespace Prisma {
     name?: boolean
     role?: boolean
     active?: boolean
+    userId?: boolean
     businessId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | Employee$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
     reviews?: boolean | Employee$reviewsArgs<ExtArgs>
     nfcTags?: boolean | Employee$nfcTagsArgs<ExtArgs>
@@ -7793,9 +8004,11 @@ export namespace Prisma {
     name?: boolean
     role?: boolean
     active?: boolean
+    userId?: boolean
     businessId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | Employee$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -7804,9 +8017,11 @@ export namespace Prisma {
     name?: boolean
     role?: boolean
     active?: boolean
+    userId?: boolean
     businessId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | Employee$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["employee"]>
 
@@ -7815,28 +8030,33 @@ export namespace Prisma {
     name?: boolean
     role?: boolean
     active?: boolean
+    userId?: boolean
     businessId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "role" | "active" | "businessId" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "role" | "active" | "userId" | "businessId" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
   export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Employee$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
     reviews?: boolean | Employee$reviewsArgs<ExtArgs>
     nfcTags?: boolean | Employee$nfcTagsArgs<ExtArgs>
     _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Employee$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }
   export type EmployeeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Employee$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }
 
   export type $EmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Employee"
     objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
       business: Prisma.$BusinessPayload<ExtArgs>
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
       nfcTags: Prisma.$NfcTagPayload<ExtArgs>[]
@@ -7846,6 +8066,7 @@ export namespace Prisma {
       name: string
       role: string | null
       active: boolean
+      userId: string | null
       businessId: string
       createdAt: Date
       updatedAt: Date
@@ -8243,6 +8464,7 @@ export namespace Prisma {
    */
   export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Employee$userArgs<ExtArgs> = {}>(args?: Subset<T, Employee$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     reviews<T extends Employee$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     nfcTags<T extends Employee$nfcTagsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$nfcTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8279,6 +8501,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Employee", 'String'>
     readonly role: FieldRef<"Employee", 'String'>
     readonly active: FieldRef<"Employee", 'Boolean'>
+    readonly userId: FieldRef<"Employee", 'String'>
     readonly businessId: FieldRef<"Employee", 'String'>
     readonly createdAt: FieldRef<"Employee", 'DateTime'>
     readonly updatedAt: FieldRef<"Employee", 'DateTime'>
@@ -8683,6 +8906,25 @@ export namespace Prisma {
   }
 
   /**
+   * Employee.user
+   */
+  export type Employee$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * Employee.reviews
    */
   export type Employee$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8746,6 +8988,1116 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EmployeeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EmployeeJoinRequest
+   */
+
+  export type AggregateEmployeeJoinRequest = {
+    _count: EmployeeJoinRequestCountAggregateOutputType | null
+    _min: EmployeeJoinRequestMinAggregateOutputType | null
+    _max: EmployeeJoinRequestMaxAggregateOutputType | null
+  }
+
+  export type EmployeeJoinRequestMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    businessId: string | null
+    jobTitle: string | null
+    status: $Enums.EmployeeJoinRequestStatus | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmployeeJoinRequestMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    businessId: string | null
+    jobTitle: string | null
+    status: $Enums.EmployeeJoinRequestStatus | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmployeeJoinRequestCountAggregateOutputType = {
+    id: number
+    userId: number
+    businessId: number
+    jobTitle: number
+    status: number
+    reviewedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EmployeeJoinRequestMinAggregateInputType = {
+    id?: true
+    userId?: true
+    businessId?: true
+    jobTitle?: true
+    status?: true
+    reviewedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmployeeJoinRequestMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    businessId?: true
+    jobTitle?: true
+    status?: true
+    reviewedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmployeeJoinRequestCountAggregateInputType = {
+    id?: true
+    userId?: true
+    businessId?: true
+    jobTitle?: true
+    status?: true
+    reviewedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EmployeeJoinRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmployeeJoinRequest to aggregate.
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmployeeJoinRequests to fetch.
+     */
+    orderBy?: EmployeeJoinRequestOrderByWithRelationInput | EmployeeJoinRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmployeeJoinRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmployeeJoinRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmployeeJoinRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EmployeeJoinRequests
+    **/
+    _count?: true | EmployeeJoinRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmployeeJoinRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmployeeJoinRequestMaxAggregateInputType
+  }
+
+  export type GetEmployeeJoinRequestAggregateType<T extends EmployeeJoinRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmployeeJoinRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmployeeJoinRequest[P]>
+      : GetScalarType<T[P], AggregateEmployeeJoinRequest[P]>
+  }
+
+
+
+
+  export type EmployeeJoinRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeJoinRequestWhereInput
+    orderBy?: EmployeeJoinRequestOrderByWithAggregationInput | EmployeeJoinRequestOrderByWithAggregationInput[]
+    by: EmployeeJoinRequestScalarFieldEnum[] | EmployeeJoinRequestScalarFieldEnum
+    having?: EmployeeJoinRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmployeeJoinRequestCountAggregateInputType | true
+    _min?: EmployeeJoinRequestMinAggregateInputType
+    _max?: EmployeeJoinRequestMaxAggregateInputType
+  }
+
+  export type EmployeeJoinRequestGroupByOutputType = {
+    id: string
+    userId: string
+    businessId: string
+    jobTitle: string | null
+    status: $Enums.EmployeeJoinRequestStatus
+    reviewedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: EmployeeJoinRequestCountAggregateOutputType | null
+    _min: EmployeeJoinRequestMinAggregateOutputType | null
+    _max: EmployeeJoinRequestMaxAggregateOutputType | null
+  }
+
+  type GetEmployeeJoinRequestGroupByPayload<T extends EmployeeJoinRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmployeeJoinRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmployeeJoinRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmployeeJoinRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], EmployeeJoinRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmployeeJoinRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    businessId?: boolean
+    jobTitle?: boolean
+    status?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employeeJoinRequest"]>
+
+  export type EmployeeJoinRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    businessId?: boolean
+    jobTitle?: boolean
+    status?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employeeJoinRequest"]>
+
+  export type EmployeeJoinRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    businessId?: boolean
+    jobTitle?: boolean
+    status?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employeeJoinRequest"]>
+
+  export type EmployeeJoinRequestSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    businessId?: boolean
+    jobTitle?: boolean
+    status?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EmployeeJoinRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "businessId" | "jobTitle" | "status" | "reviewedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["employeeJoinRequest"]>
+  export type EmployeeJoinRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }
+  export type EmployeeJoinRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }
+  export type EmployeeJoinRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }
+
+  export type $EmployeeJoinRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EmployeeJoinRequest"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      business: Prisma.$BusinessPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      businessId: string
+      jobTitle: string | null
+      status: $Enums.EmployeeJoinRequestStatus
+      reviewedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["employeeJoinRequest"]>
+    composites: {}
+  }
+
+  type EmployeeJoinRequestGetPayload<S extends boolean | null | undefined | EmployeeJoinRequestDefaultArgs> = $Result.GetResult<Prisma.$EmployeeJoinRequestPayload, S>
+
+  type EmployeeJoinRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmployeeJoinRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmployeeJoinRequestCountAggregateInputType | true
+    }
+
+  export interface EmployeeJoinRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmployeeJoinRequest'], meta: { name: 'EmployeeJoinRequest' } }
+    /**
+     * Find zero or one EmployeeJoinRequest that matches the filter.
+     * @param {EmployeeJoinRequestFindUniqueArgs} args - Arguments to find a EmployeeJoinRequest
+     * @example
+     * // Get one EmployeeJoinRequest
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmployeeJoinRequestFindUniqueArgs>(args: SelectSubset<T, EmployeeJoinRequestFindUniqueArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EmployeeJoinRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmployeeJoinRequestFindUniqueOrThrowArgs} args - Arguments to find a EmployeeJoinRequest
+     * @example
+     * // Get one EmployeeJoinRequest
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmployeeJoinRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, EmployeeJoinRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmployeeJoinRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestFindFirstArgs} args - Arguments to find a EmployeeJoinRequest
+     * @example
+     * // Get one EmployeeJoinRequest
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmployeeJoinRequestFindFirstArgs>(args?: SelectSubset<T, EmployeeJoinRequestFindFirstArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmployeeJoinRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestFindFirstOrThrowArgs} args - Arguments to find a EmployeeJoinRequest
+     * @example
+     * // Get one EmployeeJoinRequest
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmployeeJoinRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, EmployeeJoinRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EmployeeJoinRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmployeeJoinRequests
+     * const employeeJoinRequests = await prisma.employeeJoinRequest.findMany()
+     * 
+     * // Get first 10 EmployeeJoinRequests
+     * const employeeJoinRequests = await prisma.employeeJoinRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const employeeJoinRequestWithIdOnly = await prisma.employeeJoinRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmployeeJoinRequestFindManyArgs>(args?: SelectSubset<T, EmployeeJoinRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EmployeeJoinRequest.
+     * @param {EmployeeJoinRequestCreateArgs} args - Arguments to create a EmployeeJoinRequest.
+     * @example
+     * // Create one EmployeeJoinRequest
+     * const EmployeeJoinRequest = await prisma.employeeJoinRequest.create({
+     *   data: {
+     *     // ... data to create a EmployeeJoinRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmployeeJoinRequestCreateArgs>(args: SelectSubset<T, EmployeeJoinRequestCreateArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EmployeeJoinRequests.
+     * @param {EmployeeJoinRequestCreateManyArgs} args - Arguments to create many EmployeeJoinRequests.
+     * @example
+     * // Create many EmployeeJoinRequests
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmployeeJoinRequestCreateManyArgs>(args?: SelectSubset<T, EmployeeJoinRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EmployeeJoinRequests and returns the data saved in the database.
+     * @param {EmployeeJoinRequestCreateManyAndReturnArgs} args - Arguments to create many EmployeeJoinRequests.
+     * @example
+     * // Create many EmployeeJoinRequests
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EmployeeJoinRequests and only return the `id`
+     * const employeeJoinRequestWithIdOnly = await prisma.employeeJoinRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmployeeJoinRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, EmployeeJoinRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EmployeeJoinRequest.
+     * @param {EmployeeJoinRequestDeleteArgs} args - Arguments to delete one EmployeeJoinRequest.
+     * @example
+     * // Delete one EmployeeJoinRequest
+     * const EmployeeJoinRequest = await prisma.employeeJoinRequest.delete({
+     *   where: {
+     *     // ... filter to delete one EmployeeJoinRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmployeeJoinRequestDeleteArgs>(args: SelectSubset<T, EmployeeJoinRequestDeleteArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EmployeeJoinRequest.
+     * @param {EmployeeJoinRequestUpdateArgs} args - Arguments to update one EmployeeJoinRequest.
+     * @example
+     * // Update one EmployeeJoinRequest
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmployeeJoinRequestUpdateArgs>(args: SelectSubset<T, EmployeeJoinRequestUpdateArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EmployeeJoinRequests.
+     * @param {EmployeeJoinRequestDeleteManyArgs} args - Arguments to filter EmployeeJoinRequests to delete.
+     * @example
+     * // Delete a few EmployeeJoinRequests
+     * const { count } = await prisma.employeeJoinRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmployeeJoinRequestDeleteManyArgs>(args?: SelectSubset<T, EmployeeJoinRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmployeeJoinRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmployeeJoinRequests
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmployeeJoinRequestUpdateManyArgs>(args: SelectSubset<T, EmployeeJoinRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmployeeJoinRequests and returns the data updated in the database.
+     * @param {EmployeeJoinRequestUpdateManyAndReturnArgs} args - Arguments to update many EmployeeJoinRequests.
+     * @example
+     * // Update many EmployeeJoinRequests
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EmployeeJoinRequests and only return the `id`
+     * const employeeJoinRequestWithIdOnly = await prisma.employeeJoinRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmployeeJoinRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, EmployeeJoinRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EmployeeJoinRequest.
+     * @param {EmployeeJoinRequestUpsertArgs} args - Arguments to update or create a EmployeeJoinRequest.
+     * @example
+     * // Update or create a EmployeeJoinRequest
+     * const employeeJoinRequest = await prisma.employeeJoinRequest.upsert({
+     *   create: {
+     *     // ... data to create a EmployeeJoinRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmployeeJoinRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmployeeJoinRequestUpsertArgs>(args: SelectSubset<T, EmployeeJoinRequestUpsertArgs<ExtArgs>>): Prisma__EmployeeJoinRequestClient<$Result.GetResult<Prisma.$EmployeeJoinRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EmployeeJoinRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestCountArgs} args - Arguments to filter EmployeeJoinRequests to count.
+     * @example
+     * // Count the number of EmployeeJoinRequests
+     * const count = await prisma.employeeJoinRequest.count({
+     *   where: {
+     *     // ... the filter for the EmployeeJoinRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmployeeJoinRequestCountArgs>(
+      args?: Subset<T, EmployeeJoinRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmployeeJoinRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EmployeeJoinRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmployeeJoinRequestAggregateArgs>(args: Subset<T, EmployeeJoinRequestAggregateArgs>): Prisma.PrismaPromise<GetEmployeeJoinRequestAggregateType<T>>
+
+    /**
+     * Group by EmployeeJoinRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeJoinRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmployeeJoinRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmployeeJoinRequestGroupByArgs['orderBy'] }
+        : { orderBy?: EmployeeJoinRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmployeeJoinRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmployeeJoinRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EmployeeJoinRequest model
+   */
+  readonly fields: EmployeeJoinRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmployeeJoinRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmployeeJoinRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EmployeeJoinRequest model
+   */
+  interface EmployeeJoinRequestFieldRefs {
+    readonly id: FieldRef<"EmployeeJoinRequest", 'String'>
+    readonly userId: FieldRef<"EmployeeJoinRequest", 'String'>
+    readonly businessId: FieldRef<"EmployeeJoinRequest", 'String'>
+    readonly jobTitle: FieldRef<"EmployeeJoinRequest", 'String'>
+    readonly status: FieldRef<"EmployeeJoinRequest", 'EmployeeJoinRequestStatus'>
+    readonly reviewedAt: FieldRef<"EmployeeJoinRequest", 'DateTime'>
+    readonly createdAt: FieldRef<"EmployeeJoinRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"EmployeeJoinRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EmployeeJoinRequest findUnique
+   */
+  export type EmployeeJoinRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EmployeeJoinRequest to fetch.
+     */
+    where: EmployeeJoinRequestWhereUniqueInput
+  }
+
+  /**
+   * EmployeeJoinRequest findUniqueOrThrow
+   */
+  export type EmployeeJoinRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EmployeeJoinRequest to fetch.
+     */
+    where: EmployeeJoinRequestWhereUniqueInput
+  }
+
+  /**
+   * EmployeeJoinRequest findFirst
+   */
+  export type EmployeeJoinRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EmployeeJoinRequest to fetch.
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmployeeJoinRequests to fetch.
+     */
+    orderBy?: EmployeeJoinRequestOrderByWithRelationInput | EmployeeJoinRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmployeeJoinRequests.
+     */
+    cursor?: EmployeeJoinRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmployeeJoinRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmployeeJoinRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmployeeJoinRequests.
+     */
+    distinct?: EmployeeJoinRequestScalarFieldEnum | EmployeeJoinRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EmployeeJoinRequest findFirstOrThrow
+   */
+  export type EmployeeJoinRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EmployeeJoinRequest to fetch.
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmployeeJoinRequests to fetch.
+     */
+    orderBy?: EmployeeJoinRequestOrderByWithRelationInput | EmployeeJoinRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmployeeJoinRequests.
+     */
+    cursor?: EmployeeJoinRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmployeeJoinRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmployeeJoinRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmployeeJoinRequests.
+     */
+    distinct?: EmployeeJoinRequestScalarFieldEnum | EmployeeJoinRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EmployeeJoinRequest findMany
+   */
+  export type EmployeeJoinRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which EmployeeJoinRequests to fetch.
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmployeeJoinRequests to fetch.
+     */
+    orderBy?: EmployeeJoinRequestOrderByWithRelationInput | EmployeeJoinRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EmployeeJoinRequests.
+     */
+    cursor?: EmployeeJoinRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmployeeJoinRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmployeeJoinRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmployeeJoinRequests.
+     */
+    distinct?: EmployeeJoinRequestScalarFieldEnum | EmployeeJoinRequestScalarFieldEnum[]
+  }
+
+  /**
+   * EmployeeJoinRequest create
+   */
+  export type EmployeeJoinRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EmployeeJoinRequest.
+     */
+    data: XOR<EmployeeJoinRequestCreateInput, EmployeeJoinRequestUncheckedCreateInput>
+  }
+
+  /**
+   * EmployeeJoinRequest createMany
+   */
+  export type EmployeeJoinRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EmployeeJoinRequests.
+     */
+    data: EmployeeJoinRequestCreateManyInput | EmployeeJoinRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EmployeeJoinRequest createManyAndReturn
+   */
+  export type EmployeeJoinRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many EmployeeJoinRequests.
+     */
+    data: EmployeeJoinRequestCreateManyInput | EmployeeJoinRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmployeeJoinRequest update
+   */
+  export type EmployeeJoinRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EmployeeJoinRequest.
+     */
+    data: XOR<EmployeeJoinRequestUpdateInput, EmployeeJoinRequestUncheckedUpdateInput>
+    /**
+     * Choose, which EmployeeJoinRequest to update.
+     */
+    where: EmployeeJoinRequestWhereUniqueInput
+  }
+
+  /**
+   * EmployeeJoinRequest updateMany
+   */
+  export type EmployeeJoinRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EmployeeJoinRequests.
+     */
+    data: XOR<EmployeeJoinRequestUpdateManyMutationInput, EmployeeJoinRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which EmployeeJoinRequests to update
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * Limit how many EmployeeJoinRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmployeeJoinRequest updateManyAndReturn
+   */
+  export type EmployeeJoinRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update EmployeeJoinRequests.
+     */
+    data: XOR<EmployeeJoinRequestUpdateManyMutationInput, EmployeeJoinRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which EmployeeJoinRequests to update
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * Limit how many EmployeeJoinRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmployeeJoinRequest upsert
+   */
+  export type EmployeeJoinRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EmployeeJoinRequest to update in case it exists.
+     */
+    where: EmployeeJoinRequestWhereUniqueInput
+    /**
+     * In case the EmployeeJoinRequest found by the `where` argument doesn't exist, create a new EmployeeJoinRequest with this data.
+     */
+    create: XOR<EmployeeJoinRequestCreateInput, EmployeeJoinRequestUncheckedCreateInput>
+    /**
+     * In case the EmployeeJoinRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmployeeJoinRequestUpdateInput, EmployeeJoinRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * EmployeeJoinRequest delete
+   */
+  export type EmployeeJoinRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
+    /**
+     * Filter which EmployeeJoinRequest to delete.
+     */
+    where: EmployeeJoinRequestWhereUniqueInput
+  }
+
+  /**
+   * EmployeeJoinRequest deleteMany
+   */
+  export type EmployeeJoinRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmployeeJoinRequests to delete
+     */
+    where?: EmployeeJoinRequestWhereInput
+    /**
+     * Limit how many EmployeeJoinRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmployeeJoinRequest without action
+   */
+  export type EmployeeJoinRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeJoinRequest
+     */
+    select?: EmployeeJoinRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmployeeJoinRequest
+     */
+    omit?: EmployeeJoinRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeJoinRequestInclude<ExtArgs> | null
   }
 
 
@@ -28835,12 +30187,27 @@ export namespace Prisma {
     name: 'name',
     role: 'role',
     active: 'active',
+    userId: 'userId',
     businessId: 'businessId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+  export const EmployeeJoinRequestScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    businessId: 'businessId',
+    jobTitle: 'jobTitle',
+    status: 'status',
+    reviewedAt: 'reviewedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EmployeeJoinRequestScalarFieldEnum = (typeof EmployeeJoinRequestScalarFieldEnum)[keyof typeof EmployeeJoinRequestScalarFieldEnum]
 
 
   export const NfcTagScalarFieldEnum: {
@@ -29197,6 +30564,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EmployeeJoinRequestStatus'
+   */
+  export type EnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeJoinRequestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EmployeeJoinRequestStatus[]'
+   */
+  export type ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmployeeJoinRequestStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'NfcTagType'
    */
   export type EnumNfcTagTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NfcTagType'>
@@ -29285,6 +30666,8 @@ export namespace Prisma {
     badges?: UserBadgeListRelationFilter
     businessRequests?: BusinessRequestListRelationFilter
     requestSupports?: BusinessRequestSupporterListRelationFilter
+    employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+    employeeJoinRequests?: EmployeeJoinRequestListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -29314,6 +30697,8 @@ export namespace Prisma {
     badges?: UserBadgeOrderByRelationAggregateInput
     businessRequests?: BusinessRequestOrderByRelationAggregateInput
     requestSupports?: BusinessRequestSupporterOrderByRelationAggregateInput
+    employee?: EmployeeOrderByWithRelationInput
+    employeeJoinRequests?: EmployeeJoinRequestOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -29346,6 +30731,8 @@ export namespace Prisma {
     badges?: UserBadgeListRelationFilter
     businessRequests?: BusinessRequestListRelationFilter
     requestSupports?: BusinessRequestSupporterListRelationFilter
+    employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+    employeeJoinRequests?: EmployeeJoinRequestListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -29493,6 +30880,7 @@ export namespace Prisma {
     followers?: FollowerListRelationFilter
     favorites?: FavoriteListRelationFilter
     collections?: CollectionItemListRelationFilter
+    employeeJoinRequests?: EmployeeJoinRequestListRelationFilter
   }
 
   export type BusinessOrderByWithRelationInput = {
@@ -29527,6 +30915,7 @@ export namespace Prisma {
     followers?: FollowerOrderByRelationAggregateInput
     favorites?: FavoriteOrderByRelationAggregateInput
     collections?: CollectionItemOrderByRelationAggregateInput
+    employeeJoinRequests?: EmployeeJoinRequestOrderByRelationAggregateInput
   }
 
   export type BusinessWhereUniqueInput = Prisma.AtLeast<{
@@ -29564,6 +30953,7 @@ export namespace Prisma {
     followers?: FollowerListRelationFilter
     favorites?: FavoriteListRelationFilter
     collections?: CollectionItemListRelationFilter
+    employeeJoinRequests?: EmployeeJoinRequestListRelationFilter
   }, "id" | "slug">
 
   export type BusinessOrderByWithAggregationInput = {
@@ -29628,9 +31018,11 @@ export namespace Prisma {
     name?: StringFilter<"Employee"> | string
     role?: StringNullableFilter<"Employee"> | string | null
     active?: BoolFilter<"Employee"> | boolean
+    userId?: StringNullableFilter<"Employee"> | string | null
     businessId?: StringFilter<"Employee"> | string
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
     reviews?: ReviewListRelationFilter
     nfcTags?: NfcTagListRelationFilter
@@ -29641,9 +31033,11 @@ export namespace Prisma {
     name?: SortOrder
     role?: SortOrderInput | SortOrder
     active?: SortOrder
+    userId?: SortOrderInput | SortOrder
     businessId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
     business?: BusinessOrderByWithRelationInput
     reviews?: ReviewOrderByRelationAggregateInput
     nfcTags?: NfcTagOrderByRelationAggregateInput
@@ -29651,6 +31045,7 @@ export namespace Prisma {
 
   export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    userId?: string
     AND?: EmployeeWhereInput | EmployeeWhereInput[]
     OR?: EmployeeWhereInput[]
     NOT?: EmployeeWhereInput | EmployeeWhereInput[]
@@ -29660,16 +31055,18 @@ export namespace Prisma {
     businessId?: StringFilter<"Employee"> | string
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
     reviews?: ReviewListRelationFilter
     nfcTags?: NfcTagListRelationFilter
-  }, "id">
+  }, "id" | "userId">
 
   export type EmployeeOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     role?: SortOrderInput | SortOrder
     active?: SortOrder
+    userId?: SortOrderInput | SortOrder
     businessId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -29686,9 +31083,84 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Employee"> | string
     role?: StringNullableWithAggregatesFilter<"Employee"> | string | null
     active?: BoolWithAggregatesFilter<"Employee"> | boolean
+    userId?: StringNullableWithAggregatesFilter<"Employee"> | string | null
     businessId?: StringWithAggregatesFilter<"Employee"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
+  }
+
+  export type EmployeeJoinRequestWhereInput = {
+    AND?: EmployeeJoinRequestWhereInput | EmployeeJoinRequestWhereInput[]
+    OR?: EmployeeJoinRequestWhereInput[]
+    NOT?: EmployeeJoinRequestWhereInput | EmployeeJoinRequestWhereInput[]
+    id?: StringFilter<"EmployeeJoinRequest"> | string
+    userId?: StringFilter<"EmployeeJoinRequest"> | string
+    businessId?: StringFilter<"EmployeeJoinRequest"> | string
+    jobTitle?: StringNullableFilter<"EmployeeJoinRequest"> | string | null
+    status?: EnumEmployeeJoinRequestStatusFilter<"EmployeeJoinRequest"> | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: DateTimeNullableFilter<"EmployeeJoinRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"EmployeeJoinRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EmployeeJoinRequest"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
+  }
+
+  export type EmployeeJoinRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    businessId?: SortOrder
+    jobTitle?: SortOrderInput | SortOrder
+    status?: SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    business?: BusinessOrderByWithRelationInput
+  }
+
+  export type EmployeeJoinRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_businessId?: EmployeeJoinRequestUserIdBusinessIdCompoundUniqueInput
+    AND?: EmployeeJoinRequestWhereInput | EmployeeJoinRequestWhereInput[]
+    OR?: EmployeeJoinRequestWhereInput[]
+    NOT?: EmployeeJoinRequestWhereInput | EmployeeJoinRequestWhereInput[]
+    userId?: StringFilter<"EmployeeJoinRequest"> | string
+    businessId?: StringFilter<"EmployeeJoinRequest"> | string
+    jobTitle?: StringNullableFilter<"EmployeeJoinRequest"> | string | null
+    status?: EnumEmployeeJoinRequestStatusFilter<"EmployeeJoinRequest"> | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: DateTimeNullableFilter<"EmployeeJoinRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"EmployeeJoinRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EmployeeJoinRequest"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
+  }, "id" | "userId_businessId">
+
+  export type EmployeeJoinRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    businessId?: SortOrder
+    jobTitle?: SortOrderInput | SortOrder
+    status?: SortOrder
+    reviewedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EmployeeJoinRequestCountOrderByAggregateInput
+    _max?: EmployeeJoinRequestMaxOrderByAggregateInput
+    _min?: EmployeeJoinRequestMinOrderByAggregateInput
+  }
+
+  export type EmployeeJoinRequestScalarWhereWithAggregatesInput = {
+    AND?: EmployeeJoinRequestScalarWhereWithAggregatesInput | EmployeeJoinRequestScalarWhereWithAggregatesInput[]
+    OR?: EmployeeJoinRequestScalarWhereWithAggregatesInput[]
+    NOT?: EmployeeJoinRequestScalarWhereWithAggregatesInput | EmployeeJoinRequestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"EmployeeJoinRequest"> | string
+    userId?: StringWithAggregatesFilter<"EmployeeJoinRequest"> | string
+    businessId?: StringWithAggregatesFilter<"EmployeeJoinRequest"> | string
+    jobTitle?: StringNullableWithAggregatesFilter<"EmployeeJoinRequest"> | string | null
+    status?: EnumEmployeeJoinRequestStatusWithAggregatesFilter<"EmployeeJoinRequest"> | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: DateTimeNullableWithAggregatesFilter<"EmployeeJoinRequest"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"EmployeeJoinRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EmployeeJoinRequest"> | Date | string
   }
 
   export type NfcTagWhereInput = {
@@ -30948,6 +32420,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -30977,6 +32451,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -31006,6 +32482,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -31035,6 +32513,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -31196,6 +32676,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateInput = {
@@ -31228,6 +32709,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUpdateInput = {
@@ -31260,6 +32742,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateInput = {
@@ -31292,6 +32775,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessCreateManyInput = {
@@ -31368,6 +32852,7 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutEmployeeInput
     business: BusinessCreateNestedOneWithoutEmployeesInput
     reviews?: ReviewCreateNestedManyWithoutEmployeeInput
     nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
@@ -31378,6 +32863,7 @@ export namespace Prisma {
     name: string
     role?: string | null
     active?: boolean
+    userId?: string | null
     businessId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -31392,6 +32878,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutEmployeeNestedInput
     business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
     reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
     nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
@@ -31402,6 +32889,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     role?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31414,6 +32902,7 @@ export namespace Prisma {
     name: string
     role?: string | null
     active?: boolean
+    userId?: string | null
     businessId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -31433,7 +32922,83 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     role?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeJoinRequestCreateInput = {
+    id?: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEmployeeJoinRequestsInput
+    business: BusinessCreateNestedOneWithoutEmployeeJoinRequestsInput
+  }
+
+  export type EmployeeJoinRequestUncheckedCreateInput = {
+    id?: string
+    userId: string
+    businessId: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeJoinRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEmployeeJoinRequestsNestedInput
+    business?: BusinessUpdateOneRequiredWithoutEmployeeJoinRequestsNestedInput
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeJoinRequestCreateManyInput = {
+    id?: string
+    userId: string
+    businessId: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeJoinRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32840,6 +34405,17 @@ export namespace Prisma {
     none?: BusinessRequestSupporterWhereInput
   }
 
+  export type EmployeeNullableScalarRelationFilter = {
+    is?: EmployeeWhereInput | null
+    isNot?: EmployeeWhereInput | null
+  }
+
+  export type EmployeeJoinRequestListRelationFilter = {
+    every?: EmployeeJoinRequestWhereInput
+    some?: EmployeeJoinRequestWhereInput
+    none?: EmployeeJoinRequestWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -32894,6 +34470,10 @@ export namespace Prisma {
   }
 
   export type BusinessRequestSupporterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EmployeeJoinRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -33283,6 +34863,7 @@ export namespace Prisma {
     name?: SortOrder
     role?: SortOrder
     active?: SortOrder
+    userId?: SortOrder
     businessId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -33293,6 +34874,7 @@ export namespace Prisma {
     name?: SortOrder
     role?: SortOrder
     active?: SortOrder
+    userId?: SortOrder
     businessId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -33303,9 +34885,70 @@ export namespace Prisma {
     name?: SortOrder
     role?: SortOrder
     active?: SortOrder
+    userId?: SortOrder
     businessId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumEmployeeJoinRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmployeeJoinRequestStatus | EnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel> | $Enums.EmployeeJoinRequestStatus
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type EmployeeJoinRequestUserIdBusinessIdCompoundUniqueInput = {
+    userId: string
+    businessId: string
+  }
+
+  export type EmployeeJoinRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    businessId?: SortOrder
+    jobTitle?: SortOrder
+    status?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmployeeJoinRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    businessId?: SortOrder
+    jobTitle?: SortOrder
+    status?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmployeeJoinRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    businessId?: SortOrder
+    jobTitle?: SortOrder
+    status?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumEmployeeJoinRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmployeeJoinRequestStatus | EnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmployeeJoinRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmployeeJoinRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel>
   }
 
   export type EnumNfcTagTypeFilter<$PrismaModel = never> = {
@@ -33313,11 +34956,6 @@ export namespace Prisma {
     in?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
     notIn?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
     not?: NestedEnumNfcTagTypeFilter<$PrismaModel> | $Enums.NfcTagType
-  }
-
-  export type EmployeeNullableScalarRelationFilter = {
-    is?: EmployeeWhereInput | null
-    isNot?: EmployeeWhereInput | null
   }
 
   export type NfcTagCountOrderByAggregateInput = {
@@ -33387,11 +35025,6 @@ export namespace Prisma {
   export type VisitNullableScalarRelationFilter = {
     is?: VisitWhereInput | null
     isNot?: VisitWhereInput | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type ReviewCountOrderByAggregateInput = {
@@ -34126,6 +35759,19 @@ export namespace Prisma {
     connect?: BusinessRequestSupporterWhereUniqueInput | BusinessRequestSupporterWhereUniqueInput[]
   }
 
+  export type EmployeeCreateNestedOneWithoutUserInput = {
+    create?: XOR<EmployeeCreateWithoutUserInput, EmployeeUncheckedCreateWithoutUserInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutUserInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeJoinRequestCreateNestedManyWithoutUserInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutUserInput, EmployeeJoinRequestUncheckedCreateWithoutUserInput> | EmployeeJoinRequestCreateWithoutUserInput[] | EmployeeJoinRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutUserInput | EmployeeJoinRequestCreateOrConnectWithoutUserInput[]
+    createMany?: EmployeeJoinRequestCreateManyUserInputEnvelope
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -34215,6 +35861,19 @@ export namespace Prisma {
     connectOrCreate?: BusinessRequestSupporterCreateOrConnectWithoutUserInput | BusinessRequestSupporterCreateOrConnectWithoutUserInput[]
     createMany?: BusinessRequestSupporterCreateManyUserInputEnvelope
     connect?: BusinessRequestSupporterWhereUniqueInput | BusinessRequestSupporterWhereUniqueInput[]
+  }
+
+  export type EmployeeUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<EmployeeCreateWithoutUserInput, EmployeeUncheckedCreateWithoutUserInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutUserInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutUserInput, EmployeeJoinRequestUncheckedCreateWithoutUserInput> | EmployeeJoinRequestCreateWithoutUserInput[] | EmployeeJoinRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutUserInput | EmployeeJoinRequestCreateOrConnectWithoutUserInput[]
+    createMany?: EmployeeJoinRequestCreateManyUserInputEnvelope
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -34431,6 +36090,30 @@ export namespace Prisma {
     deleteMany?: BusinessRequestSupporterScalarWhereInput | BusinessRequestSupporterScalarWhereInput[]
   }
 
+  export type EmployeeUpdateOneWithoutUserNestedInput = {
+    create?: XOR<EmployeeCreateWithoutUserInput, EmployeeUncheckedCreateWithoutUserInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutUserInput
+    upsert?: EmployeeUpsertWithoutUserInput
+    disconnect?: EmployeeWhereInput | boolean
+    delete?: EmployeeWhereInput | boolean
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutUserInput, EmployeeUpdateWithoutUserInput>, EmployeeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutUserInput, EmployeeJoinRequestUncheckedCreateWithoutUserInput> | EmployeeJoinRequestCreateWithoutUserInput[] | EmployeeJoinRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutUserInput | EmployeeJoinRequestCreateOrConnectWithoutUserInput[]
+    upsert?: EmployeeJoinRequestUpsertWithWhereUniqueWithoutUserInput | EmployeeJoinRequestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EmployeeJoinRequestCreateManyUserInputEnvelope
+    set?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    disconnect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    delete?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    update?: EmployeeJoinRequestUpdateWithWhereUniqueWithoutUserInput | EmployeeJoinRequestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EmployeeJoinRequestUpdateManyWithWhereWithoutUserInput | EmployeeJoinRequestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EmployeeJoinRequestScalarWhereInput | EmployeeJoinRequestScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -34613,6 +36296,30 @@ export namespace Prisma {
     deleteMany?: BusinessRequestSupporterScalarWhereInput | BusinessRequestSupporterScalarWhereInput[]
   }
 
+  export type EmployeeUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<EmployeeCreateWithoutUserInput, EmployeeUncheckedCreateWithoutUserInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutUserInput
+    upsert?: EmployeeUpsertWithoutUserInput
+    disconnect?: EmployeeWhereInput | boolean
+    delete?: EmployeeWhereInput | boolean
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutUserInput, EmployeeUpdateWithoutUserInput>, EmployeeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutUserInput, EmployeeJoinRequestUncheckedCreateWithoutUserInput> | EmployeeJoinRequestCreateWithoutUserInput[] | EmployeeJoinRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutUserInput | EmployeeJoinRequestCreateOrConnectWithoutUserInput[]
+    upsert?: EmployeeJoinRequestUpsertWithWhereUniqueWithoutUserInput | EmployeeJoinRequestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EmployeeJoinRequestCreateManyUserInputEnvelope
+    set?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    disconnect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    delete?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    update?: EmployeeJoinRequestUpdateWithWhereUniqueWithoutUserInput | EmployeeJoinRequestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EmployeeJoinRequestUpdateManyWithWhereWithoutUserInput | EmployeeJoinRequestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EmployeeJoinRequestScalarWhereInput | EmployeeJoinRequestScalarWhereInput[]
+  }
+
   export type BusinessCreateNestedManyWithoutCategoryInput = {
     create?: XOR<BusinessCreateWithoutCategoryInput, BusinessUncheckedCreateWithoutCategoryInput> | BusinessCreateWithoutCategoryInput[] | BusinessUncheckedCreateWithoutCategoryInput[]
     connectOrCreate?: BusinessCreateOrConnectWithoutCategoryInput | BusinessCreateOrConnectWithoutCategoryInput[]
@@ -34730,6 +36437,13 @@ export namespace Prisma {
     connect?: CollectionItemWhereUniqueInput | CollectionItemWhereUniqueInput[]
   }
 
+  export type EmployeeJoinRequestCreateNestedManyWithoutBusinessInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutBusinessInput, EmployeeJoinRequestUncheckedCreateWithoutBusinessInput> | EmployeeJoinRequestCreateWithoutBusinessInput[] | EmployeeJoinRequestUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutBusinessInput | EmployeeJoinRequestCreateOrConnectWithoutBusinessInput[]
+    createMany?: EmployeeJoinRequestCreateManyBusinessInputEnvelope
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+  }
+
   export type ReviewUncheckedCreateNestedManyWithoutBusinessInput = {
     create?: XOR<ReviewCreateWithoutBusinessInput, ReviewUncheckedCreateWithoutBusinessInput> | ReviewCreateWithoutBusinessInput[] | ReviewUncheckedCreateWithoutBusinessInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutBusinessInput | ReviewCreateOrConnectWithoutBusinessInput[]
@@ -34791,6 +36505,13 @@ export namespace Prisma {
     connectOrCreate?: CollectionItemCreateOrConnectWithoutBusinessInput | CollectionItemCreateOrConnectWithoutBusinessInput[]
     createMany?: CollectionItemCreateManyBusinessInputEnvelope
     connect?: CollectionItemWhereUniqueInput | CollectionItemWhereUniqueInput[]
+  }
+
+  export type EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutBusinessInput, EmployeeJoinRequestUncheckedCreateWithoutBusinessInput> | EmployeeJoinRequestCreateWithoutBusinessInput[] | EmployeeJoinRequestUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutBusinessInput | EmployeeJoinRequestCreateOrConnectWithoutBusinessInput[]
+    createMany?: EmployeeJoinRequestCreateManyBusinessInputEnvelope
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
   }
 
   export type NullableFloatFieldUpdateOperationsInput = {
@@ -34951,6 +36672,20 @@ export namespace Prisma {
     deleteMany?: CollectionItemScalarWhereInput | CollectionItemScalarWhereInput[]
   }
 
+  export type EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutBusinessInput, EmployeeJoinRequestUncheckedCreateWithoutBusinessInput> | EmployeeJoinRequestCreateWithoutBusinessInput[] | EmployeeJoinRequestUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutBusinessInput | EmployeeJoinRequestCreateOrConnectWithoutBusinessInput[]
+    upsert?: EmployeeJoinRequestUpsertWithWhereUniqueWithoutBusinessInput | EmployeeJoinRequestUpsertWithWhereUniqueWithoutBusinessInput[]
+    createMany?: EmployeeJoinRequestCreateManyBusinessInputEnvelope
+    set?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    disconnect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    delete?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    update?: EmployeeJoinRequestUpdateWithWhereUniqueWithoutBusinessInput | EmployeeJoinRequestUpdateWithWhereUniqueWithoutBusinessInput[]
+    updateMany?: EmployeeJoinRequestUpdateManyWithWhereWithoutBusinessInput | EmployeeJoinRequestUpdateManyWithWhereWithoutBusinessInput[]
+    deleteMany?: EmployeeJoinRequestScalarWhereInput | EmployeeJoinRequestScalarWhereInput[]
+  }
+
   export type ReviewUncheckedUpdateManyWithoutBusinessNestedInput = {
     create?: XOR<ReviewCreateWithoutBusinessInput, ReviewUncheckedCreateWithoutBusinessInput> | ReviewCreateWithoutBusinessInput[] | ReviewUncheckedCreateWithoutBusinessInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutBusinessInput | ReviewCreateOrConnectWithoutBusinessInput[]
@@ -35077,6 +36812,26 @@ export namespace Prisma {
     deleteMany?: CollectionItemScalarWhereInput | CollectionItemScalarWhereInput[]
   }
 
+  export type EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput = {
+    create?: XOR<EmployeeJoinRequestCreateWithoutBusinessInput, EmployeeJoinRequestUncheckedCreateWithoutBusinessInput> | EmployeeJoinRequestCreateWithoutBusinessInput[] | EmployeeJoinRequestUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeJoinRequestCreateOrConnectWithoutBusinessInput | EmployeeJoinRequestCreateOrConnectWithoutBusinessInput[]
+    upsert?: EmployeeJoinRequestUpsertWithWhereUniqueWithoutBusinessInput | EmployeeJoinRequestUpsertWithWhereUniqueWithoutBusinessInput[]
+    createMany?: EmployeeJoinRequestCreateManyBusinessInputEnvelope
+    set?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    disconnect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    delete?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    connect?: EmployeeJoinRequestWhereUniqueInput | EmployeeJoinRequestWhereUniqueInput[]
+    update?: EmployeeJoinRequestUpdateWithWhereUniqueWithoutBusinessInput | EmployeeJoinRequestUpdateWithWhereUniqueWithoutBusinessInput[]
+    updateMany?: EmployeeJoinRequestUpdateManyWithWhereWithoutBusinessInput | EmployeeJoinRequestUpdateManyWithWhereWithoutBusinessInput[]
+    deleteMany?: EmployeeJoinRequestScalarWhereInput | EmployeeJoinRequestScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutEmployeeInput = {
+    create?: XOR<UserCreateWithoutEmployeeInput, UserUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmployeeInput
+    connect?: UserWhereUniqueInput
+  }
+
   export type BusinessCreateNestedOneWithoutEmployeesInput = {
     create?: XOR<BusinessCreateWithoutEmployeesInput, BusinessUncheckedCreateWithoutEmployeesInput>
     connectOrCreate?: BusinessCreateOrConnectWithoutEmployeesInput
@@ -35109,6 +36864,16 @@ export namespace Prisma {
     connectOrCreate?: NfcTagCreateOrConnectWithoutEmployeeInput | NfcTagCreateOrConnectWithoutEmployeeInput[]
     createMany?: NfcTagCreateManyEmployeeInputEnvelope
     connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneWithoutEmployeeNestedInput = {
+    create?: XOR<UserCreateWithoutEmployeeInput, UserUncheckedCreateWithoutEmployeeInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmployeeInput
+    upsert?: UserUpsertWithoutEmployeeInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmployeeInput, UserUpdateWithoutEmployeeInput>, UserUncheckedUpdateWithoutEmployeeInput>
   }
 
   export type BusinessUpdateOneRequiredWithoutEmployeesNestedInput = {
@@ -35173,6 +36938,38 @@ export namespace Prisma {
     update?: NfcTagUpdateWithWhereUniqueWithoutEmployeeInput | NfcTagUpdateWithWhereUniqueWithoutEmployeeInput[]
     updateMany?: NfcTagUpdateManyWithWhereWithoutEmployeeInput | NfcTagUpdateManyWithWhereWithoutEmployeeInput[]
     deleteMany?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutEmployeeJoinRequestsInput = {
+    create?: XOR<UserCreateWithoutEmployeeJoinRequestsInput, UserUncheckedCreateWithoutEmployeeJoinRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmployeeJoinRequestsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BusinessCreateNestedOneWithoutEmployeeJoinRequestsInput = {
+    create?: XOR<BusinessCreateWithoutEmployeeJoinRequestsInput, BusinessUncheckedCreateWithoutEmployeeJoinRequestsInput>
+    connectOrCreate?: BusinessCreateOrConnectWithoutEmployeeJoinRequestsInput
+    connect?: BusinessWhereUniqueInput
+  }
+
+  export type EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EmployeeJoinRequestStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutEmployeeJoinRequestsNestedInput = {
+    create?: XOR<UserCreateWithoutEmployeeJoinRequestsInput, UserUncheckedCreateWithoutEmployeeJoinRequestsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmployeeJoinRequestsInput
+    upsert?: UserUpsertWithoutEmployeeJoinRequestsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmployeeJoinRequestsInput, UserUpdateWithoutEmployeeJoinRequestsInput>, UserUncheckedUpdateWithoutEmployeeJoinRequestsInput>
+  }
+
+  export type BusinessUpdateOneRequiredWithoutEmployeeJoinRequestsNestedInput = {
+    create?: XOR<BusinessCreateWithoutEmployeeJoinRequestsInput, BusinessUncheckedCreateWithoutEmployeeJoinRequestsInput>
+    connectOrCreate?: BusinessCreateOrConnectWithoutEmployeeJoinRequestsInput
+    upsert?: BusinessUpsertWithoutEmployeeJoinRequestsInput
+    connect?: BusinessWhereUniqueInput
+    update?: XOR<XOR<BusinessUpdateToOneWithWhereWithoutEmployeeJoinRequestsInput, BusinessUpdateWithoutEmployeeJoinRequestsInput>, BusinessUncheckedUpdateWithoutEmployeeJoinRequestsInput>
   }
 
   export type BusinessCreateNestedOneWithoutNfcTagsInput = {
@@ -36066,6 +37863,23 @@ export namespace Prisma {
     _max?: NestedEnumBusinessStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmployeeJoinRequestStatus | EnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel> | $Enums.EmployeeJoinRequestStatus
+  }
+
+  export type NestedEnumEmployeeJoinRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmployeeJoinRequestStatus | EnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmployeeJoinRequestStatus[] | ListEnumEmployeeJoinRequestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmployeeJoinRequestStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmployeeJoinRequestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel>
+    _max?: NestedEnumEmployeeJoinRequestStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumNfcTagTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NfcTagType | EnumNfcTagTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
@@ -36295,6 +38109,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutOwnerInput = {
@@ -36326,6 +38141,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutOwnerInput = {
@@ -36545,6 +38361,65 @@ export namespace Prisma {
 
   export type BusinessRequestSupporterCreateManyUserInputEnvelope = {
     data: BusinessRequestSupporterCreateManyUserInput | BusinessRequestSupporterCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EmployeeCreateWithoutUserInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutEmployeesInput
+    reviews?: ReviewCreateNestedManyWithoutEmployeeInput
+    nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutEmployeeInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutUserInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutUserInput, EmployeeUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestCreateWithoutUserInput = {
+    id?: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutEmployeeJoinRequestsInput
+  }
+
+  export type EmployeeJoinRequestUncheckedCreateWithoutUserInput = {
+    id?: string
+    businessId: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeJoinRequestCreateOrConnectWithoutUserInput = {
+    where: EmployeeJoinRequestWhereUniqueInput
+    create: XOR<EmployeeJoinRequestCreateWithoutUserInput, EmployeeJoinRequestUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestCreateManyUserInputEnvelope = {
+    data: EmployeeJoinRequestCreateManyUserInput | EmployeeJoinRequestCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -36937,6 +38812,71 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"BusinessRequestSupporter"> | Date | string
   }
 
+  export type EmployeeUpsertWithoutUserInput = {
+    update: XOR<EmployeeUpdateWithoutUserInput, EmployeeUncheckedUpdateWithoutUserInput>
+    create: XOR<EmployeeCreateWithoutUserInput, EmployeeUncheckedCreateWithoutUserInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutUserInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutUserInput, EmployeeUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EmployeeUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
+    reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutEmployeeNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeJoinRequestUpsertWithWhereUniqueWithoutUserInput = {
+    where: EmployeeJoinRequestWhereUniqueInput
+    update: XOR<EmployeeJoinRequestUpdateWithoutUserInput, EmployeeJoinRequestUncheckedUpdateWithoutUserInput>
+    create: XOR<EmployeeJoinRequestCreateWithoutUserInput, EmployeeJoinRequestUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestUpdateWithWhereUniqueWithoutUserInput = {
+    where: EmployeeJoinRequestWhereUniqueInput
+    data: XOR<EmployeeJoinRequestUpdateWithoutUserInput, EmployeeJoinRequestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestUpdateManyWithWhereWithoutUserInput = {
+    where: EmployeeJoinRequestScalarWhereInput
+    data: XOR<EmployeeJoinRequestUpdateManyMutationInput, EmployeeJoinRequestUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type EmployeeJoinRequestScalarWhereInput = {
+    AND?: EmployeeJoinRequestScalarWhereInput | EmployeeJoinRequestScalarWhereInput[]
+    OR?: EmployeeJoinRequestScalarWhereInput[]
+    NOT?: EmployeeJoinRequestScalarWhereInput | EmployeeJoinRequestScalarWhereInput[]
+    id?: StringFilter<"EmployeeJoinRequest"> | string
+    userId?: StringFilter<"EmployeeJoinRequest"> | string
+    businessId?: StringFilter<"EmployeeJoinRequest"> | string
+    jobTitle?: StringNullableFilter<"EmployeeJoinRequest"> | string | null
+    status?: EnumEmployeeJoinRequestStatusFilter<"EmployeeJoinRequest"> | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: DateTimeNullableFilter<"EmployeeJoinRequest"> | Date | string | null
+    createdAt?: DateTimeFilter<"EmployeeJoinRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"EmployeeJoinRequest"> | Date | string
+  }
+
   export type BusinessCreateWithoutCategoryInput = {
     id?: string
     name: string
@@ -36966,6 +38906,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutCategoryInput = {
@@ -36997,6 +38938,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutCategoryInput = {
@@ -37078,6 +39020,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBusinessesInput = {
@@ -37106,6 +39050,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBusinessesInput = {
@@ -37158,6 +39104,7 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutEmployeeInput
     reviews?: ReviewCreateNestedManyWithoutEmployeeInput
     nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
   }
@@ -37167,6 +39114,7 @@ export namespace Prisma {
     name: string
     role?: string | null
     active?: boolean
+    userId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutEmployeeInput
@@ -37379,6 +39327,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EmployeeJoinRequestCreateWithoutBusinessInput = {
+    id?: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEmployeeJoinRequestsInput
+  }
+
+  export type EmployeeJoinRequestUncheckedCreateWithoutBusinessInput = {
+    id?: string
+    userId: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeJoinRequestCreateOrConnectWithoutBusinessInput = {
+    where: EmployeeJoinRequestWhereUniqueInput
+    create: XOR<EmployeeJoinRequestCreateWithoutBusinessInput, EmployeeJoinRequestUncheckedCreateWithoutBusinessInput>
+  }
+
+  export type EmployeeJoinRequestCreateManyBusinessInputEnvelope = {
+    data: EmployeeJoinRequestCreateManyBusinessInput | EmployeeJoinRequestCreateManyBusinessInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CategoryUpsertWithoutBusinessesInput = {
     update: XOR<CategoryUpdateWithoutBusinessesInput, CategoryUncheckedUpdateWithoutBusinessesInput>
     create: XOR<CategoryCreateWithoutBusinessesInput, CategoryUncheckedCreateWithoutBusinessesInput>
@@ -37449,6 +39427,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBusinessesInput = {
@@ -37477,6 +39457,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReviewUpsertWithWhereUniqueWithoutBusinessInput = {
@@ -37519,6 +39501,7 @@ export namespace Prisma {
     name?: StringFilter<"Employee"> | string
     role?: StringNullableFilter<"Employee"> | string | null
     active?: BoolFilter<"Employee"> | boolean
+    userId?: StringNullableFilter<"Employee"> | string | null
     businessId?: StringFilter<"Employee"> | string
     createdAt?: DateTimeFilter<"Employee"> | Date | string
     updatedAt?: DateTimeFilter<"Employee"> | Date | string
@@ -37690,6 +39673,87 @@ export namespace Prisma {
     businessId?: StringFilter<"CollectionItem"> | string
   }
 
+  export type EmployeeJoinRequestUpsertWithWhereUniqueWithoutBusinessInput = {
+    where: EmployeeJoinRequestWhereUniqueInput
+    update: XOR<EmployeeJoinRequestUpdateWithoutBusinessInput, EmployeeJoinRequestUncheckedUpdateWithoutBusinessInput>
+    create: XOR<EmployeeJoinRequestCreateWithoutBusinessInput, EmployeeJoinRequestUncheckedCreateWithoutBusinessInput>
+  }
+
+  export type EmployeeJoinRequestUpdateWithWhereUniqueWithoutBusinessInput = {
+    where: EmployeeJoinRequestWhereUniqueInput
+    data: XOR<EmployeeJoinRequestUpdateWithoutBusinessInput, EmployeeJoinRequestUncheckedUpdateWithoutBusinessInput>
+  }
+
+  export type EmployeeJoinRequestUpdateManyWithWhereWithoutBusinessInput = {
+    where: EmployeeJoinRequestScalarWhereInput
+    data: XOR<EmployeeJoinRequestUpdateManyMutationInput, EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessInput>
+  }
+
+  export type UserCreateWithoutEmployeeInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    role?: $Enums.Role
+    xp?: number
+    reputation?: number
+    points?: number
+    loginStreak?: number
+    lastActiveAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewVotes?: ReviewVoteCreateNestedManyWithoutUserInput
+    businesses?: BusinessCreateNestedManyWithoutOwnerInput
+    favorites?: FavoriteCreateNestedManyWithoutUserInput
+    collections?: CollectionCreateNestedManyWithoutUserInput
+    redemptions?: OfferRedemptionCreateNestedManyWithoutUserInput
+    visits?: VisitCreateNestedManyWithoutUserInput
+    followers?: FollowerCreateNestedManyWithoutUserInput
+    badges?: UserBadgeCreateNestedManyWithoutUserInput
+    businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
+    requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEmployeeInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    role?: $Enums.Role
+    xp?: number
+    reputation?: number
+    points?: number
+    loginStreak?: number
+    lastActiveAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewVotes?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    businesses?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput
+    collections?: CollectionUncheckedCreateNestedManyWithoutUserInput
+    redemptions?: OfferRedemptionUncheckedCreateNestedManyWithoutUserInput
+    visits?: VisitUncheckedCreateNestedManyWithoutUserInput
+    followers?: FollowerUncheckedCreateNestedManyWithoutUserInput
+    badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
+    businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
+    requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEmployeeInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEmployeeInput, UserUncheckedCreateWithoutEmployeeInput>
+  }
+
   export type BusinessCreateWithoutEmployeesInput = {
     id?: string
     name: string
@@ -37719,6 +39783,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutEmployeesInput = {
@@ -37750,6 +39815,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutEmployeesInput = {
@@ -37829,6 +39895,77 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserUpsertWithoutEmployeeInput = {
+    update: XOR<UserUpdateWithoutEmployeeInput, UserUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<UserCreateWithoutEmployeeInput, UserUncheckedCreateWithoutEmployeeInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEmployeeInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEmployeeInput, UserUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type UserUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    xp?: IntFieldUpdateOperationsInput | number
+    reputation?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    loginStreak?: IntFieldUpdateOperationsInput | number
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewVotes?: ReviewVoteUpdateManyWithoutUserNestedInput
+    businesses?: BusinessUpdateManyWithoutOwnerNestedInput
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput
+    collections?: CollectionUpdateManyWithoutUserNestedInput
+    redemptions?: OfferRedemptionUpdateManyWithoutUserNestedInput
+    visits?: VisitUpdateManyWithoutUserNestedInput
+    followers?: FollowerUpdateManyWithoutUserNestedInput
+    badges?: UserBadgeUpdateManyWithoutUserNestedInput
+    businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
+    requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    xp?: IntFieldUpdateOperationsInput | number
+    reputation?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    loginStreak?: IntFieldUpdateOperationsInput | number
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewVotes?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    businesses?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput
+    collections?: CollectionUncheckedUpdateManyWithoutUserNestedInput
+    redemptions?: OfferRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutUserNestedInput
+    followers?: FollowerUncheckedUpdateManyWithoutUserNestedInput
+    badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+    businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
+    requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type BusinessUpsertWithoutEmployeesInput = {
     update: XOR<BusinessUpdateWithoutEmployeesInput, BusinessUncheckedUpdateWithoutEmployeesInput>
     create: XOR<BusinessCreateWithoutEmployeesInput, BusinessUncheckedCreateWithoutEmployeesInput>
@@ -37869,6 +40006,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutEmployeesInput = {
@@ -37900,6 +40038,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type ReviewUpsertWithWhereUniqueWithoutEmployeeInput = {
@@ -37934,6 +40073,286 @@ export namespace Prisma {
     data: XOR<NfcTagUpdateManyMutationInput, NfcTagUncheckedUpdateManyWithoutEmployeeInput>
   }
 
+  export type UserCreateWithoutEmployeeJoinRequestsInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    role?: $Enums.Role
+    xp?: number
+    reputation?: number
+    points?: number
+    loginStreak?: number
+    lastActiveAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    reviews?: ReviewCreateNestedManyWithoutUserInput
+    reviewVotes?: ReviewVoteCreateNestedManyWithoutUserInput
+    businesses?: BusinessCreateNestedManyWithoutOwnerInput
+    favorites?: FavoriteCreateNestedManyWithoutUserInput
+    collections?: CollectionCreateNestedManyWithoutUserInput
+    redemptions?: OfferRedemptionCreateNestedManyWithoutUserInput
+    visits?: VisitCreateNestedManyWithoutUserInput
+    followers?: FollowerCreateNestedManyWithoutUserInput
+    badges?: UserBadgeCreateNestedManyWithoutUserInput
+    businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
+    requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEmployeeJoinRequestsInput = {
+    id: string
+    name: string
+    email: string
+    emailVerified?: boolean
+    image?: string | null
+    role?: $Enums.Role
+    xp?: number
+    reputation?: number
+    points?: number
+    loginStreak?: number
+    lastActiveAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput
+    reviewVotes?: ReviewVoteUncheckedCreateNestedManyWithoutUserInput
+    businesses?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutUserInput
+    collections?: CollectionUncheckedCreateNestedManyWithoutUserInput
+    redemptions?: OfferRedemptionUncheckedCreateNestedManyWithoutUserInput
+    visits?: VisitUncheckedCreateNestedManyWithoutUserInput
+    followers?: FollowerUncheckedCreateNestedManyWithoutUserInput
+    badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
+    businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
+    requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEmployeeJoinRequestsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEmployeeJoinRequestsInput, UserUncheckedCreateWithoutEmployeeJoinRequestsInput>
+  }
+
+  export type BusinessCreateWithoutEmployeeJoinRequestsInput = {
+    id?: string
+    name: string
+    slug: string
+    imageUrl?: string | null
+    address?: string | null
+    city?: string | null
+    phone?: string | null
+    website?: string | null
+    googleReviewUrl?: string | null
+    instagram?: string | null
+    hours?: string | null
+    description?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    status?: $Enums.BusinessStatus
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category?: CategoryCreateNestedOneWithoutBusinessesInput
+    owner?: UserCreateNestedOneWithoutBusinessesInput
+    reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
+    offers?: OfferCreateNestedManyWithoutBusinessInput
+    photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
+    visits?: VisitCreateNestedManyWithoutBusinessInput
+    followers?: FollowerCreateNestedManyWithoutBusinessInput
+    favorites?: FavoriteCreateNestedManyWithoutBusinessInput
+    collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+  }
+
+  export type BusinessUncheckedCreateWithoutEmployeeJoinRequestsInput = {
+    id?: string
+    name: string
+    slug: string
+    imageUrl?: string | null
+    categoryId?: string | null
+    ownerId?: string | null
+    address?: string | null
+    city?: string | null
+    phone?: string | null
+    website?: string | null
+    googleReviewUrl?: string | null
+    instagram?: string | null
+    hours?: string | null
+    description?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    status?: $Enums.BusinessStatus
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
+    offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
+    photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
+    visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
+    followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
+    collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+  }
+
+  export type BusinessCreateOrConnectWithoutEmployeeJoinRequestsInput = {
+    where: BusinessWhereUniqueInput
+    create: XOR<BusinessCreateWithoutEmployeeJoinRequestsInput, BusinessUncheckedCreateWithoutEmployeeJoinRequestsInput>
+  }
+
+  export type UserUpsertWithoutEmployeeJoinRequestsInput = {
+    update: XOR<UserUpdateWithoutEmployeeJoinRequestsInput, UserUncheckedUpdateWithoutEmployeeJoinRequestsInput>
+    create: XOR<UserCreateWithoutEmployeeJoinRequestsInput, UserUncheckedCreateWithoutEmployeeJoinRequestsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEmployeeJoinRequestsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEmployeeJoinRequestsInput, UserUncheckedUpdateWithoutEmployeeJoinRequestsInput>
+  }
+
+  export type UserUpdateWithoutEmployeeJoinRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    xp?: IntFieldUpdateOperationsInput | number
+    reputation?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    loginStreak?: IntFieldUpdateOperationsInput | number
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUpdateManyWithoutUserNestedInput
+    reviewVotes?: ReviewVoteUpdateManyWithoutUserNestedInput
+    businesses?: BusinessUpdateManyWithoutOwnerNestedInput
+    favorites?: FavoriteUpdateManyWithoutUserNestedInput
+    collections?: CollectionUpdateManyWithoutUserNestedInput
+    redemptions?: OfferRedemptionUpdateManyWithoutUserNestedInput
+    visits?: VisitUpdateManyWithoutUserNestedInput
+    followers?: FollowerUpdateManyWithoutUserNestedInput
+    badges?: UserBadgeUpdateManyWithoutUserNestedInput
+    businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
+    requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEmployeeJoinRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    xp?: IntFieldUpdateOperationsInput | number
+    reputation?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    loginStreak?: IntFieldUpdateOperationsInput | number
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput
+    reviewVotes?: ReviewVoteUncheckedUpdateManyWithoutUserNestedInput
+    businesses?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+    favorites?: FavoriteUncheckedUpdateManyWithoutUserNestedInput
+    collections?: CollectionUncheckedUpdateManyWithoutUserNestedInput
+    redemptions?: OfferRedemptionUncheckedUpdateManyWithoutUserNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutUserNestedInput
+    followers?: FollowerUncheckedUpdateManyWithoutUserNestedInput
+    badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+    businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
+    requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type BusinessUpsertWithoutEmployeeJoinRequestsInput = {
+    update: XOR<BusinessUpdateWithoutEmployeeJoinRequestsInput, BusinessUncheckedUpdateWithoutEmployeeJoinRequestsInput>
+    create: XOR<BusinessCreateWithoutEmployeeJoinRequestsInput, BusinessUncheckedCreateWithoutEmployeeJoinRequestsInput>
+    where?: BusinessWhereInput
+  }
+
+  export type BusinessUpdateToOneWithWhereWithoutEmployeeJoinRequestsInput = {
+    where?: BusinessWhereInput
+    data: XOR<BusinessUpdateWithoutEmployeeJoinRequestsInput, BusinessUncheckedUpdateWithoutEmployeeJoinRequestsInput>
+  }
+
+  export type BusinessUpdateWithoutEmployeeJoinRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    hours?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneWithoutBusinessesNestedInput
+    owner?: UserUpdateOneWithoutBusinessesNestedInput
+    reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
+    offers?: OfferUpdateManyWithoutBusinessNestedInput
+    photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
+    visits?: VisitUpdateManyWithoutBusinessNestedInput
+    followers?: FollowerUpdateManyWithoutBusinessNestedInput
+    favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
+    collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+  }
+
+  export type BusinessUncheckedUpdateWithoutEmployeeJoinRequestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    hours?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
+    photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
+    followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
+    favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
+    collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+  }
+
   export type BusinessCreateWithoutNfcTagsInput = {
     id?: string
     name: string
@@ -37963,6 +40382,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutNfcTagsInput = {
@@ -37994,6 +40414,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutNfcTagsInput = {
@@ -38008,6 +40429,7 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutEmployeeInput
     business: BusinessCreateNestedOneWithoutEmployeesInput
     reviews?: ReviewCreateNestedManyWithoutEmployeeInput
   }
@@ -38017,6 +40439,7 @@ export namespace Prisma {
     name: string
     role?: string | null
     active?: boolean
+    userId?: string | null
     businessId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38068,6 +40491,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutNfcTagsInput = {
@@ -38099,6 +40523,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type EmployeeUpsertWithoutNfcTagsInput = {
@@ -38119,6 +40544,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutEmployeeNestedInput
     business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
     reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
   }
@@ -38128,6 +40554,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     role?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38141,6 +40568,7 @@ export namespace Prisma {
     active?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutEmployeeInput
     business: BusinessCreateNestedOneWithoutEmployeesInput
     nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
   }
@@ -38150,6 +40578,7 @@ export namespace Prisma {
     name: string
     role?: string | null
     active?: boolean
+    userId?: string | null
     businessId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -38216,6 +40645,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -38244,6 +40675,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -38280,6 +40713,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutReviewsInput = {
@@ -38311,6 +40745,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutReviewsInput = {
@@ -38360,6 +40795,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutEmployeeNestedInput
     business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
     nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
   }
@@ -38369,6 +40805,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     role?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -38447,6 +40884,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -38475,6 +40914,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BusinessUpsertWithoutReviewsInput = {
@@ -38517,6 +40958,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutReviewsInput = {
@@ -38548,6 +40990,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type ReviewVoteUpsertWithWhereUniqueWithoutReviewInput = {
@@ -38592,6 +41035,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitsInput = {
@@ -38620,6 +41065,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitsInput = {
@@ -38656,6 +41103,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutVisitsInput = {
@@ -38687,6 +41135,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutVisitsInput = {
@@ -38764,6 +41213,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitsInput = {
@@ -38792,6 +41243,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BusinessUpsertWithoutVisitsInput = {
@@ -38834,6 +41287,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutVisitsInput = {
@@ -38865,6 +41319,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type ReviewUpsertWithoutVisitInput = {
@@ -38935,6 +41390,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutOffersInput = {
@@ -38966,6 +41422,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutOffersInput = {
@@ -39035,6 +41492,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutOffersInput = {
@@ -39066,6 +41524,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type OfferRedemptionUpsertWithWhereUniqueWithoutOfferInput = {
@@ -39110,6 +41569,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRedemptionsInput = {
@@ -39138,6 +41599,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRedemptionsInput = {
@@ -39217,6 +41680,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRedemptionsInput = {
@@ -39245,6 +41710,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type OfferUpsertWithoutRedemptionsInput = {
@@ -39314,6 +41781,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -39342,6 +41811,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -39378,6 +41849,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutBusinessInput
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutFavoritesInput = {
@@ -39409,6 +41881,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutFavoritesInput = {
@@ -39453,6 +41926,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -39481,6 +41956,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BusinessUpsertWithoutFavoritesInput = {
@@ -39523,6 +42000,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutFavoritesInput = {
@@ -39554,6 +42032,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type UserCreateWithoutCollectionsInput = {
@@ -39582,6 +42061,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCollectionsInput = {
@@ -39610,6 +42091,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCollectionsInput = {
@@ -39674,6 +42157,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCollectionsInput = {
@@ -39702,6 +42187,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CollectionItemUpsertWithWhereUniqueWithoutCollectionInput = {
@@ -39770,6 +42257,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutBusinessInput
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutCollectionsInput = {
@@ -39801,6 +42289,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutCollectionsInput = {
@@ -39875,6 +42364,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutCollectionsInput = {
@@ -39906,6 +42396,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessCreateWithoutPhotosInput = {
@@ -39937,6 +42428,7 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutPhotosInput = {
@@ -39968,6 +42460,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutPhotosInput = {
@@ -40015,6 +42508,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutPhotosInput = {
@@ -40046,6 +42540,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type UserCreateWithoutFollowersInput = {
@@ -40074,6 +42569,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowersInput = {
@@ -40102,6 +42599,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowersInput = {
@@ -40138,6 +42637,7 @@ export namespace Prisma {
     visits?: VisitCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutFollowersInput = {
@@ -40169,6 +42669,7 @@ export namespace Prisma {
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
     favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
     collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessCreateOrConnectWithoutFollowersInput = {
@@ -40213,6 +42714,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -40241,6 +42744,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BusinessUpsertWithoutFollowersInput = {
@@ -40283,6 +42788,7 @@ export namespace Prisma {
     visits?: VisitUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutFollowersInput = {
@@ -40314,6 +42820,7 @@ export namespace Prisma {
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -40342,6 +42849,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -40370,6 +42879,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -40414,6 +42925,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -40442,6 +42955,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -40470,6 +42985,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -40498,6 +43015,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -40542,6 +43061,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -40570,6 +43091,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserBadgeCreateWithoutBadgeInput = {
@@ -40636,6 +43159,8 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBadgesInput = {
@@ -40664,6 +43189,8 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBadgesInput = {
@@ -40731,6 +43258,8 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBadgesInput = {
@@ -40759,6 +43288,8 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BadgeUpsertWithoutUsersInput = {
@@ -40849,6 +43380,8 @@ export namespace Prisma {
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReviewVotesInput = {
@@ -40877,6 +43410,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReviewVotesInput = {
@@ -40960,6 +43495,8 @@ export namespace Prisma {
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReviewVotesInput = {
@@ -40988,6 +43525,8 @@ export namespace Prisma {
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBusinessRequestsInput = {
@@ -41016,6 +43555,8 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutUserInput
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     requestSupports?: BusinessRequestSupporterCreateNestedManyWithoutUserInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBusinessRequestsInput = {
@@ -41044,6 +43585,8 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutUserInput
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     requestSupports?: BusinessRequestSupporterUncheckedCreateNestedManyWithoutUserInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBusinessRequestsInput = {
@@ -41110,6 +43653,8 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutUserNestedInput
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     requestSupports?: BusinessRequestSupporterUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBusinessRequestsInput = {
@@ -41138,6 +43683,8 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutUserNestedInput
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     requestSupports?: BusinessRequestSupporterUncheckedUpdateManyWithoutUserNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BusinessRequestSupporterUpsertWithWhereUniqueWithoutRequestInput = {
@@ -41217,6 +43764,8 @@ export namespace Prisma {
     followers?: FollowerCreateNestedManyWithoutUserInput
     badges?: UserBadgeCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestCreateNestedManyWithoutRequesterInput
+    employee?: EmployeeCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRequestSupportsInput = {
@@ -41245,6 +43794,8 @@ export namespace Prisma {
     followers?: FollowerUncheckedCreateNestedManyWithoutUserInput
     badges?: UserBadgeUncheckedCreateNestedManyWithoutUserInput
     businessRequests?: BusinessRequestUncheckedCreateNestedManyWithoutRequesterInput
+    employee?: EmployeeUncheckedCreateNestedOneWithoutUserInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRequestSupportsInput = {
@@ -41330,6 +43881,8 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutUserNestedInput
     badges?: UserBadgeUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUpdateManyWithoutRequesterNestedInput
+    employee?: EmployeeUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRequestSupportsInput = {
@@ -41358,6 +43911,8 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutUserNestedInput
     badges?: UserBadgeUncheckedUpdateManyWithoutUserNestedInput
     businessRequests?: BusinessRequestUncheckedUpdateManyWithoutRequesterNestedInput
+    employee?: EmployeeUncheckedUpdateOneWithoutUserNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SessionCreateManyUserInput = {
@@ -41487,6 +44042,16 @@ export namespace Prisma {
     id?: string
     requestId: string
     createdAt?: Date | string
+  }
+
+  export type EmployeeJoinRequestCreateManyUserInput = {
+    id?: string
+    businessId: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -41655,6 +44220,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutOwnerInput = {
@@ -41686,6 +44252,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
@@ -41902,6 +44469,36 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type EmployeeJoinRequestUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutEmployeeJoinRequestsNestedInput
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BusinessCreateManyCategoryInput = {
     id?: string
     name: string
@@ -41953,6 +44550,7 @@ export namespace Prisma {
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutCategoryInput = {
@@ -41984,6 +44582,7 @@ export namespace Prisma {
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
     favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
     collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+    employeeJoinRequests?: EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateManyWithoutCategoryInput = {
@@ -42026,6 +44625,7 @@ export namespace Prisma {
     name: string
     role?: string | null
     active?: boolean
+    userId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -42091,6 +44691,16 @@ export namespace Prisma {
     collectionId: string
   }
 
+  export type EmployeeJoinRequestCreateManyBusinessInput = {
+    id?: string
+    userId: string
+    jobTitle?: string | null
+    status?: $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type ReviewUpdateWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -42139,6 +44749,7 @@ export namespace Prisma {
     active?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutEmployeeNestedInput
     reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
     nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
   }
@@ -42148,6 +44759,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     role?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutEmployeeNestedInput
@@ -42159,6 +44771,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     role?: NullableStringFieldUpdateOperationsInput | string | null
     active?: BoolFieldUpdateOperationsInput | boolean
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42348,6 +44961,36 @@ export namespace Prisma {
   export type CollectionItemUncheckedUpdateManyWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     collectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmployeeJoinRequestUpdateWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEmployeeJoinRequestsNestedInput
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeJoinRequestUncheckedUpdateManyWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmployeeJoinRequestStatusFieldUpdateOperationsInput | $Enums.EmployeeJoinRequestStatus
+    reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewCreateManyEmployeeInput = {

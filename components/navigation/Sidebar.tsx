@@ -18,7 +18,7 @@ interface SidebarProps {
 
 function isActive(pathname: string, href: string) {
   if (pathname === href) return true;
-  if (href !== "/dashboard" && pathname.startsWith(href)) return true;
+  if (href !== "/dashboard" && href !== "/" && pathname.startsWith(href)) return true;
   return false;
 }
 

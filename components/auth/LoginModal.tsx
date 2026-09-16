@@ -9,12 +9,28 @@ export function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
   const callbackURL =
     redirectTo || (typeof window !== "undefined" ? window.location.href : "/");
+
+  async function handleGoogleEmployeeLogin() {
+    setGoogleLoading(true);
+    setError(null);
+    try {
+      const result = await signIn.social({ provider: "google", callbackURL: "/employee/join" });
+      if (result?.error) {
+        setError(result.error.message || "No se pudo iniciar sesión con Google");
+        setGoogleLoading(false);
+      }
+    } catch {
+      setError("No se pudo iniciar sesión con Google.");
+      setGoogleLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,6 +74,22 @@ export function LoginModal() {
         <p className="mb-6 text-sm text-[var(--muted-foreground)]">
           Inicia sesión para gestionar tus NFCs y tus reseñas.
         </p>
+
+        <button
+          type="button"
+          onClick={handleGoogleEmployeeLogin}
+          disabled={googleLoading || loading}
+          className="flex w-full items-center justify-center gap-3 rounded-full border border-[var(--border)] bg-white px-4 py-3 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--muted)] disabled:opacity-50"
+        >
+          <span className="flex h-5 w-5 items-center justify-center font-bold text-[#4285f4]">G</span>
+          {googleLoading ? "Conectando con Google…" : "Entrar con Google como empleado"}
+        </button>
+
+        <div className="my-5 flex items-center gap-3 text-xs text-[var(--muted-foreground)]">
+          <span className="h-px flex-1 bg-[var(--border)]" />
+          Acceso de propietario
+          <span className="h-px flex-1 bg-[var(--border)]" />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <input

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { BusinessSelector } from "@/components/dashboard/BusinessSelector";
+import { PeriodSelector } from "@/components/dashboard/PeriodSelector";
 import {
   Star,
   TrendingUp,
@@ -14,15 +14,41 @@ import {
 } from "lucide-react";
 
 interface DashboardHomePageProps {
-  searchParams: Promise<{ businessId?: string }>;
+  searchParams: Promise<{ businessId?: string; period?: string }>;
 }
+
+type Period = "this-month" | "last-month" | "last-30-days" | "all-time";
+
+const validPeriods = new Set<Period>(["this-month", "last-month", "last-30-days", "all-time"]);
 
 function startOfMonth(date: Date) {
   return new Date(date.getFullYear(), date.getMonth(), 1);
 }
 
-function isSameMonth(d: Date, month: Date) {
-  return d.getFullYear() === month.getFullYear() && d.getMonth() === month.getMonth();
+function getPeriodRange(period: Period, now: Date) {
+  if (period === "all-time") return null;
+  if (period === "last-30-days") {
+    return { start: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000), end: now };
+  }
+  if (period === "last-month") {
+    return {
+      start: new Date(now.getFullYear(), now.getMonth() - 1, 1),
+      end: startOfMonth(now),
+    };
+  }
+  return {
+    start: startOfMonth(now),
+    end: new Date(now.getFullYear(), now.getMonth() + 1, 1),
+  };
+}
+
+function isInRange(date: Date, range: ReturnType<typeof getPeriodRange>) {
+  return !range || (date >= range.start && date < range.end);
+}
+
+function getPreviousRange(range: Exclude<ReturnType<typeof getPeriodRange>, null>) {
+  const duration = range.end.getTime() - range.start.getTime();
+  return { start: new Date(range.start.getTime() - duration), end: range.start };
 }
 
 function relativeTime(date: Date) {
@@ -68,6 +94,7 @@ export default async function DashboardHomePage({
   const selectedId = businesses.some((b) => b.id === query.businessId)
     ? query.businessId
     : businesses[0].id;
+  const period = validPeriods.has(query.period as Period) ? (query.period as Period) : "this-month";
 
   const business = await prisma.business.findUnique({
     where: { id: selectedId },
@@ -96,61 +123,67 @@ export default async function DashboardHomePage({
   }
 
   const now = new Date();
-  const currentMonth = startOfMonth(now);
-  const previousMonth = startOfMonth(new Date(now.getFullYear(), now.getMonth() - 1));
-
-  const internalReviews = business.reviews.filter((r) => r.employeeId != null);
+  const periodRange = getPeriodRange(period, now);
+  const previousRange = periodRange ? getPreviousRange(periodRange) : null;
+  const allInternalReviews = business.reviews.filter((r) => r.employeeId != null);
+  const internalReviews = allInternalReviews.filter((r) => isInRange(r.createdAt, periodRange));
+  const previousInternalReviews = previousRange
+    ? allInternalReviews.filter((r) => isInRange(r.createdAt, previousRange))
+    : [];
   const internalCount = internalReviews.length;
-  const internalThisMonth = internalReviews.filter((r) =>
-    isSameMonth(r.createdAt, currentMonth)
-  );
-  const internalPrevMonth = internalReviews.filter((r) =>
-    isSameMonth(r.createdAt, previousMonth)
-  );
   const internalAvg =
     internalCount > 0
-      ? internalReviews.reduce((s, r) => s + r.rating, 0) / internalCount
+      ? internalReviews.reduce((sum, review) => sum + review.rating, 0) / internalCount
       : 0;
 
-  const typeATags = business.nfcTags.filter((t) => t.type === "business_google");
-  const generalTaps = typeATags.reduce((s, t) => s + t.scanCount, 0);
-
-  const typeBTags = business.nfcTags.filter((t) => t.type === "employee_review");
+  const typeATags = business.nfcTags.filter((tag) => tag.type === "business_google");
+  const typeBTags = business.nfcTags.filter((tag) => tag.type === "employee_review");
+  const typeATokens = typeATags.map((tag) => tag.token);
 
   const employeeStats = business.employees
-    .map((emp) => {
-      const monthReviews = emp.reviews.filter((r) => isSameMonth(r.createdAt, currentMonth));
-      const total = emp.reviews.length;
-      const good = emp.reviews.filter((r) => r.rating >= 4).length;
-      const bad = emp.reviews.filter((r) => r.rating <= 2).length;
-      const avg = total > 0 ? emp.reviews.reduce((s, r) => s + r.rating, 0) / total : 0;
+    .map((employee) => {
+      const reviews = employee.reviews.filter((review) => isInRange(review.createdAt, periodRange));
+      const total = reviews.length;
+      const good = reviews.filter((review) => review.rating >= 4).length;
+      const bad = reviews.filter((review) => review.rating <= 2).length;
+      const avg = total > 0 ? reviews.reduce((sum, review) => sum + review.rating, 0) / total : 0;
       const percent = total > 0 ? Math.round((good / total) * 100) : 0;
       return {
-        id: emp.id,
-        name: emp.name,
-        initials: emp.name
+        id: employee.id,
+        name: employee.name,
+        initials: employee.name
           .split(" ")
-          .map((w) => w[0])
+          .map((word) => word[0])
           .join("")
           .slice(0, 2)
           .toUpperCase(),
-        monthReviews: monthReviews.length,
+        total,
         good,
         bad,
         avg,
         percent,
       };
     })
-    .filter((e) => e.monthReviews > 0)
+    .filter((employee) => employee.total > 0)
     .sort((a, b) => b.avg - a.avg || b.good - a.good)
     .slice(0, 3);
 
-  const visits = await prisma.visit.findMany({
-    where: { businessId: business.id },
-    orderBy: { createdAt: "desc" },
-    take: 8,
-    select: { id: true, token: true, createdAt: true },
-  });
+  const createdAt = periodRange
+    ? { gte: periodRange.start, lt: periodRange.end }
+    : undefined;
+  const [generalTaps, visits] = await Promise.all([
+    typeATokens.length > 0
+      ? prisma.visit.count({
+          where: { businessId: business.id, token: { in: typeATokens }, createdAt },
+        })
+      : 0,
+    prisma.visit.findMany({
+      where: { businessId: business.id, createdAt },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      select: { id: true, token: true, createdAt: true },
+    }),
+  ]);
 
   const tagByToken = new Map(business.nfcTags.map((t) => [t.token, t]));
 
@@ -170,7 +203,7 @@ export default async function DashboardHomePage({
     return { id: v.id, label, detail: undefined as string | undefined, date: v.createdAt, type: "visit" as const };
   });
 
-  const reviewEvents = business.reviews.slice(0, 8).map((r) => {
+  const reviewEvents = business.reviews.filter((review) => isInRange(review.createdAt, periodRange)).slice(0, 8).map((r) => {
     let label = "Reseña del negocio registrada";
     if (r.employeeId) {
       const emp = business.employees.find((e) => e.id === r.employeeId);
@@ -189,18 +222,17 @@ export default async function DashboardHomePage({
     .sort((a, b) => b.date.getTime() - a.date.getTime())
     .slice(0, 8);
 
-  const trendDiff = internalThisMonth.length - internalPrevMonth.length;
+  const trendDiff = periodRange
+    ? internalReviews.length - previousInternalReviews.length
+    : null;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-[var(--foreground)]">Vista actual</h1>
-        <div className="flex items-center gap-3">
-          <BusinessSelector businesses={businesses} selectedId={selectedId} />
-          <span className="rounded-full bg-[var(--muted)] px-3 py-1 text-xs font-medium text-[var(--muted-foreground)]">
-            Sesión: dueño
-          </span>
-        </div>
+        <p className="text-sm font-semibold text-[var(--foreground)]">
+          {business.name}
+        </p>
       </div>
 
       {/* Resumen */}
@@ -212,9 +244,7 @@ export default async function DashboardHomePage({
               {business.name} · {business.city || "Sin ciudad"}
             </p>
           </div>
-          <span className="text-xs font-medium text-[var(--muted-foreground)]">
-            Periodo: este mes
-          </span>
+          <PeriodSelector value={period} />
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -223,10 +253,10 @@ export default async function DashboardHomePage({
               <div>
                 <p className="text-sm text-[var(--muted-foreground)]">Reseñas internas (tipo B)</p>
                 <p className="mt-1 text-3xl font-bold text-[var(--foreground)]">{internalCount}</p>
-                {trendDiff !== 0 && (
+                {trendDiff !== null && trendDiff !== 0 && (
                   <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[var(--primary-dark)]">
                     <TrendingUp className="h-3.5 w-3.5" />
-                    {trendDiff > 0 ? `+${trendDiff}` : trendDiff} vs. mes anterior
+                    {trendDiff > 0 ? `+${trendDiff}` : trendDiff} vs. periodo anterior
                   </p>
                 )}
               </div>
@@ -311,7 +341,7 @@ export default async function DashboardHomePage({
       {/* Top del mes */}
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-[var(--foreground)]">Top del mes</h2>
+          <h2 className="text-lg font-bold text-[var(--foreground)]">Top del periodo</h2>
           <Link
             href="/dashboard/team"
             className="flex items-center gap-1 text-sm font-medium text-[var(--primary-dark)] hover:underline"
@@ -321,7 +351,7 @@ export default async function DashboardHomePage({
         </div>
         {employeeStats.length === 0 ? (
           <p className="text-sm text-[var(--muted-foreground)]">
-            Aún no hay reseñas internas este mes.
+            Aún no hay reseñas internas en este periodo.
           </p>
         ) : (
           <div className="space-y-3">

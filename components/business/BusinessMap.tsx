@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { Map as LeafletMap } from "leaflet";
 
 interface BusinessPin {
   id: string;
@@ -16,7 +17,7 @@ interface BusinessMapProps {
 
 export function BusinessMap({ businesses }: BusinessMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<LeafletMap | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {

@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export default function HowItWorksPage() {
   const steps = [
     { icon: "�", title: "Recibes tus NFCs", desc: "Te entregamos un NFC para Google y los NFC personalizados para tu equipo." },
-    { icon: "📱", title: "El cliente acerca el móvil", desc: "Cada NFC abre automáticamente el destino correcto, sin cámara ni búsquedas." },
+    { icon: "📱", title: "El cliente acerca el teléfono", desc: "Cada NFC abre automáticamente el destino correcto, sin cámara ni búsquedas." },
     { icon: "⭐", title: "Recibes feedback", desc: "El cliente reseña tu negocio en Google o valora directamente a quien le atendió." },
   ];
 

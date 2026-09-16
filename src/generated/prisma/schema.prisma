@@ -9,37 +9,40 @@ datasource db {
 
 enum Role {
   user
+  employee
   business
   admin
 }
 
 model User {
-  id               String                     @id
-  name             String
-  email            String
-  emailVerified    Boolean                    @default(false)
-  image            String?
-  role             Role                       @default(user)
-  xp               Int                        @default(0)
-  reputation       Int                        @default(0)
-  points           Int                        @default(0)
-  loginStreak      Int                        @default(0)
-  lastActiveAt     DateTime?
-  createdAt        DateTime                   @default(now())
-  updatedAt        DateTime                   @updatedAt
-  sessions         Session[]
-  accounts         Account[]
-  reviews          Review[]
-  reviewVotes      ReviewVote[]
-  businesses       Business[]                 @relation("BusinessOwner")
-  favorites        Favorite[]
-  collections      Collection[]
-  redemptions      OfferRedemption[]
-  visits           Visit[]
-  followers        Follower[]
-  badges           UserBadge[]
-  businessRequests BusinessRequest[]
-  requestSupports  BusinessRequestSupporter[]
+  id                   String                     @id
+  name                 String
+  email                String
+  emailVerified        Boolean                    @default(false)
+  image                String?
+  role                 Role                       @default(user)
+  xp                   Int                        @default(0)
+  reputation           Int                        @default(0)
+  points               Int                        @default(0)
+  loginStreak          Int                        @default(0)
+  lastActiveAt         DateTime?
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+  sessions             Session[]
+  accounts             Account[]
+  reviews              Review[]
+  reviewVotes          ReviewVote[]
+  businesses           Business[]                 @relation("BusinessOwner")
+  favorites            Favorite[]
+  collections          Collection[]
+  redemptions          OfferRedemption[]
+  visits               Visit[]
+  followers            Follower[]
+  badges               UserBadge[]
+  businessRequests     BusinessRequest[]
+  requestSupports      BusinessRequestSupporter[]
+  employee             Employee?
+  employeeJoinRequests EmployeeJoinRequest[]
 
   @@unique([email])
   @@map("user")
@@ -65,37 +68,38 @@ enum BusinessStatus {
 }
 
 model Business {
-  id              String           @id @default(cuid())
-  name            String
-  slug            String           @unique
-  imageUrl        String?
-  categoryId      String?
-  category        Category?        @relation(fields: [categoryId], references: [id])
-  ownerId         String?
-  owner           User?            @relation("BusinessOwner", fields: [ownerId], references: [id])
-  address         String?
-  city            String?
-  phone           String?
-  website         String?
-  googleReviewUrl String?
-  instagram       String?
-  hours           String?
-  description     String?
-  latitude        Float?
-  longitude       Float?
-  status          BusinessStatus   @default(community)
-  featured        Boolean          @default(false)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  reviews         Review[]
-  employees       Employee[]
-  nfcTags         NfcTag[]
-  offers          Offer[]
-  photos          BusinessPhoto[]
-  visits          Visit[]
-  followers       Follower[]
-  favorites       Favorite[]
-  collections     CollectionItem[]
+  id                   String                @id @default(cuid())
+  name                 String
+  slug                 String                @unique
+  imageUrl             String?
+  categoryId           String?
+  category             Category?             @relation(fields: [categoryId], references: [id])
+  ownerId              String?
+  owner                User?                 @relation("BusinessOwner", fields: [ownerId], references: [id])
+  address              String?
+  city                 String?
+  phone                String?
+  website              String?
+  googleReviewUrl      String?
+  instagram            String?
+  hours                String?
+  description          String?
+  latitude             Float?
+  longitude            Float?
+  status               BusinessStatus        @default(community)
+  featured             Boolean               @default(false)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  reviews              Review[]
+  employees            Employee[]
+  nfcTags              NfcTag[]
+  offers               Offer[]
+  photos               BusinessPhoto[]
+  visits               Visit[]
+  followers            Follower[]
+  favorites            Favorite[]
+  collections          CollectionItem[]
+  employeeJoinRequests EmployeeJoinRequest[]
 
   @@index([status])
   @@index([featured])
@@ -115,6 +119,8 @@ model Employee {
   name       String
   role       String?
   active     Boolean  @default(true)
+  userId     String?  @unique
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   reviews    Review[]
@@ -123,6 +129,29 @@ model Employee {
   updatedAt  DateTime @updatedAt
 
   @@index([businessId])
+}
+
+enum EmployeeJoinRequestStatus {
+  pending
+  approved
+  rejected
+}
+
+model EmployeeJoinRequest {
+  id         String                    @id @default(cuid())
+  userId     String
+  user       User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business                  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  jobTitle   String?
+  status     EmployeeJoinRequestStatus @default(pending)
+  reviewedAt DateTime?
+  createdAt  DateTime                  @default(now())
+  updatedAt  DateTime                  @updatedAt
+
+  @@unique([userId, businessId])
+  @@index([businessId, status])
+  @@index([userId, status])
 }
 
 enum NfcTagType {

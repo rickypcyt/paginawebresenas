@@ -50,7 +50,7 @@ export function BusinessHoursInput({ value, onChange }: BusinessHoursInputProps)
 
   useEffect(() => {
     onChange(formatSchedule(entries));
-  }, [entries]);
+  }, [entries, onChange]);
 
   function addEntry() {
     setEntries([...entries, { days: ["Sáb", "Dom"], open: "09:00", close: "14:00" }]);

@@ -25,9 +25,9 @@ function formatExpiry(endDate: Date): string {
 }
 
 export function OfferCard({ offer }: OfferCardProps) {
-  const isExpired = offer.endDate ? new Date(offer.endDate).getTime() < Date.now() : false;
   const expiryLabel = offer.endDate ? formatExpiry(new Date(offer.endDate)) : null;
-  const isUrgent = offer.endDate && !isExpired && (new Date(offer.endDate).getTime() - Date.now()) < 1000 * 60 * 60 * 24;
+  const isExpired = expiryLabel === "Expirada";
+  const isUrgent = expiryLabel === "Expira hoy";
 
   return (
     <Link

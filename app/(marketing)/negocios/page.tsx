@@ -8,7 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Negocios verificados — Descubre Local",
+  title: "Negocios verificados — Toque",
   description:
     "Explora todos los negocios verificados de la plataforma. Cafeterías, restaurantes, gimnasios y más con reseñas reales y ofertas.",
   alternates: {

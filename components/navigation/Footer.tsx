@@ -7,7 +7,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid gap-8 sm:grid-cols-2">
           <div>
-            <h3 className="mb-3 text-lg font-bold text-[var(--foreground)]">Descubre Local</h3>
+            <h3 className="mb-3 text-lg font-bold text-[var(--foreground)]">Toque</h3>
             <p className="text-sm text-[var(--muted-foreground)]">
               Gestiona reseñas con NFC para tu negocio y para cada miembro de tu equipo.
             </p>
@@ -27,7 +27,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[var(--border)] pt-6 text-sm text-[var(--muted-foreground)] sm:flex-row">
-          <p>© {new Date().getFullYear()} Descubre Local. Hecho en Guayaquil.</p>
+          <p>© {new Date().getFullYear()} Toque. Hecho en Guayaquil.</p>
           <div className="flex gap-4">
             <Link href="/como-funciona" className="hover:text-[var(--primary)]">Ayuda</Link>
             <Link href="#" className="hover:text-[var(--primary)]">Privacidad</Link>

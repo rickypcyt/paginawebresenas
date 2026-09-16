@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
-import { isBusiness } from "@/lib/roles";
+import { isBusiness, isEmployee } from "@/lib/roles";
 import { useState, useRef, useEffect } from "react";
 
 const bottomLinks = [
@@ -13,22 +13,36 @@ const bottomLinks = [
   { href: "/profile", label: "Perfil", icon: "👤" },
 ];
 
-const menuLinks = [
-  { href: "/profile", label: "Tu perfil" },
-  { href: "/dashboard", label: "Panel de negocio" },
-  { href: "/businesses/new", label: "Registrar negocio" },
-];
-
 interface UserNavbarProps {
-  initialUser?: { name?: string | null; email?: string | null; image?: string | null } | null;
+  initialUser?: { name?: string | null; email?: string | null; image?: string | null; role?: string | null } | null;
 }
 
 export function UserNavbar({ initialUser }: UserNavbarProps) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const user = session?.user ?? initialUser;
+  const user = { ...initialUser, ...session?.user };
+  const role = (user as { role?: string | null })?.role;
+  const menuLinks = [
+    { href: "/profile", label: "Tu perfil" },
+    ...(isBusiness(role) ? [{ href: "/dashboard", label: "Panel de negocio" }] : []),
+    ...(isEmployee(role) ? [{ href: "/employee", label: "Panel de empleado" }] : []),
+    ...(role === "user" ? [{ href: "/employee/join", label: "Unirme como empleado" }] : []),
+    ...(isBusiness(role) ? [{ href: "/businesses/new", label: "Registrar negocio" }] : []),
+  ];
   const [open, setOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  async function handleSignOut() {
+    setIsSigningOut(true);
+    try {
+      await signOut();
+      window.location.assign("/");
+    } catch {
+      setIsSigningOut(false);
+      alert("No se pudo cerrar la sesión. Inténtalo de nuevo.");
+    }
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -45,11 +59,11 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 lg:px-8">
           <Link href="/" className="shrink-0 text-lg font-semibold tracking-tight text-[var(--foreground)]">
-            DescubreLocal
+            Toque
           </Link>
 
           <div className="flex items-center gap-3">
-            {isBusiness((user as { role?: string | null })?.role) && (
+            {isBusiness(role) && (
               <Link
                 href="/dashboard"
                 className="hidden rounded-full bg-[var(--primary)] px-4 py-1.5 text-sm font-medium text-[var(--primary-foreground)] transition hover:bg-[var(--primary-dark)] md:block"
@@ -90,10 +104,12 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
                 </nav>
                 <div className="border-t border-[var(--border)] pt-1">
                   <button
-                    onClick={() => signOut()}
-                    className="w-full rounded-lg px-3 py-2 text-left text-sm text-[var(--destructive)] transition hover:bg-[var(--secondary)]"
+                    type="button"
+                    onClick={handleSignOut}
+                    disabled={isSigningOut}
+                    className="w-full rounded-lg px-3 py-2 text-left text-sm text-[var(--destructive)] transition hover:bg-[var(--secondary)] disabled:cursor-wait disabled:opacity-60"
                   >
-                    Cerrar sesión
+                    {isSigningOut ? "Cerrando sesión…" : "Cerrar sesión"}
                   </button>
                 </div>
               </div>

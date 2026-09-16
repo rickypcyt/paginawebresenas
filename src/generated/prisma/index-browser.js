@@ -175,7 +175,19 @@ exports.Prisma.EmployeeScalarFieldEnum = {
   name: 'name',
   role: 'role',
   active: 'active',
+  userId: 'userId',
   businessId: 'businessId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EmployeeJoinRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  businessId: 'businessId',
+  jobTitle: 'jobTitle',
+  status: 'status',
+  reviewedAt: 'reviewedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -375,6 +387,7 @@ exports.Prisma.NullsOrder = {
 };
 exports.Role = exports.$Enums.Role = {
   user: 'user',
+  employee: 'employee',
   business: 'business',
   admin: 'admin'
 };
@@ -384,6 +397,12 @@ exports.BusinessStatus = exports.$Enums.BusinessStatus = {
   claim_pending: 'claim_pending',
   verified: 'verified',
   premium: 'premium'
+};
+
+exports.EmployeeJoinRequestStatus = exports.$Enums.EmployeeJoinRequestStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected'
 };
 
 exports.NfcTagType = exports.$Enums.NfcTagType = {
@@ -418,6 +437,7 @@ exports.Prisma.ModelName = {
   Category: 'Category',
   Business: 'Business',
   Employee: 'Employee',
+  EmployeeJoinRequest: 'EmployeeJoinRequest',
   NfcTag: 'NfcTag',
   Review: 'Review',
   Visit: 'Visit',

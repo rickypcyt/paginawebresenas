@@ -25,7 +25,7 @@ export function getNextLevelXp(xp: number): number | null {
 
 export function computeReviewWeight(reputation: number, xp: number): number {
   const { index } = getLevel(xp);
-  let weight = 1 + Math.min(reputation / 2000, 0.25) + index * 0.05;
+  const weight = 1 + Math.min(reputation / 2000, 0.25) + index * 0.05;
   return Math.min(Math.round(weight * 100) / 100, 1.5);
 }
 

@@ -6,21 +6,29 @@ export function BusinessQrDisplay({ businessId }: { businessId: string }) {
   const [data, setData] = useState<{ daily: string; dynamic: string; expiresIn: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function fetchQr() {
-    try {
-      const res = await fetch(`/api/businesses/${businessId}/qr`);
-      if (!res.ok) throw new Error("No autorizado");
-      setData(await res.json());
-      setError(null);
-    } catch (e) {
-      setError("No se pudo cargar el código QR");
-    }
-  }
-
   useEffect(() => {
-    fetchQr();
-    const interval = setInterval(fetchQr, 30000);
-    return () => clearInterval(interval);
+    let cancelled = false;
+    async function fetchQr() {
+      try {
+        const res = await fetch(`/api/businesses/${businessId}/qr`);
+        if (!res.ok) throw new Error("No autorizado");
+        const nextData = await res.json();
+        if (!cancelled) {
+          setData(nextData);
+          setError(null);
+        }
+      } catch {
+        if (!cancelled) setError("No se pudo cargar el código QR");
+      }
+    }
+
+    const timeout = window.setTimeout(fetchQr, 0);
+    const interval = window.setInterval(fetchQr, 30000);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeout);
+      window.clearInterval(interval);
+    };
   }, [businessId]);
 
   if (error) return <p className="text-red-500">{error}</p>;

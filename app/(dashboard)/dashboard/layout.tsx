@@ -9,6 +9,7 @@ import {
   Tag,
   MessageSquareText,
   SmartphoneNfc,
+  House,
 } from "lucide-react";
 
 const links = [
@@ -18,6 +19,7 @@ const links = [
   { href: "/dashboard/nfc-tags", label: "Tags NFC", icon: <Tag className="h-4 w-4" /> },
   { href: "/dashboard/reviews", label: "Reseñas", icon: <MessageSquareText className="h-4 w-4" /> },
   { href: "/dashboard/simulator", label: "Simulador de tap", icon: <SmartphoneNfc className="h-4 w-4" /> },
+  { href: "/", label: "Volver al inicio", icon: <House className="h-4 w-4" /> },
 ];
 
 export default async function DashboardLayout({

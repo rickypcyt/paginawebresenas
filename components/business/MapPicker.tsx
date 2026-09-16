@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { LeafletMouseEvent, Map as LeafletMap, Marker } from "leaflet";
 
 interface MapPickerProps {
   latitude?: number | null;
@@ -10,8 +11,8 @@ interface MapPickerProps {
 
 export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
-  const markerRef = useRef<any>(null);
+  const mapInstanceRef = useRef<LeafletMap | null>(null);
+  const markerRef = useRef<Marker | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         }).addTo(map);
 
-        map.on("click", (e: any) => {
+        map.on("click", (e: LeafletMouseEvent) => {
           const { lat, lng } = e.latlng;
           onSelect(lat, lng);
 

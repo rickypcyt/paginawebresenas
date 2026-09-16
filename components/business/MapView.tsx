@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { Map as LeafletMap } from "leaflet";
 
 interface MapViewProps {
   latitude?: number | null;
@@ -11,32 +12,33 @@ interface MapViewProps {
 
 export function MapView({ latitude, longitude, address, city }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<any>(null);
+  const mapInstanceRef = useRef<LeafletMap | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
-    latitude && longitude ? { lat: latitude, lng: longitude } : null
+    latitude != null && longitude != null ? { lat: latitude, lng: longitude } : null
   );
 
   useEffect(() => {
-    if (latitude && longitude) {
-      setCoords({ lat: latitude, lng: longitude });
-      return;
-    }
-
     const query = [address, city].filter(Boolean).join(", ");
     if (!query) return;
 
+    const fallbackCoords =
+      latitude != null && longitude != null ? { lat: latitude, lng: longitude } : null;
     let cancelled = false;
     fetch(`/api/geocode?q=${encodeURIComponent(query)}`)
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
         const result = data.results?.[0];
-        if (result?.lat && result?.lon) {
-          setCoords({ lat: Number(result.lat), lng: Number(result.lon) });
-        }
+        setCoords(
+          result?.lat && result?.lon
+            ? { lat: Number(result.lat), lng: Number(result.lon) }
+            : fallbackCoords
+        );
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setCoords(fallbackCoords);
+      });
 
     return () => {
       cancelled = true;
