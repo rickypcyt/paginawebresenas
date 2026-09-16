@@ -32,6 +32,8 @@ export const POST = withErrorHandler(async (request: Request) => {
   const rating = Number(body.rating);
   const businessId: string | undefined = body.businessId;
   const businessSlug: string | undefined = body.businessSlug;
+  const nfcToken = typeof body.nfcToken === "string" ? body.nfcToken.trim() : "";
+  const requestedEmployeeId = typeof body.employeeId === "string" ? body.employeeId : undefined;
 
   if (!title) {
     return NextResponse.json({ error: "El título es obligatorio" }, { status: 400 });
@@ -54,6 +56,28 @@ export const POST = withErrorHandler(async (request: Request) => {
       { error: "Debes seleccionar un negocio" },
       { status: 400 }
     );
+  }
+
+  let nfcTag = null;
+  if (nfcToken) {
+    nfcTag = await prisma.nfcTag.findUnique({
+      where: { token: nfcToken },
+      select: { businessId: true, employeeId: true, active: true },
+    });
+    if (!nfcTag?.active || nfcTag.businessId !== resolvedBusinessId) {
+      return NextResponse.json({ error: "NFC inválido o desactivado" }, { status: 403 });
+    }
+  }
+
+  const employeeId = nfcTag?.employeeId ?? requestedEmployeeId;
+  if (employeeId) {
+    const employee = await prisma.employee.findFirst({
+      where: { id: employeeId, businessId: resolvedBusinessId, active: true },
+      select: { id: true },
+    });
+    if (!employee) {
+      return NextResponse.json({ error: "La persona seleccionada no pertenece al negocio" }, { status: 400 });
+    }
   }
 
   const previousReviews = await prisma.review.count({
@@ -79,10 +103,18 @@ export const POST = withErrorHandler(async (request: Request) => {
       rating,
       userId: user.id,
       businessId: resolvedBusinessId,
-      verification: recentVisit ? recentVisit.verification : "none",
+      verification: nfcTag ? "nfc" : recentVisit ? recentVisit.verification : "none",
       visitId: recentVisit?.id,
+      employeeId,
     },
   });
+
+  if (nfcTag) {
+    await prisma.nfcTag.update({
+      where: { token: nfcToken },
+      data: { scanCount: { increment: 1 } },
+    });
+  }
 
   await awardAction(user.id, userReviews === 0 ? "first_review" : "review");
   if (previousReviews === 0) {

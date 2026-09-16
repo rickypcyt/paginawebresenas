@@ -2,14 +2,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
-import { getSession } from "@/lib/session";
 import { StarRating } from "@/components/ui/StarRating";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { OfferCard } from "@/components/offers/OfferCard";
 import { MapView } from "@/components/business/MapView";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { computeReviewWeight } from "@/lib/gamification";
-import { VerifyVisitButtons } from "./VerifyVisitButtons";
 
 interface BusinessPageProps {
   params: Promise<{ slug: string }>;
@@ -46,8 +44,6 @@ export async function generateMetadata({ params }: BusinessPageProps): Promise<M
 
 export default async function BusinessPage({ params }: BusinessPageProps) {
   const { slug } = await params;
-  const session = await getSession();
-
   const business = await prisma.business.findUnique({
     where: { slug },
     include: {
@@ -175,12 +171,10 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
         </Link>
       </div>
 
-      {/* ── Acción principal: verificar visita ── */}
-      {session?.user?.id && (
-        <div className="mb-8">
-          <VerifyVisitButtons businessId={business.id} />
-        </div>
-      )}
+      <div className="mb-8 rounded-2xl border border-[var(--primary)]/20 bg-[var(--primary-light)] p-5">
+        <p className="text-sm font-bold text-[var(--foreground)]">¿Has recibido atención aquí?</p>
+        <p className="mt-1 text-sm text-[var(--muted-foreground)]">Busca el NFC del negocio o de la persona que te atendió para dejar tu reseña en el momento.</p>
+      </div>
 
       {/* ── Información rápida con iconos ── */}
       <div className="mb-8 grid gap-3 sm:grid-cols-2">

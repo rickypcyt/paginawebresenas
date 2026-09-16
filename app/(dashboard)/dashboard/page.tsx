@@ -10,7 +10,7 @@ export default async function DashboardHomePage() {
   const [businesses, visits, reviews] = await Promise.all([
     prisma.business.findMany({
       where: { ownerId: userId },
-      include: { reviews: { select: { rating: true, createdAt: true } } },
+      include: { reviews: { select: { rating: true, createdAt: true } }, nfcTags: { where: { active: true }, select: { id: true } } },
     }),
     prisma.visit.count({
       where: { business: { ownerId: userId } },
@@ -40,6 +40,7 @@ export default async function DashboardHomePage() {
     0
   );
   const avgRating = businesses.length > 0 ? totalRating / businesses.length : 0;
+  const activeNfcCount = businesses.reduce((count, business) => count + business.nfcTags.length, 0);
 
   const recentReviews = businesses.reduce(
     (count, b) => count + b.reviews.filter((r) => {
@@ -56,8 +57,8 @@ export default async function DashboardHomePage() {
       {/* Stats del día */}
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
-          <p className="text-2xl font-bold text-[var(--foreground)]">{visits}</p>
-          <p className="text-sm text-[var(--muted-foreground)]">📍 Visitas totales</p>
+          <p className="text-2xl font-bold text-[var(--foreground)]">{activeNfcCount}</p>
+          <p className="text-sm text-[var(--muted-foreground)]">� NFC activos</p>
         </div>
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
           <p className="text-2xl font-bold text-[var(--foreground)]">{reviews}</p>

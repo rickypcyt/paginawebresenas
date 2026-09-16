@@ -14,6 +14,7 @@ export function BusinessForm({ categories }: { categories: { id: string; name: s
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
   const [website, setWebsite] = useState("");
+  const [googleReviewUrl, setGoogleReviewUrl] = useState("");
   const [hours, setHours] = useState("");
   const [description, setDescription] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -35,6 +36,7 @@ export function BusinessForm({ categories }: { categories: { id: string; name: s
         city,
         phone,
         website,
+        googleReviewUrl,
         hours,
         description,
         latitude,
@@ -137,6 +139,18 @@ export function BusinessForm({ categories }: { categories: { id: string; name: s
             className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
           />
         </div>
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Enlace de reseñas de Google</label>
+        <input
+          type="url"
+          value={googleReviewUrl}
+          onChange={(e) => setGoogleReviewUrl(e.target.value)}
+          placeholder="https://g.page/r/.../review"
+          className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
+        />
+        <p className="mt-1 text-xs text-[var(--muted-foreground)]">Este será el destino del NFC para reseñas del negocio.</p>
       </div>
 
       <div>

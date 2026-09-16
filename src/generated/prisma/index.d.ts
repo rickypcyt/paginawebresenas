@@ -29,6 +29,16 @@ export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
  */
 export type Business = $Result.DefaultSelection<Prisma.$BusinessPayload>
 /**
+ * Model Employee
+ * 
+ */
+export type Employee = $Result.DefaultSelection<Prisma.$EmployeePayload>
+/**
+ * Model NfcTag
+ * 
+ */
+export type NfcTag = $Result.DefaultSelection<Prisma.$NfcTagPayload>
+/**
  * Model Review
  * 
  */
@@ -141,10 +151,19 @@ export const ReviewVerification: {
   none: 'none',
   location: 'location',
   qr: 'qr',
+  nfc: 'nfc',
   integration: 'integration'
 };
 
 export type ReviewVerification = (typeof ReviewVerification)[keyof typeof ReviewVerification]
+
+
+export const NfcTagType: {
+  business_google: 'business_google',
+  employee_review: 'employee_review'
+};
+
+export type NfcTagType = (typeof NfcTagType)[keyof typeof NfcTagType]
 
 
 export const DiscountType: {
@@ -179,6 +198,10 @@ export const BusinessStatus: typeof $Enums.BusinessStatus
 export type ReviewVerification = $Enums.ReviewVerification
 
 export const ReviewVerification: typeof $Enums.ReviewVerification
+
+export type NfcTagType = $Enums.NfcTagType
+
+export const NfcTagType: typeof $Enums.NfcTagType
 
 export type DiscountType = $Enums.DiscountType
 
@@ -338,6 +361,26 @@ export class PrismaClient<
     * ```
     */
   get business(): Prisma.BusinessDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.employee`: Exposes CRUD operations for the **Employee** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Employees
+    * const employees = await prisma.employee.findMany()
+    * ```
+    */
+  get employee(): Prisma.EmployeeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.nfcTag`: Exposes CRUD operations for the **NfcTag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NfcTags
+    * const nfcTags = await prisma.nfcTag.findMany()
+    * ```
+    */
+  get nfcTag(): Prisma.NfcTagDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.review`: Exposes CRUD operations for the **Review** model.
@@ -945,6 +988,8 @@ export namespace Prisma {
     User: 'User',
     Category: 'Category',
     Business: 'Business',
+    Employee: 'Employee',
+    NfcTag: 'NfcTag',
     Review: 'Review',
     Visit: 'Visit',
     Offer: 'Offer',
@@ -977,7 +1022,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "category" | "business" | "review" | "visit" | "offer" | "offerRedemption" | "favorite" | "collection" | "collectionItem" | "businessPhoto" | "follower" | "session" | "account" | "verification" | "badge" | "userBadge" | "reviewVote" | "businessRequest" | "businessRequestSupporter"
+      modelProps: "user" | "category" | "business" | "employee" | "nfcTag" | "review" | "visit" | "offer" | "offerRedemption" | "favorite" | "collection" | "collectionItem" | "businessPhoto" | "follower" | "session" | "account" | "verification" | "badge" | "userBadge" | "reviewVote" | "businessRequest" | "businessRequestSupporter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1200,6 +1245,154 @@ export namespace Prisma {
           count: {
             args: Prisma.BusinessCountArgs<ExtArgs>
             result: $Utils.Optional<BusinessCountAggregateOutputType> | number
+          }
+        }
+      }
+      Employee: {
+        payload: Prisma.$EmployeePayload<ExtArgs>
+        fields: Prisma.EmployeeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmployeeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmployeeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          findFirst: {
+            args: Prisma.EmployeeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmployeeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          findMany: {
+            args: Prisma.EmployeeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+          }
+          create: {
+            args: Prisma.EmployeeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          createMany: {
+            args: Prisma.EmployeeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmployeeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+          }
+          delete: {
+            args: Prisma.EmployeeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          update: {
+            args: Prisma.EmployeeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          deleteMany: {
+            args: Prisma.EmployeeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmployeeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmployeeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>[]
+          }
+          upsert: {
+            args: Prisma.EmployeeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmployeePayload>
+          }
+          aggregate: {
+            args: Prisma.EmployeeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmployee>
+          }
+          groupBy: {
+            args: Prisma.EmployeeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmployeeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmployeeCountArgs<ExtArgs>
+            result: $Utils.Optional<EmployeeCountAggregateOutputType> | number
+          }
+        }
+      }
+      NfcTag: {
+        payload: Prisma.$NfcTagPayload<ExtArgs>
+        fields: Prisma.NfcTagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NfcTagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NfcTagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>
+          }
+          findFirst: {
+            args: Prisma.NfcTagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NfcTagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>
+          }
+          findMany: {
+            args: Prisma.NfcTagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>[]
+          }
+          create: {
+            args: Prisma.NfcTagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>
+          }
+          createMany: {
+            args: Prisma.NfcTagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NfcTagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>[]
+          }
+          delete: {
+            args: Prisma.NfcTagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>
+          }
+          update: {
+            args: Prisma.NfcTagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>
+          }
+          deleteMany: {
+            args: Prisma.NfcTagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NfcTagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NfcTagUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>[]
+          }
+          upsert: {
+            args: Prisma.NfcTagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NfcTagPayload>
+          }
+          aggregate: {
+            args: Prisma.NfcTagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNfcTag>
+          }
+          groupBy: {
+            args: Prisma.NfcTagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NfcTagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NfcTagCountArgs<ExtArgs>
+            result: $Utils.Optional<NfcTagCountAggregateOutputType> | number
           }
         }
       }
@@ -2572,6 +2765,8 @@ export namespace Prisma {
     user?: UserOmit
     category?: CategoryOmit
     business?: BusinessOmit
+    employee?: EmployeeOmit
+    nfcTag?: NfcTagOmit
     review?: ReviewOmit
     visit?: VisitOmit
     offer?: OfferOmit
@@ -2840,6 +3035,8 @@ export namespace Prisma {
 
   export type BusinessCountOutputType = {
     reviews: number
+    employees: number
+    nfcTags: number
     offers: number
     photos: number
     visits: number
@@ -2850,6 +3047,8 @@ export namespace Prisma {
 
   export type BusinessCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reviews?: boolean | BusinessCountOutputTypeCountReviewsArgs
+    employees?: boolean | BusinessCountOutputTypeCountEmployeesArgs
+    nfcTags?: boolean | BusinessCountOutputTypeCountNfcTagsArgs
     offers?: boolean | BusinessCountOutputTypeCountOffersArgs
     photos?: boolean | BusinessCountOutputTypeCountPhotosArgs
     visits?: boolean | BusinessCountOutputTypeCountVisitsArgs
@@ -2874,6 +3073,20 @@ export namespace Prisma {
    */
   export type BusinessCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReviewWhereInput
+  }
+
+  /**
+   * BusinessCountOutputType without action
+   */
+  export type BusinessCountOutputTypeCountEmployeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeWhereInput
+  }
+
+  /**
+   * BusinessCountOutputType without action
+   */
+  export type BusinessCountOutputTypeCountNfcTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTagWhereInput
   }
 
   /**
@@ -2916,6 +3129,46 @@ export namespace Prisma {
    */
   export type BusinessCountOutputTypeCountCollectionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CollectionItemWhereInput
+  }
+
+
+  /**
+   * Count Type EmployeeCountOutputType
+   */
+
+  export type EmployeeCountOutputType = {
+    reviews: number
+    nfcTags: number
+  }
+
+  export type EmployeeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    reviews?: boolean | EmployeeCountOutputTypeCountReviewsArgs
+    nfcTags?: boolean | EmployeeCountOutputTypeCountNfcTagsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmployeeCountOutputType
+     */
+    select?: EmployeeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviewWhereInput
+  }
+
+  /**
+   * EmployeeCountOutputType without action
+   */
+  export type EmployeeCountOutputTypeCountNfcTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTagWhereInput
   }
 
 
@@ -5786,6 +6039,7 @@ export namespace Prisma {
     city: string | null
     phone: string | null
     website: string | null
+    googleReviewUrl: string | null
     instagram: string | null
     hours: string | null
     description: string | null
@@ -5808,6 +6062,7 @@ export namespace Prisma {
     city: string | null
     phone: string | null
     website: string | null
+    googleReviewUrl: string | null
     instagram: string | null
     hours: string | null
     description: string | null
@@ -5830,6 +6085,7 @@ export namespace Prisma {
     city: number
     phone: number
     website: number
+    googleReviewUrl: number
     instagram: number
     hours: number
     description: number
@@ -5864,6 +6120,7 @@ export namespace Prisma {
     city?: true
     phone?: true
     website?: true
+    googleReviewUrl?: true
     instagram?: true
     hours?: true
     description?: true
@@ -5886,6 +6143,7 @@ export namespace Prisma {
     city?: true
     phone?: true
     website?: true
+    googleReviewUrl?: true
     instagram?: true
     hours?: true
     description?: true
@@ -5908,6 +6166,7 @@ export namespace Prisma {
     city?: true
     phone?: true
     website?: true
+    googleReviewUrl?: true
     instagram?: true
     hours?: true
     description?: true
@@ -6017,6 +6276,7 @@ export namespace Prisma {
     city: string | null
     phone: string | null
     website: string | null
+    googleReviewUrl: string | null
     instagram: string | null
     hours: string | null
     description: string | null
@@ -6058,6 +6318,7 @@ export namespace Prisma {
     city?: boolean
     phone?: boolean
     website?: boolean
+    googleReviewUrl?: boolean
     instagram?: boolean
     hours?: boolean
     description?: boolean
@@ -6070,6 +6331,8 @@ export namespace Prisma {
     category?: boolean | Business$categoryArgs<ExtArgs>
     owner?: boolean | Business$ownerArgs<ExtArgs>
     reviews?: boolean | Business$reviewsArgs<ExtArgs>
+    employees?: boolean | Business$employeesArgs<ExtArgs>
+    nfcTags?: boolean | Business$nfcTagsArgs<ExtArgs>
     offers?: boolean | Business$offersArgs<ExtArgs>
     photos?: boolean | Business$photosArgs<ExtArgs>
     visits?: boolean | Business$visitsArgs<ExtArgs>
@@ -6090,6 +6353,7 @@ export namespace Prisma {
     city?: boolean
     phone?: boolean
     website?: boolean
+    googleReviewUrl?: boolean
     instagram?: boolean
     hours?: boolean
     description?: boolean
@@ -6114,6 +6378,7 @@ export namespace Prisma {
     city?: boolean
     phone?: boolean
     website?: boolean
+    googleReviewUrl?: boolean
     instagram?: boolean
     hours?: boolean
     description?: boolean
@@ -6138,6 +6403,7 @@ export namespace Prisma {
     city?: boolean
     phone?: boolean
     website?: boolean
+    googleReviewUrl?: boolean
     instagram?: boolean
     hours?: boolean
     description?: boolean
@@ -6149,11 +6415,13 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BusinessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "imageUrl" | "categoryId" | "ownerId" | "address" | "city" | "phone" | "website" | "instagram" | "hours" | "description" | "latitude" | "longitude" | "status" | "featured" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
+  export type BusinessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "imageUrl" | "categoryId" | "ownerId" | "address" | "city" | "phone" | "website" | "googleReviewUrl" | "instagram" | "hours" | "description" | "latitude" | "longitude" | "status" | "featured" | "createdAt" | "updatedAt", ExtArgs["result"]["business"]>
   export type BusinessInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | Business$categoryArgs<ExtArgs>
     owner?: boolean | Business$ownerArgs<ExtArgs>
     reviews?: boolean | Business$reviewsArgs<ExtArgs>
+    employees?: boolean | Business$employeesArgs<ExtArgs>
+    nfcTags?: boolean | Business$nfcTagsArgs<ExtArgs>
     offers?: boolean | Business$offersArgs<ExtArgs>
     photos?: boolean | Business$photosArgs<ExtArgs>
     visits?: boolean | Business$visitsArgs<ExtArgs>
@@ -6177,6 +6445,8 @@ export namespace Prisma {
       category: Prisma.$CategoryPayload<ExtArgs> | null
       owner: Prisma.$UserPayload<ExtArgs> | null
       reviews: Prisma.$ReviewPayload<ExtArgs>[]
+      employees: Prisma.$EmployeePayload<ExtArgs>[]
+      nfcTags: Prisma.$NfcTagPayload<ExtArgs>[]
       offers: Prisma.$OfferPayload<ExtArgs>[]
       photos: Prisma.$BusinessPhotoPayload<ExtArgs>[]
       visits: Prisma.$VisitPayload<ExtArgs>[]
@@ -6195,6 +6465,7 @@ export namespace Prisma {
       city: string | null
       phone: string | null
       website: string | null
+      googleReviewUrl: string | null
       instagram: string | null
       hours: string | null
       description: string | null
@@ -6601,6 +6872,8 @@ export namespace Prisma {
     category<T extends Business$categoryArgs<ExtArgs> = {}>(args?: Subset<T, Business$categoryArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     owner<T extends Business$ownerArgs<ExtArgs> = {}>(args?: Subset<T, Business$ownerArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     reviews<T extends Business$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Business$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    employees<T extends Business$employeesArgs<ExtArgs> = {}>(args?: Subset<T, Business$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    nfcTags<T extends Business$nfcTagsArgs<ExtArgs> = {}>(args?: Subset<T, Business$nfcTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     offers<T extends Business$offersArgs<ExtArgs> = {}>(args?: Subset<T, Business$offersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OfferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     photos<T extends Business$photosArgs<ExtArgs> = {}>(args?: Subset<T, Business$photosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     visits<T extends Business$visitsArgs<ExtArgs> = {}>(args?: Subset<T, Business$visitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6646,6 +6919,7 @@ export namespace Prisma {
     readonly city: FieldRef<"Business", 'String'>
     readonly phone: FieldRef<"Business", 'String'>
     readonly website: FieldRef<"Business", 'String'>
+    readonly googleReviewUrl: FieldRef<"Business", 'String'>
     readonly instagram: FieldRef<"Business", 'String'>
     readonly hours: FieldRef<"Business", 'String'>
     readonly description: FieldRef<"Business", 'String'>
@@ -7118,6 +7392,54 @@ export namespace Prisma {
   }
 
   /**
+   * Business.employees
+   */
+  export type Business$employeesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    where?: EmployeeWhereInput
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    cursor?: EmployeeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Business.nfcTags
+   */
+  export type Business$nfcTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    where?: NfcTagWhereInput
+    orderBy?: NfcTagOrderByWithRelationInput | NfcTagOrderByWithRelationInput[]
+    cursor?: NfcTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NfcTagScalarFieldEnum | NfcTagScalarFieldEnum[]
+  }
+
+  /**
    * Business.offers
    */
   export type Business$offersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7281,6 +7603,2342 @@ export namespace Prisma {
 
 
   /**
+   * Model Employee
+   */
+
+  export type AggregateEmployee = {
+    _count: EmployeeCountAggregateOutputType | null
+    _min: EmployeeMinAggregateOutputType | null
+    _max: EmployeeMaxAggregateOutputType | null
+  }
+
+  export type EmployeeMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    role: string | null
+    active: boolean | null
+    businessId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmployeeMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    role: string | null
+    active: boolean | null
+    businessId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmployeeCountAggregateOutputType = {
+    id: number
+    name: number
+    role: number
+    active: number
+    businessId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EmployeeMinAggregateInputType = {
+    id?: true
+    name?: true
+    role?: true
+    active?: true
+    businessId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmployeeMaxAggregateInputType = {
+    id?: true
+    name?: true
+    role?: true
+    active?: true
+    businessId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmployeeCountAggregateInputType = {
+    id?: true
+    name?: true
+    role?: true
+    active?: true
+    businessId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EmployeeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Employee to aggregate.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Employees
+    **/
+    _count?: true | EmployeeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmployeeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmployeeMaxAggregateInputType
+  }
+
+  export type GetEmployeeAggregateType<T extends EmployeeAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmployee]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmployee[P]>
+      : GetScalarType<T[P], AggregateEmployee[P]>
+  }
+
+
+
+
+  export type EmployeeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmployeeWhereInput
+    orderBy?: EmployeeOrderByWithAggregationInput | EmployeeOrderByWithAggregationInput[]
+    by: EmployeeScalarFieldEnum[] | EmployeeScalarFieldEnum
+    having?: EmployeeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmployeeCountAggregateInputType | true
+    _min?: EmployeeMinAggregateInputType
+    _max?: EmployeeMaxAggregateInputType
+  }
+
+  export type EmployeeGroupByOutputType = {
+    id: string
+    name: string
+    role: string | null
+    active: boolean
+    businessId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: EmployeeCountAggregateOutputType | null
+    _min: EmployeeMinAggregateOutputType | null
+    _max: EmployeeMaxAggregateOutputType | null
+  }
+
+  type GetEmployeeGroupByPayload<T extends EmployeeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmployeeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmployeeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
+            : GetScalarType<T[P], EmployeeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmployeeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    role?: boolean
+    active?: boolean
+    businessId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    reviews?: boolean | Employee$reviewsArgs<ExtArgs>
+    nfcTags?: boolean | Employee$nfcTagsArgs<ExtArgs>
+    _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employee"]>
+
+  export type EmployeeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    role?: boolean
+    active?: boolean
+    businessId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employee"]>
+
+  export type EmployeeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    role?: boolean
+    active?: boolean
+    businessId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["employee"]>
+
+  export type EmployeeSelectScalar = {
+    id?: boolean
+    name?: boolean
+    role?: boolean
+    active?: boolean
+    businessId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EmployeeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "role" | "active" | "businessId" | "createdAt" | "updatedAt", ExtArgs["result"]["employee"]>
+  export type EmployeeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    reviews?: boolean | Employee$reviewsArgs<ExtArgs>
+    nfcTags?: boolean | Employee$nfcTagsArgs<ExtArgs>
+    _count?: boolean | EmployeeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EmployeeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }
+  export type EmployeeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+  }
+
+  export type $EmployeePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Employee"
+    objects: {
+      business: Prisma.$BusinessPayload<ExtArgs>
+      reviews: Prisma.$ReviewPayload<ExtArgs>[]
+      nfcTags: Prisma.$NfcTagPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      role: string | null
+      active: boolean
+      businessId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["employee"]>
+    composites: {}
+  }
+
+  type EmployeeGetPayload<S extends boolean | null | undefined | EmployeeDefaultArgs> = $Result.GetResult<Prisma.$EmployeePayload, S>
+
+  type EmployeeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmployeeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmployeeCountAggregateInputType | true
+    }
+
+  export interface EmployeeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Employee'], meta: { name: 'Employee' } }
+    /**
+     * Find zero or one Employee that matches the filter.
+     * @param {EmployeeFindUniqueArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmployeeFindUniqueArgs>(args: SelectSubset<T, EmployeeFindUniqueArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Employee that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmployeeFindUniqueOrThrowArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmployeeFindUniqueOrThrowArgs>(args: SelectSubset<T, EmployeeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Employee that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeFindFirstArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmployeeFindFirstArgs>(args?: SelectSubset<T, EmployeeFindFirstArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Employee that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeFindFirstOrThrowArgs} args - Arguments to find a Employee
+     * @example
+     * // Get one Employee
+     * const employee = await prisma.employee.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmployeeFindFirstOrThrowArgs>(args?: SelectSubset<T, EmployeeFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Employees that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Employees
+     * const employees = await prisma.employee.findMany()
+     * 
+     * // Get first 10 Employees
+     * const employees = await prisma.employee.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const employeeWithIdOnly = await prisma.employee.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmployeeFindManyArgs>(args?: SelectSubset<T, EmployeeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Employee.
+     * @param {EmployeeCreateArgs} args - Arguments to create a Employee.
+     * @example
+     * // Create one Employee
+     * const Employee = await prisma.employee.create({
+     *   data: {
+     *     // ... data to create a Employee
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmployeeCreateArgs>(args: SelectSubset<T, EmployeeCreateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Employees.
+     * @param {EmployeeCreateManyArgs} args - Arguments to create many Employees.
+     * @example
+     * // Create many Employees
+     * const employee = await prisma.employee.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmployeeCreateManyArgs>(args?: SelectSubset<T, EmployeeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Employees and returns the data saved in the database.
+     * @param {EmployeeCreateManyAndReturnArgs} args - Arguments to create many Employees.
+     * @example
+     * // Create many Employees
+     * const employee = await prisma.employee.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Employees and only return the `id`
+     * const employeeWithIdOnly = await prisma.employee.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmployeeCreateManyAndReturnArgs>(args?: SelectSubset<T, EmployeeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Employee.
+     * @param {EmployeeDeleteArgs} args - Arguments to delete one Employee.
+     * @example
+     * // Delete one Employee
+     * const Employee = await prisma.employee.delete({
+     *   where: {
+     *     // ... filter to delete one Employee
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmployeeDeleteArgs>(args: SelectSubset<T, EmployeeDeleteArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Employee.
+     * @param {EmployeeUpdateArgs} args - Arguments to update one Employee.
+     * @example
+     * // Update one Employee
+     * const employee = await prisma.employee.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmployeeUpdateArgs>(args: SelectSubset<T, EmployeeUpdateArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Employees.
+     * @param {EmployeeDeleteManyArgs} args - Arguments to filter Employees to delete.
+     * @example
+     * // Delete a few Employees
+     * const { count } = await prisma.employee.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmployeeDeleteManyArgs>(args?: SelectSubset<T, EmployeeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Employees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Employees
+     * const employee = await prisma.employee.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmployeeUpdateManyArgs>(args: SelectSubset<T, EmployeeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Employees and returns the data updated in the database.
+     * @param {EmployeeUpdateManyAndReturnArgs} args - Arguments to update many Employees.
+     * @example
+     * // Update many Employees
+     * const employee = await prisma.employee.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Employees and only return the `id`
+     * const employeeWithIdOnly = await prisma.employee.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmployeeUpdateManyAndReturnArgs>(args: SelectSubset<T, EmployeeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Employee.
+     * @param {EmployeeUpsertArgs} args - Arguments to update or create a Employee.
+     * @example
+     * // Update or create a Employee
+     * const employee = await prisma.employee.upsert({
+     *   create: {
+     *     // ... data to create a Employee
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Employee we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmployeeUpsertArgs>(args: SelectSubset<T, EmployeeUpsertArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Employees.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeCountArgs} args - Arguments to filter Employees to count.
+     * @example
+     * // Count the number of Employees
+     * const count = await prisma.employee.count({
+     *   where: {
+     *     // ... the filter for the Employees we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmployeeCountArgs>(
+      args?: Subset<T, EmployeeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmployeeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Employee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmployeeAggregateArgs>(args: Subset<T, EmployeeAggregateArgs>): Prisma.PrismaPromise<GetEmployeeAggregateType<T>>
+
+    /**
+     * Group by Employee.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmployeeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmployeeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmployeeGroupByArgs['orderBy'] }
+        : { orderBy?: EmployeeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmployeeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmployeeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Employee model
+   */
+  readonly fields: EmployeeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Employee.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmployeeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviews<T extends Employee$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    nfcTags<T extends Employee$nfcTagsArgs<ExtArgs> = {}>(args?: Subset<T, Employee$nfcTagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Employee model
+   */
+  interface EmployeeFieldRefs {
+    readonly id: FieldRef<"Employee", 'String'>
+    readonly name: FieldRef<"Employee", 'String'>
+    readonly role: FieldRef<"Employee", 'String'>
+    readonly active: FieldRef<"Employee", 'Boolean'>
+    readonly businessId: FieldRef<"Employee", 'String'>
+    readonly createdAt: FieldRef<"Employee", 'DateTime'>
+    readonly updatedAt: FieldRef<"Employee", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Employee findUnique
+   */
+  export type EmployeeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee findUniqueOrThrow
+   */
+  export type EmployeeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee findFirst
+   */
+  export type EmployeeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Employees.
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Employees.
+     */
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Employee findFirstOrThrow
+   */
+  export type EmployeeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employee to fetch.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Employees.
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Employees.
+     */
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Employee findMany
+   */
+  export type EmployeeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter, which Employees to fetch.
+     */
+    where?: EmployeeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Employees to fetch.
+     */
+    orderBy?: EmployeeOrderByWithRelationInput | EmployeeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Employees.
+     */
+    cursor?: EmployeeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Employees from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Employees.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Employees.
+     */
+    distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
+  }
+
+  /**
+   * Employee create
+   */
+  export type EmployeeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Employee.
+     */
+    data: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
+  }
+
+  /**
+   * Employee createMany
+   */
+  export type EmployeeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Employees.
+     */
+    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Employee createManyAndReturn
+   */
+  export type EmployeeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * The data used to create many Employees.
+     */
+    data: EmployeeCreateManyInput | EmployeeCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Employee update
+   */
+  export type EmployeeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Employee.
+     */
+    data: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
+    /**
+     * Choose, which Employee to update.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee updateMany
+   */
+  export type EmployeeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Employees.
+     */
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
+    /**
+     * Filter which Employees to update
+     */
+    where?: EmployeeWhereInput
+    /**
+     * Limit how many Employees to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Employee updateManyAndReturn
+   */
+  export type EmployeeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * The data used to update Employees.
+     */
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyInput>
+    /**
+     * Filter which Employees to update
+     */
+    where?: EmployeeWhereInput
+    /**
+     * Limit how many Employees to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Employee upsert
+   */
+  export type EmployeeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Employee to update in case it exists.
+     */
+    where: EmployeeWhereUniqueInput
+    /**
+     * In case the Employee found by the `where` argument doesn't exist, create a new Employee with this data.
+     */
+    create: XOR<EmployeeCreateInput, EmployeeUncheckedCreateInput>
+    /**
+     * In case the Employee was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmployeeUpdateInput, EmployeeUncheckedUpdateInput>
+  }
+
+  /**
+   * Employee delete
+   */
+  export type EmployeeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    /**
+     * Filter which Employee to delete.
+     */
+    where: EmployeeWhereUniqueInput
+  }
+
+  /**
+   * Employee deleteMany
+   */
+  export type EmployeeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Employees to delete
+     */
+    where?: EmployeeWhereInput
+    /**
+     * Limit how many Employees to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Employee.reviews
+   */
+  export type Employee$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Review
+     */
+    select?: ReviewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Review
+     */
+    omit?: ReviewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviewInclude<ExtArgs> | null
+    where?: ReviewWhereInput
+    orderBy?: ReviewOrderByWithRelationInput | ReviewOrderByWithRelationInput[]
+    cursor?: ReviewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReviewScalarFieldEnum | ReviewScalarFieldEnum[]
+  }
+
+  /**
+   * Employee.nfcTags
+   */
+  export type Employee$nfcTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    where?: NfcTagWhereInput
+    orderBy?: NfcTagOrderByWithRelationInput | NfcTagOrderByWithRelationInput[]
+    cursor?: NfcTagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NfcTagScalarFieldEnum | NfcTagScalarFieldEnum[]
+  }
+
+  /**
+   * Employee without action
+   */
+  export type EmployeeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NfcTag
+   */
+
+  export type AggregateNfcTag = {
+    _count: NfcTagCountAggregateOutputType | null
+    _avg: NfcTagAvgAggregateOutputType | null
+    _sum: NfcTagSumAggregateOutputType | null
+    _min: NfcTagMinAggregateOutputType | null
+    _max: NfcTagMaxAggregateOutputType | null
+  }
+
+  export type NfcTagAvgAggregateOutputType = {
+    scanCount: number | null
+  }
+
+  export type NfcTagSumAggregateOutputType = {
+    scanCount: number | null
+  }
+
+  export type NfcTagMinAggregateOutputType = {
+    id: string | null
+    token: string | null
+    label: string | null
+    type: $Enums.NfcTagType | null
+    active: boolean | null
+    scanCount: number | null
+    businessId: string | null
+    employeeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NfcTagMaxAggregateOutputType = {
+    id: string | null
+    token: string | null
+    label: string | null
+    type: $Enums.NfcTagType | null
+    active: boolean | null
+    scanCount: number | null
+    businessId: string | null
+    employeeId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type NfcTagCountAggregateOutputType = {
+    id: number
+    token: number
+    label: number
+    type: number
+    active: number
+    scanCount: number
+    businessId: number
+    employeeId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type NfcTagAvgAggregateInputType = {
+    scanCount?: true
+  }
+
+  export type NfcTagSumAggregateInputType = {
+    scanCount?: true
+  }
+
+  export type NfcTagMinAggregateInputType = {
+    id?: true
+    token?: true
+    label?: true
+    type?: true
+    active?: true
+    scanCount?: true
+    businessId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NfcTagMaxAggregateInputType = {
+    id?: true
+    token?: true
+    label?: true
+    type?: true
+    active?: true
+    scanCount?: true
+    businessId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type NfcTagCountAggregateInputType = {
+    id?: true
+    token?: true
+    label?: true
+    type?: true
+    active?: true
+    scanCount?: true
+    businessId?: true
+    employeeId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type NfcTagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NfcTag to aggregate.
+     */
+    where?: NfcTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTags to fetch.
+     */
+    orderBy?: NfcTagOrderByWithRelationInput | NfcTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NfcTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NfcTags
+    **/
+    _count?: true | NfcTagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NfcTagAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NfcTagSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NfcTagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NfcTagMaxAggregateInputType
+  }
+
+  export type GetNfcTagAggregateType<T extends NfcTagAggregateArgs> = {
+        [P in keyof T & keyof AggregateNfcTag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNfcTag[P]>
+      : GetScalarType<T[P], AggregateNfcTag[P]>
+  }
+
+
+
+
+  export type NfcTagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NfcTagWhereInput
+    orderBy?: NfcTagOrderByWithAggregationInput | NfcTagOrderByWithAggregationInput[]
+    by: NfcTagScalarFieldEnum[] | NfcTagScalarFieldEnum
+    having?: NfcTagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NfcTagCountAggregateInputType | true
+    _avg?: NfcTagAvgAggregateInputType
+    _sum?: NfcTagSumAggregateInputType
+    _min?: NfcTagMinAggregateInputType
+    _max?: NfcTagMaxAggregateInputType
+  }
+
+  export type NfcTagGroupByOutputType = {
+    id: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active: boolean
+    scanCount: number
+    businessId: string
+    employeeId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: NfcTagCountAggregateOutputType | null
+    _avg: NfcTagAvgAggregateOutputType | null
+    _sum: NfcTagSumAggregateOutputType | null
+    _min: NfcTagMinAggregateOutputType | null
+    _max: NfcTagMaxAggregateOutputType | null
+  }
+
+  type GetNfcTagGroupByPayload<T extends NfcTagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NfcTagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NfcTagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NfcTagGroupByOutputType[P]>
+            : GetScalarType<T[P], NfcTagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NfcTagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    label?: boolean
+    type?: boolean
+    active?: boolean
+    scanCount?: boolean
+    businessId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    employee?: boolean | NfcTag$employeeArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcTag"]>
+
+  export type NfcTagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    label?: boolean
+    type?: boolean
+    active?: boolean
+    scanCount?: boolean
+    businessId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    employee?: boolean | NfcTag$employeeArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcTag"]>
+
+  export type NfcTagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    label?: boolean
+    type?: boolean
+    active?: boolean
+    scanCount?: boolean
+    businessId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    employee?: boolean | NfcTag$employeeArgs<ExtArgs>
+  }, ExtArgs["result"]["nfcTag"]>
+
+  export type NfcTagSelectScalar = {
+    id?: boolean
+    token?: boolean
+    label?: boolean
+    type?: boolean
+    active?: boolean
+    scanCount?: boolean
+    businessId?: boolean
+    employeeId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type NfcTagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "label" | "type" | "active" | "scanCount" | "businessId" | "employeeId" | "createdAt" | "updatedAt", ExtArgs["result"]["nfcTag"]>
+  export type NfcTagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    employee?: boolean | NfcTag$employeeArgs<ExtArgs>
+  }
+  export type NfcTagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    employee?: boolean | NfcTag$employeeArgs<ExtArgs>
+  }
+  export type NfcTagIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    business?: boolean | BusinessDefaultArgs<ExtArgs>
+    employee?: boolean | NfcTag$employeeArgs<ExtArgs>
+  }
+
+  export type $NfcTagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NfcTag"
+    objects: {
+      business: Prisma.$BusinessPayload<ExtArgs>
+      employee: Prisma.$EmployeePayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      token: string
+      label: string
+      type: $Enums.NfcTagType
+      active: boolean
+      scanCount: number
+      businessId: string
+      employeeId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["nfcTag"]>
+    composites: {}
+  }
+
+  type NfcTagGetPayload<S extends boolean | null | undefined | NfcTagDefaultArgs> = $Result.GetResult<Prisma.$NfcTagPayload, S>
+
+  type NfcTagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NfcTagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NfcTagCountAggregateInputType | true
+    }
+
+  export interface NfcTagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NfcTag'], meta: { name: 'NfcTag' } }
+    /**
+     * Find zero or one NfcTag that matches the filter.
+     * @param {NfcTagFindUniqueArgs} args - Arguments to find a NfcTag
+     * @example
+     * // Get one NfcTag
+     * const nfcTag = await prisma.nfcTag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NfcTagFindUniqueArgs>(args: SelectSubset<T, NfcTagFindUniqueArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NfcTag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NfcTagFindUniqueOrThrowArgs} args - Arguments to find a NfcTag
+     * @example
+     * // Get one NfcTag
+     * const nfcTag = await prisma.nfcTag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NfcTagFindUniqueOrThrowArgs>(args: SelectSubset<T, NfcTagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NfcTag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagFindFirstArgs} args - Arguments to find a NfcTag
+     * @example
+     * // Get one NfcTag
+     * const nfcTag = await prisma.nfcTag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NfcTagFindFirstArgs>(args?: SelectSubset<T, NfcTagFindFirstArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NfcTag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagFindFirstOrThrowArgs} args - Arguments to find a NfcTag
+     * @example
+     * // Get one NfcTag
+     * const nfcTag = await prisma.nfcTag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NfcTagFindFirstOrThrowArgs>(args?: SelectSubset<T, NfcTagFindFirstOrThrowArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NfcTags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NfcTags
+     * const nfcTags = await prisma.nfcTag.findMany()
+     * 
+     * // Get first 10 NfcTags
+     * const nfcTags = await prisma.nfcTag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const nfcTagWithIdOnly = await prisma.nfcTag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NfcTagFindManyArgs>(args?: SelectSubset<T, NfcTagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NfcTag.
+     * @param {NfcTagCreateArgs} args - Arguments to create a NfcTag.
+     * @example
+     * // Create one NfcTag
+     * const NfcTag = await prisma.nfcTag.create({
+     *   data: {
+     *     // ... data to create a NfcTag
+     *   }
+     * })
+     * 
+     */
+    create<T extends NfcTagCreateArgs>(args: SelectSubset<T, NfcTagCreateArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NfcTags.
+     * @param {NfcTagCreateManyArgs} args - Arguments to create many NfcTags.
+     * @example
+     * // Create many NfcTags
+     * const nfcTag = await prisma.nfcTag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NfcTagCreateManyArgs>(args?: SelectSubset<T, NfcTagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NfcTags and returns the data saved in the database.
+     * @param {NfcTagCreateManyAndReturnArgs} args - Arguments to create many NfcTags.
+     * @example
+     * // Create many NfcTags
+     * const nfcTag = await prisma.nfcTag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NfcTags and only return the `id`
+     * const nfcTagWithIdOnly = await prisma.nfcTag.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NfcTagCreateManyAndReturnArgs>(args?: SelectSubset<T, NfcTagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NfcTag.
+     * @param {NfcTagDeleteArgs} args - Arguments to delete one NfcTag.
+     * @example
+     * // Delete one NfcTag
+     * const NfcTag = await prisma.nfcTag.delete({
+     *   where: {
+     *     // ... filter to delete one NfcTag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NfcTagDeleteArgs>(args: SelectSubset<T, NfcTagDeleteArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NfcTag.
+     * @param {NfcTagUpdateArgs} args - Arguments to update one NfcTag.
+     * @example
+     * // Update one NfcTag
+     * const nfcTag = await prisma.nfcTag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NfcTagUpdateArgs>(args: SelectSubset<T, NfcTagUpdateArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NfcTags.
+     * @param {NfcTagDeleteManyArgs} args - Arguments to filter NfcTags to delete.
+     * @example
+     * // Delete a few NfcTags
+     * const { count } = await prisma.nfcTag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NfcTagDeleteManyArgs>(args?: SelectSubset<T, NfcTagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NfcTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NfcTags
+     * const nfcTag = await prisma.nfcTag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NfcTagUpdateManyArgs>(args: SelectSubset<T, NfcTagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NfcTags and returns the data updated in the database.
+     * @param {NfcTagUpdateManyAndReturnArgs} args - Arguments to update many NfcTags.
+     * @example
+     * // Update many NfcTags
+     * const nfcTag = await prisma.nfcTag.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NfcTags and only return the `id`
+     * const nfcTagWithIdOnly = await prisma.nfcTag.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NfcTagUpdateManyAndReturnArgs>(args: SelectSubset<T, NfcTagUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NfcTag.
+     * @param {NfcTagUpsertArgs} args - Arguments to update or create a NfcTag.
+     * @example
+     * // Update or create a NfcTag
+     * const nfcTag = await prisma.nfcTag.upsert({
+     *   create: {
+     *     // ... data to create a NfcTag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NfcTag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NfcTagUpsertArgs>(args: SelectSubset<T, NfcTagUpsertArgs<ExtArgs>>): Prisma__NfcTagClient<$Result.GetResult<Prisma.$NfcTagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NfcTags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagCountArgs} args - Arguments to filter NfcTags to count.
+     * @example
+     * // Count the number of NfcTags
+     * const count = await prisma.nfcTag.count({
+     *   where: {
+     *     // ... the filter for the NfcTags we want to count
+     *   }
+     * })
+    **/
+    count<T extends NfcTagCountArgs>(
+      args?: Subset<T, NfcTagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NfcTagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NfcTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NfcTagAggregateArgs>(args: Subset<T, NfcTagAggregateArgs>): Prisma.PrismaPromise<GetNfcTagAggregateType<T>>
+
+    /**
+     * Group by NfcTag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NfcTagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NfcTagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NfcTagGroupByArgs['orderBy'] }
+        : { orderBy?: NfcTagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NfcTagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNfcTagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NfcTag model
+   */
+  readonly fields: NfcTagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NfcTag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NfcTagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    employee<T extends NfcTag$employeeArgs<ExtArgs> = {}>(args?: Subset<T, NfcTag$employeeArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NfcTag model
+   */
+  interface NfcTagFieldRefs {
+    readonly id: FieldRef<"NfcTag", 'String'>
+    readonly token: FieldRef<"NfcTag", 'String'>
+    readonly label: FieldRef<"NfcTag", 'String'>
+    readonly type: FieldRef<"NfcTag", 'NfcTagType'>
+    readonly active: FieldRef<"NfcTag", 'Boolean'>
+    readonly scanCount: FieldRef<"NfcTag", 'Int'>
+    readonly businessId: FieldRef<"NfcTag", 'String'>
+    readonly employeeId: FieldRef<"NfcTag", 'String'>
+    readonly createdAt: FieldRef<"NfcTag", 'DateTime'>
+    readonly updatedAt: FieldRef<"NfcTag", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NfcTag findUnique
+   */
+  export type NfcTagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTag to fetch.
+     */
+    where: NfcTagWhereUniqueInput
+  }
+
+  /**
+   * NfcTag findUniqueOrThrow
+   */
+  export type NfcTagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTag to fetch.
+     */
+    where: NfcTagWhereUniqueInput
+  }
+
+  /**
+   * NfcTag findFirst
+   */
+  export type NfcTagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTag to fetch.
+     */
+    where?: NfcTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTags to fetch.
+     */
+    orderBy?: NfcTagOrderByWithRelationInput | NfcTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NfcTags.
+     */
+    cursor?: NfcTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcTags.
+     */
+    distinct?: NfcTagScalarFieldEnum | NfcTagScalarFieldEnum[]
+  }
+
+  /**
+   * NfcTag findFirstOrThrow
+   */
+  export type NfcTagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTag to fetch.
+     */
+    where?: NfcTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTags to fetch.
+     */
+    orderBy?: NfcTagOrderByWithRelationInput | NfcTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NfcTags.
+     */
+    cursor?: NfcTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcTags.
+     */
+    distinct?: NfcTagScalarFieldEnum | NfcTagScalarFieldEnum[]
+  }
+
+  /**
+   * NfcTag findMany
+   */
+  export type NfcTagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * Filter, which NfcTags to fetch.
+     */
+    where?: NfcTagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NfcTags to fetch.
+     */
+    orderBy?: NfcTagOrderByWithRelationInput | NfcTagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NfcTags.
+     */
+    cursor?: NfcTagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NfcTags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NfcTags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NfcTags.
+     */
+    distinct?: NfcTagScalarFieldEnum | NfcTagScalarFieldEnum[]
+  }
+
+  /**
+   * NfcTag create
+   */
+  export type NfcTagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a NfcTag.
+     */
+    data: XOR<NfcTagCreateInput, NfcTagUncheckedCreateInput>
+  }
+
+  /**
+   * NfcTag createMany
+   */
+  export type NfcTagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NfcTags.
+     */
+    data: NfcTagCreateManyInput | NfcTagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NfcTag createManyAndReturn
+   */
+  export type NfcTagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * The data used to create many NfcTags.
+     */
+    data: NfcTagCreateManyInput | NfcTagCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NfcTag update
+   */
+  export type NfcTagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a NfcTag.
+     */
+    data: XOR<NfcTagUpdateInput, NfcTagUncheckedUpdateInput>
+    /**
+     * Choose, which NfcTag to update.
+     */
+    where: NfcTagWhereUniqueInput
+  }
+
+  /**
+   * NfcTag updateMany
+   */
+  export type NfcTagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NfcTags.
+     */
+    data: XOR<NfcTagUpdateManyMutationInput, NfcTagUncheckedUpdateManyInput>
+    /**
+     * Filter which NfcTags to update
+     */
+    where?: NfcTagWhereInput
+    /**
+     * Limit how many NfcTags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NfcTag updateManyAndReturn
+   */
+  export type NfcTagUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * The data used to update NfcTags.
+     */
+    data: XOR<NfcTagUpdateManyMutationInput, NfcTagUncheckedUpdateManyInput>
+    /**
+     * Filter which NfcTags to update
+     */
+    where?: NfcTagWhereInput
+    /**
+     * Limit how many NfcTags to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * NfcTag upsert
+   */
+  export type NfcTagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the NfcTag to update in case it exists.
+     */
+    where: NfcTagWhereUniqueInput
+    /**
+     * In case the NfcTag found by the `where` argument doesn't exist, create a new NfcTag with this data.
+     */
+    create: XOR<NfcTagCreateInput, NfcTagUncheckedCreateInput>
+    /**
+     * In case the NfcTag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NfcTagUpdateInput, NfcTagUncheckedUpdateInput>
+  }
+
+  /**
+   * NfcTag delete
+   */
+  export type NfcTagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+    /**
+     * Filter which NfcTag to delete.
+     */
+    where: NfcTagWhereUniqueInput
+  }
+
+  /**
+   * NfcTag deleteMany
+   */
+  export type NfcTagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NfcTags to delete
+     */
+    where?: NfcTagWhereInput
+    /**
+     * Limit how many NfcTags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NfcTag.employee
+   */
+  export type NfcTag$employeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    where?: EmployeeWhereInput
+  }
+
+  /**
+   * NfcTag without action
+   */
+  export type NfcTagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NfcTag
+     */
+    select?: NfcTagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NfcTag
+     */
+    omit?: NfcTagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NfcTagInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Review
    */
 
@@ -7306,6 +9964,7 @@ export namespace Prisma {
     content: string | null
     rating: number | null
     verification: $Enums.ReviewVerification | null
+    employeeId: string | null
     visitId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7319,6 +9978,7 @@ export namespace Prisma {
     content: string | null
     rating: number | null
     verification: $Enums.ReviewVerification | null
+    employeeId: string | null
     visitId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -7332,6 +9992,7 @@ export namespace Prisma {
     content: number
     rating: number
     verification: number
+    employeeId: number
     visitId: number
     createdAt: number
     updatedAt: number
@@ -7355,6 +10016,7 @@ export namespace Prisma {
     content?: true
     rating?: true
     verification?: true
+    employeeId?: true
     visitId?: true
     createdAt?: true
     updatedAt?: true
@@ -7368,6 +10030,7 @@ export namespace Prisma {
     content?: true
     rating?: true
     verification?: true
+    employeeId?: true
     visitId?: true
     createdAt?: true
     updatedAt?: true
@@ -7381,6 +10044,7 @@ export namespace Prisma {
     content?: true
     rating?: true
     verification?: true
+    employeeId?: true
     visitId?: true
     createdAt?: true
     updatedAt?: true
@@ -7481,6 +10145,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification: $Enums.ReviewVerification
+    employeeId: string | null
     visitId: string | null
     createdAt: Date
     updatedAt: Date
@@ -7513,11 +10178,13 @@ export namespace Prisma {
     content?: boolean
     rating?: boolean
     verification?: boolean
+    employeeId?: boolean
     visitId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
     businessId?: boolean
+    employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -7531,11 +10198,13 @@ export namespace Prisma {
     content?: boolean
     rating?: boolean
     verification?: boolean
+    employeeId?: boolean
     visitId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
     businessId?: boolean
+    employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -7547,11 +10216,13 @@ export namespace Prisma {
     content?: boolean
     rating?: boolean
     verification?: boolean
+    employeeId?: boolean
     visitId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
     businessId?: boolean
+    employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -7563,6 +10234,7 @@ export namespace Prisma {
     content?: boolean
     rating?: boolean
     verification?: boolean
+    employeeId?: boolean
     visitId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -7570,8 +10242,9 @@ export namespace Prisma {
     businessId?: boolean
   }
 
-  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "rating" | "verification" | "visitId" | "createdAt" | "updatedAt" | "userId" | "businessId", ExtArgs["result"]["review"]>
+  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "rating" | "verification" | "employeeId" | "visitId" | "createdAt" | "updatedAt" | "userId" | "businessId", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -7579,11 +10252,13 @@ export namespace Prisma {
     _count?: boolean | ReviewCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
@@ -7592,6 +10267,7 @@ export namespace Prisma {
   export type $ReviewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Review"
     objects: {
+      employee: Prisma.$EmployeePayload<ExtArgs> | null
       visit: Prisma.$VisitPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs>
       business: Prisma.$BusinessPayload<ExtArgs>
@@ -7603,6 +10279,7 @@ export namespace Prisma {
       content: string
       rating: number
       verification: $Enums.ReviewVerification
+      employeeId: string | null
       visitId: string | null
       createdAt: Date
       updatedAt: Date
@@ -8002,6 +10679,7 @@ export namespace Prisma {
    */
   export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    employee<T extends Review$employeeArgs<ExtArgs> = {}>(args?: Subset<T, Review$employeeArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     visit<T extends Review$visitArgs<ExtArgs> = {}>(args?: Subset<T, Review$visitArgs<ExtArgs>>): Prisma__VisitClient<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -8040,6 +10718,7 @@ export namespace Prisma {
     readonly content: FieldRef<"Review", 'String'>
     readonly rating: FieldRef<"Review", 'Int'>
     readonly verification: FieldRef<"Review", 'ReviewVerification'>
+    readonly employeeId: FieldRef<"Review", 'String'>
     readonly visitId: FieldRef<"Review", 'String'>
     readonly createdAt: FieldRef<"Review", 'DateTime'>
     readonly updatedAt: FieldRef<"Review", 'DateTime'>
@@ -8443,6 +11122,25 @@ export namespace Prisma {
      * Limit how many Reviews to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Review.employee
+   */
+  export type Review$employeeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Employee
+     */
+    select?: EmployeeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Employee
+     */
+    omit?: EmployeeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmployeeInclude<ExtArgs> | null
+    where?: EmployeeWhereInput
   }
 
   /**
@@ -26117,6 +28815,7 @@ export namespace Prisma {
     city: 'city',
     phone: 'phone',
     website: 'website',
+    googleReviewUrl: 'googleReviewUrl',
     instagram: 'instagram',
     hours: 'hours',
     description: 'description',
@@ -26131,12 +28830,42 @@ export namespace Prisma {
   export type BusinessScalarFieldEnum = (typeof BusinessScalarFieldEnum)[keyof typeof BusinessScalarFieldEnum]
 
 
+  export const EmployeeScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    role: 'role',
+    active: 'active',
+    businessId: 'businessId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
+
+
+  export const NfcTagScalarFieldEnum: {
+    id: 'id',
+    token: 'token',
+    label: 'label',
+    type: 'type',
+    active: 'active',
+    scanCount: 'scanCount',
+    businessId: 'businessId',
+    employeeId: 'employeeId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type NfcTagScalarFieldEnum = (typeof NfcTagScalarFieldEnum)[keyof typeof NfcTagScalarFieldEnum]
+
+
   export const ReviewScalarFieldEnum: {
     id: 'id',
     title: 'title',
     content: 'content',
     rating: 'rating',
     verification: 'verification',
+    employeeId: 'employeeId',
     visitId: 'visitId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -26468,6 +29197,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'NfcTagType'
+   */
+  export type EnumNfcTagTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NfcTagType'>
+    
+
+
+  /**
+   * Reference to a field of type 'NfcTagType[]'
+   */
+  export type ListEnumNfcTagTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NfcTagType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ReviewVerification'
    */
   export type EnumReviewVerificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReviewVerification'>
@@ -26729,6 +29472,7 @@ export namespace Prisma {
     city?: StringNullableFilter<"Business"> | string | null
     phone?: StringNullableFilter<"Business"> | string | null
     website?: StringNullableFilter<"Business"> | string | null
+    googleReviewUrl?: StringNullableFilter<"Business"> | string | null
     instagram?: StringNullableFilter<"Business"> | string | null
     hours?: StringNullableFilter<"Business"> | string | null
     description?: StringNullableFilter<"Business"> | string | null
@@ -26741,6 +29485,8 @@ export namespace Prisma {
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     reviews?: ReviewListRelationFilter
+    employees?: EmployeeListRelationFilter
+    nfcTags?: NfcTagListRelationFilter
     offers?: OfferListRelationFilter
     photos?: BusinessPhotoListRelationFilter
     visits?: VisitListRelationFilter
@@ -26760,6 +29506,7 @@ export namespace Prisma {
     city?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    googleReviewUrl?: SortOrderInput | SortOrder
     instagram?: SortOrderInput | SortOrder
     hours?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
@@ -26772,6 +29519,8 @@ export namespace Prisma {
     category?: CategoryOrderByWithRelationInput
     owner?: UserOrderByWithRelationInput
     reviews?: ReviewOrderByRelationAggregateInput
+    employees?: EmployeeOrderByRelationAggregateInput
+    nfcTags?: NfcTagOrderByRelationAggregateInput
     offers?: OfferOrderByRelationAggregateInput
     photos?: BusinessPhotoOrderByRelationAggregateInput
     visits?: VisitOrderByRelationAggregateInput
@@ -26794,6 +29543,7 @@ export namespace Prisma {
     city?: StringNullableFilter<"Business"> | string | null
     phone?: StringNullableFilter<"Business"> | string | null
     website?: StringNullableFilter<"Business"> | string | null
+    googleReviewUrl?: StringNullableFilter<"Business"> | string | null
     instagram?: StringNullableFilter<"Business"> | string | null
     hours?: StringNullableFilter<"Business"> | string | null
     description?: StringNullableFilter<"Business"> | string | null
@@ -26806,6 +29556,8 @@ export namespace Prisma {
     category?: XOR<CategoryNullableScalarRelationFilter, CategoryWhereInput> | null
     owner?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     reviews?: ReviewListRelationFilter
+    employees?: EmployeeListRelationFilter
+    nfcTags?: NfcTagListRelationFilter
     offers?: OfferListRelationFilter
     photos?: BusinessPhotoListRelationFilter
     visits?: VisitListRelationFilter
@@ -26825,6 +29577,7 @@ export namespace Prisma {
     city?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    googleReviewUrl?: SortOrderInput | SortOrder
     instagram?: SortOrderInput | SortOrder
     hours?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
@@ -26855,6 +29608,7 @@ export namespace Prisma {
     city?: StringNullableWithAggregatesFilter<"Business"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Business"> | string | null
     website?: StringNullableWithAggregatesFilter<"Business"> | string | null
+    googleReviewUrl?: StringNullableWithAggregatesFilter<"Business"> | string | null
     instagram?: StringNullableWithAggregatesFilter<"Business"> | string | null
     hours?: StringNullableWithAggregatesFilter<"Business"> | string | null
     description?: StringNullableWithAggregatesFilter<"Business"> | string | null
@@ -26866,6 +29620,162 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Business"> | Date | string
   }
 
+  export type EmployeeWhereInput = {
+    AND?: EmployeeWhereInput | EmployeeWhereInput[]
+    OR?: EmployeeWhereInput[]
+    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
+    id?: StringFilter<"Employee"> | string
+    name?: StringFilter<"Employee"> | string
+    role?: StringNullableFilter<"Employee"> | string | null
+    active?: BoolFilter<"Employee"> | boolean
+    businessId?: StringFilter<"Employee"> | string
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
+    reviews?: ReviewListRelationFilter
+    nfcTags?: NfcTagListRelationFilter
+  }
+
+  export type EmployeeOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    role?: SortOrderInput | SortOrder
+    active?: SortOrder
+    businessId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    business?: BusinessOrderByWithRelationInput
+    reviews?: ReviewOrderByRelationAggregateInput
+    nfcTags?: NfcTagOrderByRelationAggregateInput
+  }
+
+  export type EmployeeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EmployeeWhereInput | EmployeeWhereInput[]
+    OR?: EmployeeWhereInput[]
+    NOT?: EmployeeWhereInput | EmployeeWhereInput[]
+    name?: StringFilter<"Employee"> | string
+    role?: StringNullableFilter<"Employee"> | string | null
+    active?: BoolFilter<"Employee"> | boolean
+    businessId?: StringFilter<"Employee"> | string
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+    business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
+    reviews?: ReviewListRelationFilter
+    nfcTags?: NfcTagListRelationFilter
+  }, "id">
+
+  export type EmployeeOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    role?: SortOrderInput | SortOrder
+    active?: SortOrder
+    businessId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EmployeeCountOrderByAggregateInput
+    _max?: EmployeeMaxOrderByAggregateInput
+    _min?: EmployeeMinOrderByAggregateInput
+  }
+
+  export type EmployeeScalarWhereWithAggregatesInput = {
+    AND?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
+    OR?: EmployeeScalarWhereWithAggregatesInput[]
+    NOT?: EmployeeScalarWhereWithAggregatesInput | EmployeeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Employee"> | string
+    name?: StringWithAggregatesFilter<"Employee"> | string
+    role?: StringNullableWithAggregatesFilter<"Employee"> | string | null
+    active?: BoolWithAggregatesFilter<"Employee"> | boolean
+    businessId?: StringWithAggregatesFilter<"Employee"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Employee"> | Date | string
+  }
+
+  export type NfcTagWhereInput = {
+    AND?: NfcTagWhereInput | NfcTagWhereInput[]
+    OR?: NfcTagWhereInput[]
+    NOT?: NfcTagWhereInput | NfcTagWhereInput[]
+    id?: StringFilter<"NfcTag"> | string
+    token?: StringFilter<"NfcTag"> | string
+    label?: StringFilter<"NfcTag"> | string
+    type?: EnumNfcTagTypeFilter<"NfcTag"> | $Enums.NfcTagType
+    active?: BoolFilter<"NfcTag"> | boolean
+    scanCount?: IntFilter<"NfcTag"> | number
+    businessId?: StringFilter<"NfcTag"> | string
+    employeeId?: StringNullableFilter<"NfcTag"> | string | null
+    createdAt?: DateTimeFilter<"NfcTag"> | Date | string
+    updatedAt?: DateTimeFilter<"NfcTag"> | Date | string
+    business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
+    employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+  }
+
+  export type NfcTagOrderByWithRelationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    label?: SortOrder
+    type?: SortOrder
+    active?: SortOrder
+    scanCount?: SortOrder
+    businessId?: SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    business?: BusinessOrderByWithRelationInput
+    employee?: EmployeeOrderByWithRelationInput
+  }
+
+  export type NfcTagWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: NfcTagWhereInput | NfcTagWhereInput[]
+    OR?: NfcTagWhereInput[]
+    NOT?: NfcTagWhereInput | NfcTagWhereInput[]
+    label?: StringFilter<"NfcTag"> | string
+    type?: EnumNfcTagTypeFilter<"NfcTag"> | $Enums.NfcTagType
+    active?: BoolFilter<"NfcTag"> | boolean
+    scanCount?: IntFilter<"NfcTag"> | number
+    businessId?: StringFilter<"NfcTag"> | string
+    employeeId?: StringNullableFilter<"NfcTag"> | string | null
+    createdAt?: DateTimeFilter<"NfcTag"> | Date | string
+    updatedAt?: DateTimeFilter<"NfcTag"> | Date | string
+    business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
+    employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
+  }, "id" | "token">
+
+  export type NfcTagOrderByWithAggregationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    label?: SortOrder
+    type?: SortOrder
+    active?: SortOrder
+    scanCount?: SortOrder
+    businessId?: SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: NfcTagCountOrderByAggregateInput
+    _avg?: NfcTagAvgOrderByAggregateInput
+    _max?: NfcTagMaxOrderByAggregateInput
+    _min?: NfcTagMinOrderByAggregateInput
+    _sum?: NfcTagSumOrderByAggregateInput
+  }
+
+  export type NfcTagScalarWhereWithAggregatesInput = {
+    AND?: NfcTagScalarWhereWithAggregatesInput | NfcTagScalarWhereWithAggregatesInput[]
+    OR?: NfcTagScalarWhereWithAggregatesInput[]
+    NOT?: NfcTagScalarWhereWithAggregatesInput | NfcTagScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"NfcTag"> | string
+    token?: StringWithAggregatesFilter<"NfcTag"> | string
+    label?: StringWithAggregatesFilter<"NfcTag"> | string
+    type?: EnumNfcTagTypeWithAggregatesFilter<"NfcTag"> | $Enums.NfcTagType
+    active?: BoolWithAggregatesFilter<"NfcTag"> | boolean
+    scanCount?: IntWithAggregatesFilter<"NfcTag"> | number
+    businessId?: StringWithAggregatesFilter<"NfcTag"> | string
+    employeeId?: StringNullableWithAggregatesFilter<"NfcTag"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"NfcTag"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"NfcTag"> | Date | string
+  }
+
   export type ReviewWhereInput = {
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
@@ -26875,11 +29785,13 @@ export namespace Prisma {
     content?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     verification?: EnumReviewVerificationFilter<"Review"> | $Enums.ReviewVerification
+    employeeId?: StringNullableFilter<"Review"> | string | null
     visitId?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
     userId?: StringFilter<"Review"> | string
     businessId?: StringFilter<"Review"> | string
+    employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     visit?: XOR<VisitNullableScalarRelationFilter, VisitWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
@@ -26892,11 +29804,13 @@ export namespace Prisma {
     content?: SortOrder
     rating?: SortOrder
     verification?: SortOrder
+    employeeId?: SortOrderInput | SortOrder
     visitId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
     businessId?: SortOrder
+    employee?: EmployeeOrderByWithRelationInput
     visit?: VisitOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     business?: BusinessOrderByWithRelationInput
@@ -26913,10 +29827,12 @@ export namespace Prisma {
     content?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     verification?: EnumReviewVerificationFilter<"Review"> | $Enums.ReviewVerification
+    employeeId?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
     userId?: StringFilter<"Review"> | string
     businessId?: StringFilter<"Review"> | string
+    employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     visit?: XOR<VisitNullableScalarRelationFilter, VisitWhereInput> | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
@@ -26929,6 +29845,7 @@ export namespace Prisma {
     content?: SortOrder
     rating?: SortOrder
     verification?: SortOrder
+    employeeId?: SortOrderInput | SortOrder
     visitId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -26950,6 +29867,7 @@ export namespace Prisma {
     content?: StringWithAggregatesFilter<"Review"> | string
     rating?: IntWithAggregatesFilter<"Review"> | number
     verification?: EnumReviewVerificationWithAggregatesFilter<"Review"> | $Enums.ReviewVerification
+    employeeId?: StringNullableWithAggregatesFilter<"Review"> | string | null
     visitId?: StringNullableWithAggregatesFilter<"Review"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
@@ -28257,6 +31175,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -28269,6 +31188,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -28288,6 +31209,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -28298,6 +31220,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -28315,6 +31239,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28327,6 +31252,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -28346,6 +31273,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28356,6 +31284,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -28375,6 +31305,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -28395,6 +31326,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28417,6 +31349,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28424,6 +31357,172 @@ export namespace Prisma {
     longitude?: NullableFloatFieldUpdateOperationsInput | number | null
     status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
     featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeCreateInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutEmployeesInput
+    reviews?: ReviewCreateNestedManyWithoutEmployeeInput
+    nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutEmployeeInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
+    reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutEmployeeNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeCreateManyInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmployeeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmployeeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTagCreateInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutNfcTagsInput
+    employee?: EmployeeCreateNestedOneWithoutNfcTagsInput
+  }
+
+  export type NfcTagUncheckedCreateInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    businessId: string
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcTagUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutNfcTagsNestedInput
+    employee?: EmployeeUpdateOneWithoutNfcTagsNestedInput
+  }
+
+  export type NfcTagUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    businessId?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTagCreateManyInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    businessId: string
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcTagUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTagUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    businessId?: StringFieldUpdateOperationsInput | string
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28436,6 +31535,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
     user: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
@@ -28448,6 +31548,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -28464,6 +31565,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
     user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
@@ -28476,6 +31578,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -28490,6 +31593,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -28513,6 +31617,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30013,6 +33118,18 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type EmployeeListRelationFilter = {
+    every?: EmployeeWhereInput
+    some?: EmployeeWhereInput
+    none?: EmployeeWhereInput
+  }
+
+  export type NfcTagListRelationFilter = {
+    every?: NfcTagWhereInput
+    some?: NfcTagWhereInput
+    none?: NfcTagWhereInput
+  }
+
   export type OfferListRelationFilter = {
     every?: OfferWhereInput
     some?: OfferWhereInput
@@ -30029,6 +33146,14 @@ export namespace Prisma {
     every?: CollectionItemWhereInput
     some?: CollectionItemWhereInput
     none?: CollectionItemWhereInput
+  }
+
+  export type EmployeeOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NfcTagOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type OfferOrderByRelationAggregateInput = {
@@ -30054,6 +33179,7 @@ export namespace Prisma {
     city?: SortOrder
     phone?: SortOrder
     website?: SortOrder
+    googleReviewUrl?: SortOrder
     instagram?: SortOrder
     hours?: SortOrder
     description?: SortOrder
@@ -30081,6 +33207,7 @@ export namespace Prisma {
     city?: SortOrder
     phone?: SortOrder
     website?: SortOrder
+    googleReviewUrl?: SortOrder
     instagram?: SortOrder
     hours?: SortOrder
     description?: SortOrder
@@ -30103,6 +33230,7 @@ export namespace Prisma {
     city?: SortOrder
     phone?: SortOrder
     website?: SortOrder
+    googleReviewUrl?: SortOrder
     instagram?: SortOrder
     hours?: SortOrder
     description?: SortOrder
@@ -30145,6 +33273,110 @@ export namespace Prisma {
     _max?: NestedEnumBusinessStatusFilter<$PrismaModel>
   }
 
+  export type BusinessScalarRelationFilter = {
+    is?: BusinessWhereInput
+    isNot?: BusinessWhereInput
+  }
+
+  export type EmployeeCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    role?: SortOrder
+    active?: SortOrder
+    businessId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmployeeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    role?: SortOrder
+    active?: SortOrder
+    businessId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmployeeMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    role?: SortOrder
+    active?: SortOrder
+    businessId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumNfcTagTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NfcTagType | EnumNfcTagTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNfcTagTypeFilter<$PrismaModel> | $Enums.NfcTagType
+  }
+
+  export type EmployeeNullableScalarRelationFilter = {
+    is?: EmployeeWhereInput | null
+    isNot?: EmployeeWhereInput | null
+  }
+
+  export type NfcTagCountOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    label?: SortOrder
+    type?: SortOrder
+    active?: SortOrder
+    scanCount?: SortOrder
+    businessId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NfcTagAvgOrderByAggregateInput = {
+    scanCount?: SortOrder
+  }
+
+  export type NfcTagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    label?: SortOrder
+    type?: SortOrder
+    active?: SortOrder
+    scanCount?: SortOrder
+    businessId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NfcTagMinOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    label?: SortOrder
+    type?: SortOrder
+    active?: SortOrder
+    scanCount?: SortOrder
+    businessId?: SortOrder
+    employeeId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type NfcTagSumOrderByAggregateInput = {
+    scanCount?: SortOrder
+  }
+
+  export type EnumNfcTagTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NfcTagType | EnumNfcTagTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNfcTagTypeWithAggregatesFilter<$PrismaModel> | $Enums.NfcTagType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNfcTagTypeFilter<$PrismaModel>
+    _max?: NestedEnumNfcTagTypeFilter<$PrismaModel>
+  }
+
   export type EnumReviewVerificationFilter<$PrismaModel = never> = {
     equals?: $Enums.ReviewVerification | EnumReviewVerificationFieldRefInput<$PrismaModel>
     in?: $Enums.ReviewVerification[] | ListEnumReviewVerificationFieldRefInput<$PrismaModel>
@@ -30162,17 +33394,13 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type BusinessScalarRelationFilter = {
-    is?: BusinessWhereInput
-    isNot?: BusinessWhereInput
-  }
-
   export type ReviewCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
     content?: SortOrder
     rating?: SortOrder
     verification?: SortOrder
+    employeeId?: SortOrder
     visitId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -30190,6 +33418,7 @@ export namespace Prisma {
     content?: SortOrder
     rating?: SortOrder
     verification?: SortOrder
+    employeeId?: SortOrder
     visitId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -30203,6 +33432,7 @@ export namespace Prisma {
     content?: SortOrder
     rating?: SortOrder
     verification?: SortOrder
+    employeeId?: SortOrder
     visitId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31444,6 +34674,20 @@ export namespace Prisma {
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
   }
 
+  export type EmployeeCreateNestedManyWithoutBusinessInput = {
+    create?: XOR<EmployeeCreateWithoutBusinessInput, EmployeeUncheckedCreateWithoutBusinessInput> | EmployeeCreateWithoutBusinessInput[] | EmployeeUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutBusinessInput | EmployeeCreateOrConnectWithoutBusinessInput[]
+    createMany?: EmployeeCreateManyBusinessInputEnvelope
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+  }
+
+  export type NfcTagCreateNestedManyWithoutBusinessInput = {
+    create?: XOR<NfcTagCreateWithoutBusinessInput, NfcTagUncheckedCreateWithoutBusinessInput> | NfcTagCreateWithoutBusinessInput[] | NfcTagUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutBusinessInput | NfcTagCreateOrConnectWithoutBusinessInput[]
+    createMany?: NfcTagCreateManyBusinessInputEnvelope
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+  }
+
   export type OfferCreateNestedManyWithoutBusinessInput = {
     create?: XOR<OfferCreateWithoutBusinessInput, OfferUncheckedCreateWithoutBusinessInput> | OfferCreateWithoutBusinessInput[] | OfferUncheckedCreateWithoutBusinessInput[]
     connectOrCreate?: OfferCreateOrConnectWithoutBusinessInput | OfferCreateOrConnectWithoutBusinessInput[]
@@ -31491,6 +34735,20 @@ export namespace Prisma {
     connectOrCreate?: ReviewCreateOrConnectWithoutBusinessInput | ReviewCreateOrConnectWithoutBusinessInput[]
     createMany?: ReviewCreateManyBusinessInputEnvelope
     connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
+  export type EmployeeUncheckedCreateNestedManyWithoutBusinessInput = {
+    create?: XOR<EmployeeCreateWithoutBusinessInput, EmployeeUncheckedCreateWithoutBusinessInput> | EmployeeCreateWithoutBusinessInput[] | EmployeeUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutBusinessInput | EmployeeCreateOrConnectWithoutBusinessInput[]
+    createMany?: EmployeeCreateManyBusinessInputEnvelope
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+  }
+
+  export type NfcTagUncheckedCreateNestedManyWithoutBusinessInput = {
+    create?: XOR<NfcTagCreateWithoutBusinessInput, NfcTagUncheckedCreateWithoutBusinessInput> | NfcTagCreateWithoutBusinessInput[] | NfcTagUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutBusinessInput | NfcTagCreateOrConnectWithoutBusinessInput[]
+    createMany?: NfcTagCreateManyBusinessInputEnvelope
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
   }
 
   export type OfferUncheckedCreateNestedManyWithoutBusinessInput = {
@@ -31579,6 +34837,34 @@ export namespace Prisma {
     update?: ReviewUpdateWithWhereUniqueWithoutBusinessInput | ReviewUpdateWithWhereUniqueWithoutBusinessInput[]
     updateMany?: ReviewUpdateManyWithWhereWithoutBusinessInput | ReviewUpdateManyWithWhereWithoutBusinessInput[]
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
+  export type EmployeeUpdateManyWithoutBusinessNestedInput = {
+    create?: XOR<EmployeeCreateWithoutBusinessInput, EmployeeUncheckedCreateWithoutBusinessInput> | EmployeeCreateWithoutBusinessInput[] | EmployeeUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutBusinessInput | EmployeeCreateOrConnectWithoutBusinessInput[]
+    upsert?: EmployeeUpsertWithWhereUniqueWithoutBusinessInput | EmployeeUpsertWithWhereUniqueWithoutBusinessInput[]
+    createMany?: EmployeeCreateManyBusinessInputEnvelope
+    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    update?: EmployeeUpdateWithWhereUniqueWithoutBusinessInput | EmployeeUpdateWithWhereUniqueWithoutBusinessInput[]
+    updateMany?: EmployeeUpdateManyWithWhereWithoutBusinessInput | EmployeeUpdateManyWithWhereWithoutBusinessInput[]
+    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+  }
+
+  export type NfcTagUpdateManyWithoutBusinessNestedInput = {
+    create?: XOR<NfcTagCreateWithoutBusinessInput, NfcTagUncheckedCreateWithoutBusinessInput> | NfcTagCreateWithoutBusinessInput[] | NfcTagUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutBusinessInput | NfcTagCreateOrConnectWithoutBusinessInput[]
+    upsert?: NfcTagUpsertWithWhereUniqueWithoutBusinessInput | NfcTagUpsertWithWhereUniqueWithoutBusinessInput[]
+    createMany?: NfcTagCreateManyBusinessInputEnvelope
+    set?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    disconnect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    delete?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    update?: NfcTagUpdateWithWhereUniqueWithoutBusinessInput | NfcTagUpdateWithWhereUniqueWithoutBusinessInput[]
+    updateMany?: NfcTagUpdateManyWithWhereWithoutBusinessInput | NfcTagUpdateManyWithWhereWithoutBusinessInput[]
+    deleteMany?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
   }
 
   export type OfferUpdateManyWithoutBusinessNestedInput = {
@@ -31679,6 +34965,34 @@ export namespace Prisma {
     deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
   }
 
+  export type EmployeeUncheckedUpdateManyWithoutBusinessNestedInput = {
+    create?: XOR<EmployeeCreateWithoutBusinessInput, EmployeeUncheckedCreateWithoutBusinessInput> | EmployeeCreateWithoutBusinessInput[] | EmployeeUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: EmployeeCreateOrConnectWithoutBusinessInput | EmployeeCreateOrConnectWithoutBusinessInput[]
+    upsert?: EmployeeUpsertWithWhereUniqueWithoutBusinessInput | EmployeeUpsertWithWhereUniqueWithoutBusinessInput[]
+    createMany?: EmployeeCreateManyBusinessInputEnvelope
+    set?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    disconnect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    delete?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    connect?: EmployeeWhereUniqueInput | EmployeeWhereUniqueInput[]
+    update?: EmployeeUpdateWithWhereUniqueWithoutBusinessInput | EmployeeUpdateWithWhereUniqueWithoutBusinessInput[]
+    updateMany?: EmployeeUpdateManyWithWhereWithoutBusinessInput | EmployeeUpdateManyWithWhereWithoutBusinessInput[]
+    deleteMany?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+  }
+
+  export type NfcTagUncheckedUpdateManyWithoutBusinessNestedInput = {
+    create?: XOR<NfcTagCreateWithoutBusinessInput, NfcTagUncheckedCreateWithoutBusinessInput> | NfcTagCreateWithoutBusinessInput[] | NfcTagUncheckedCreateWithoutBusinessInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutBusinessInput | NfcTagCreateOrConnectWithoutBusinessInput[]
+    upsert?: NfcTagUpsertWithWhereUniqueWithoutBusinessInput | NfcTagUpsertWithWhereUniqueWithoutBusinessInput[]
+    createMany?: NfcTagCreateManyBusinessInputEnvelope
+    set?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    disconnect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    delete?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    update?: NfcTagUpdateWithWhereUniqueWithoutBusinessInput | NfcTagUpdateWithWhereUniqueWithoutBusinessInput[]
+    updateMany?: NfcTagUpdateManyWithWhereWithoutBusinessInput | NfcTagUpdateManyWithWhereWithoutBusinessInput[]
+    deleteMany?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
+  }
+
   export type OfferUncheckedUpdateManyWithoutBusinessNestedInput = {
     create?: XOR<OfferCreateWithoutBusinessInput, OfferUncheckedCreateWithoutBusinessInput> | OfferCreateWithoutBusinessInput[] | OfferUncheckedCreateWithoutBusinessInput[]
     connectOrCreate?: OfferCreateOrConnectWithoutBusinessInput | OfferCreateOrConnectWithoutBusinessInput[]
@@ -31763,6 +35077,144 @@ export namespace Prisma {
     deleteMany?: CollectionItemScalarWhereInput | CollectionItemScalarWhereInput[]
   }
 
+  export type BusinessCreateNestedOneWithoutEmployeesInput = {
+    create?: XOR<BusinessCreateWithoutEmployeesInput, BusinessUncheckedCreateWithoutEmployeesInput>
+    connectOrCreate?: BusinessCreateOrConnectWithoutEmployeesInput
+    connect?: BusinessWhereUniqueInput
+  }
+
+  export type ReviewCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<ReviewCreateWithoutEmployeeInput, ReviewUncheckedCreateWithoutEmployeeInput> | ReviewCreateWithoutEmployeeInput[] | ReviewUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutEmployeeInput | ReviewCreateOrConnectWithoutEmployeeInput[]
+    createMany?: ReviewCreateManyEmployeeInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
+  export type NfcTagCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<NfcTagCreateWithoutEmployeeInput, NfcTagUncheckedCreateWithoutEmployeeInput> | NfcTagCreateWithoutEmployeeInput[] | NfcTagUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutEmployeeInput | NfcTagCreateOrConnectWithoutEmployeeInput[]
+    createMany?: NfcTagCreateManyEmployeeInputEnvelope
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+  }
+
+  export type ReviewUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<ReviewCreateWithoutEmployeeInput, ReviewUncheckedCreateWithoutEmployeeInput> | ReviewCreateWithoutEmployeeInput[] | ReviewUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutEmployeeInput | ReviewCreateOrConnectWithoutEmployeeInput[]
+    createMany?: ReviewCreateManyEmployeeInputEnvelope
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+  }
+
+  export type NfcTagUncheckedCreateNestedManyWithoutEmployeeInput = {
+    create?: XOR<NfcTagCreateWithoutEmployeeInput, NfcTagUncheckedCreateWithoutEmployeeInput> | NfcTagCreateWithoutEmployeeInput[] | NfcTagUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutEmployeeInput | NfcTagCreateOrConnectWithoutEmployeeInput[]
+    createMany?: NfcTagCreateManyEmployeeInputEnvelope
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+  }
+
+  export type BusinessUpdateOneRequiredWithoutEmployeesNestedInput = {
+    create?: XOR<BusinessCreateWithoutEmployeesInput, BusinessUncheckedCreateWithoutEmployeesInput>
+    connectOrCreate?: BusinessCreateOrConnectWithoutEmployeesInput
+    upsert?: BusinessUpsertWithoutEmployeesInput
+    connect?: BusinessWhereUniqueInput
+    update?: XOR<XOR<BusinessUpdateToOneWithWhereWithoutEmployeesInput, BusinessUpdateWithoutEmployeesInput>, BusinessUncheckedUpdateWithoutEmployeesInput>
+  }
+
+  export type ReviewUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<ReviewCreateWithoutEmployeeInput, ReviewUncheckedCreateWithoutEmployeeInput> | ReviewCreateWithoutEmployeeInput[] | ReviewUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutEmployeeInput | ReviewCreateOrConnectWithoutEmployeeInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutEmployeeInput | ReviewUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: ReviewCreateManyEmployeeInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutEmployeeInput | ReviewUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutEmployeeInput | ReviewUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
+  export type NfcTagUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<NfcTagCreateWithoutEmployeeInput, NfcTagUncheckedCreateWithoutEmployeeInput> | NfcTagCreateWithoutEmployeeInput[] | NfcTagUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutEmployeeInput | NfcTagCreateOrConnectWithoutEmployeeInput[]
+    upsert?: NfcTagUpsertWithWhereUniqueWithoutEmployeeInput | NfcTagUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: NfcTagCreateManyEmployeeInputEnvelope
+    set?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    disconnect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    delete?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    update?: NfcTagUpdateWithWhereUniqueWithoutEmployeeInput | NfcTagUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: NfcTagUpdateManyWithWhereWithoutEmployeeInput | NfcTagUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<ReviewCreateWithoutEmployeeInput, ReviewUncheckedCreateWithoutEmployeeInput> | ReviewCreateWithoutEmployeeInput[] | ReviewUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: ReviewCreateOrConnectWithoutEmployeeInput | ReviewCreateOrConnectWithoutEmployeeInput[]
+    upsert?: ReviewUpsertWithWhereUniqueWithoutEmployeeInput | ReviewUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: ReviewCreateManyEmployeeInputEnvelope
+    set?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    disconnect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    delete?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    connect?: ReviewWhereUniqueInput | ReviewWhereUniqueInput[]
+    update?: ReviewUpdateWithWhereUniqueWithoutEmployeeInput | ReviewUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: ReviewUpdateManyWithWhereWithoutEmployeeInput | ReviewUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: ReviewScalarWhereInput | ReviewScalarWhereInput[]
+  }
+
+  export type NfcTagUncheckedUpdateManyWithoutEmployeeNestedInput = {
+    create?: XOR<NfcTagCreateWithoutEmployeeInput, NfcTagUncheckedCreateWithoutEmployeeInput> | NfcTagCreateWithoutEmployeeInput[] | NfcTagUncheckedCreateWithoutEmployeeInput[]
+    connectOrCreate?: NfcTagCreateOrConnectWithoutEmployeeInput | NfcTagCreateOrConnectWithoutEmployeeInput[]
+    upsert?: NfcTagUpsertWithWhereUniqueWithoutEmployeeInput | NfcTagUpsertWithWhereUniqueWithoutEmployeeInput[]
+    createMany?: NfcTagCreateManyEmployeeInputEnvelope
+    set?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    disconnect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    delete?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    connect?: NfcTagWhereUniqueInput | NfcTagWhereUniqueInput[]
+    update?: NfcTagUpdateWithWhereUniqueWithoutEmployeeInput | NfcTagUpdateWithWhereUniqueWithoutEmployeeInput[]
+    updateMany?: NfcTagUpdateManyWithWhereWithoutEmployeeInput | NfcTagUpdateManyWithWhereWithoutEmployeeInput[]
+    deleteMany?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
+  }
+
+  export type BusinessCreateNestedOneWithoutNfcTagsInput = {
+    create?: XOR<BusinessCreateWithoutNfcTagsInput, BusinessUncheckedCreateWithoutNfcTagsInput>
+    connectOrCreate?: BusinessCreateOrConnectWithoutNfcTagsInput
+    connect?: BusinessWhereUniqueInput
+  }
+
+  export type EmployeeCreateNestedOneWithoutNfcTagsInput = {
+    create?: XOR<EmployeeCreateWithoutNfcTagsInput, EmployeeUncheckedCreateWithoutNfcTagsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutNfcTagsInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
+  export type EnumNfcTagTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NfcTagType
+  }
+
+  export type BusinessUpdateOneRequiredWithoutNfcTagsNestedInput = {
+    create?: XOR<BusinessCreateWithoutNfcTagsInput, BusinessUncheckedCreateWithoutNfcTagsInput>
+    connectOrCreate?: BusinessCreateOrConnectWithoutNfcTagsInput
+    upsert?: BusinessUpsertWithoutNfcTagsInput
+    connect?: BusinessWhereUniqueInput
+    update?: XOR<XOR<BusinessUpdateToOneWithWhereWithoutNfcTagsInput, BusinessUpdateWithoutNfcTagsInput>, BusinessUncheckedUpdateWithoutNfcTagsInput>
+  }
+
+  export type EmployeeUpdateOneWithoutNfcTagsNestedInput = {
+    create?: XOR<EmployeeCreateWithoutNfcTagsInput, EmployeeUncheckedCreateWithoutNfcTagsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutNfcTagsInput
+    upsert?: EmployeeUpsertWithoutNfcTagsInput
+    disconnect?: EmployeeWhereInput | boolean
+    delete?: EmployeeWhereInput | boolean
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutNfcTagsInput, EmployeeUpdateWithoutNfcTagsInput>, EmployeeUncheckedUpdateWithoutNfcTagsInput>
+  }
+
+  export type EmployeeCreateNestedOneWithoutReviewsInput = {
+    create?: XOR<EmployeeCreateWithoutReviewsInput, EmployeeUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutReviewsInput
+    connect?: EmployeeWhereUniqueInput
+  }
+
   export type VisitCreateNestedOneWithoutReviewInput = {
     create?: XOR<VisitCreateWithoutReviewInput, VisitUncheckedCreateWithoutReviewInput>
     connectOrCreate?: VisitCreateOrConnectWithoutReviewInput
@@ -31797,6 +35249,16 @@ export namespace Prisma {
 
   export type EnumReviewVerificationFieldUpdateOperationsInput = {
     set?: $Enums.ReviewVerification
+  }
+
+  export type EmployeeUpdateOneWithoutReviewsNestedInput = {
+    create?: XOR<EmployeeCreateWithoutReviewsInput, EmployeeUncheckedCreateWithoutReviewsInput>
+    connectOrCreate?: EmployeeCreateOrConnectWithoutReviewsInput
+    upsert?: EmployeeUpsertWithoutReviewsInput
+    disconnect?: EmployeeWhereInput | boolean
+    delete?: EmployeeWhereInput | boolean
+    connect?: EmployeeWhereUniqueInput
+    update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutReviewsInput, EmployeeUpdateWithoutReviewsInput>, EmployeeUncheckedUpdateWithoutReviewsInput>
   }
 
   export type VisitUpdateOneWithoutReviewNestedInput = {
@@ -32604,6 +36066,23 @@ export namespace Prisma {
     _max?: NestedEnumBusinessStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumNfcTagTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NfcTagType | EnumNfcTagTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNfcTagTypeFilter<$PrismaModel> | $Enums.NfcTagType
+  }
+
+  export type NestedEnumNfcTagTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NfcTagType | EnumNfcTagTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.NfcTagType[] | ListEnumNfcTagTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumNfcTagTypeWithAggregatesFilter<$PrismaModel> | $Enums.NfcTagType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNfcTagTypeFilter<$PrismaModel>
+    _max?: NestedEnumNfcTagTypeFilter<$PrismaModel>
+  }
+
   export type NestedEnumReviewVerificationFilter<$PrismaModel = never> = {
     equals?: $Enums.ReviewVerification | EnumReviewVerificationFieldRefInput<$PrismaModel>
     in?: $Enums.ReviewVerification[] | ListEnumReviewVerificationFieldRefInput<$PrismaModel>
@@ -32733,6 +36212,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
     business: BusinessCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
@@ -32744,6 +36224,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -32794,6 +36275,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -32805,6 +36287,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -32823,6 +36307,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -32833,6 +36318,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -33151,6 +36638,7 @@ export namespace Prisma {
     content?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     verification?: EnumReviewVerificationFilter<"Review"> | $Enums.ReviewVerification
+    employeeId?: StringNullableFilter<"Review"> | string | null
     visitId?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
@@ -33215,6 +36703,7 @@ export namespace Prisma {
     city?: StringNullableFilter<"Business"> | string | null
     phone?: StringNullableFilter<"Business"> | string | null
     website?: StringNullableFilter<"Business"> | string | null
+    googleReviewUrl?: StringNullableFilter<"Business"> | string | null
     instagram?: StringNullableFilter<"Business"> | string | null
     hours?: StringNullableFilter<"Business"> | string | null
     description?: StringNullableFilter<"Business"> | string | null
@@ -33457,6 +36946,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -33468,6 +36958,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -33486,6 +36978,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -33496,6 +36989,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -33626,6 +37121,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
     user: UserCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
@@ -33637,6 +37133,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -33651,6 +37148,72 @@ export namespace Prisma {
 
   export type ReviewCreateManyBusinessInputEnvelope = {
     data: ReviewCreateManyBusinessInput | ReviewCreateManyBusinessInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EmployeeCreateWithoutBusinessInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewCreateNestedManyWithoutEmployeeInput
+    nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutBusinessInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutEmployeeInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutBusinessInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutBusinessInput, EmployeeUncheckedCreateWithoutBusinessInput>
+  }
+
+  export type EmployeeCreateManyBusinessInputEnvelope = {
+    data: EmployeeCreateManyBusinessInput | EmployeeCreateManyBusinessInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NfcTagCreateWithoutBusinessInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    employee?: EmployeeCreateNestedOneWithoutNfcTagsInput
+  }
+
+  export type NfcTagUncheckedCreateWithoutBusinessInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcTagCreateOrConnectWithoutBusinessInput = {
+    where: NfcTagWhereUniqueInput
+    create: XOR<NfcTagCreateWithoutBusinessInput, NfcTagUncheckedCreateWithoutBusinessInput>
+  }
+
+  export type NfcTagCreateManyBusinessInputEnvelope = {
+    data: NfcTagCreateManyBusinessInput | NfcTagCreateManyBusinessInput[]
     skipDuplicates?: boolean
   }
 
@@ -33932,6 +37495,67 @@ export namespace Prisma {
     data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutBusinessInput>
   }
 
+  export type EmployeeUpsertWithWhereUniqueWithoutBusinessInput = {
+    where: EmployeeWhereUniqueInput
+    update: XOR<EmployeeUpdateWithoutBusinessInput, EmployeeUncheckedUpdateWithoutBusinessInput>
+    create: XOR<EmployeeCreateWithoutBusinessInput, EmployeeUncheckedCreateWithoutBusinessInput>
+  }
+
+  export type EmployeeUpdateWithWhereUniqueWithoutBusinessInput = {
+    where: EmployeeWhereUniqueInput
+    data: XOR<EmployeeUpdateWithoutBusinessInput, EmployeeUncheckedUpdateWithoutBusinessInput>
+  }
+
+  export type EmployeeUpdateManyWithWhereWithoutBusinessInput = {
+    where: EmployeeScalarWhereInput
+    data: XOR<EmployeeUpdateManyMutationInput, EmployeeUncheckedUpdateManyWithoutBusinessInput>
+  }
+
+  export type EmployeeScalarWhereInput = {
+    AND?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+    OR?: EmployeeScalarWhereInput[]
+    NOT?: EmployeeScalarWhereInput | EmployeeScalarWhereInput[]
+    id?: StringFilter<"Employee"> | string
+    name?: StringFilter<"Employee"> | string
+    role?: StringNullableFilter<"Employee"> | string | null
+    active?: BoolFilter<"Employee"> | boolean
+    businessId?: StringFilter<"Employee"> | string
+    createdAt?: DateTimeFilter<"Employee"> | Date | string
+    updatedAt?: DateTimeFilter<"Employee"> | Date | string
+  }
+
+  export type NfcTagUpsertWithWhereUniqueWithoutBusinessInput = {
+    where: NfcTagWhereUniqueInput
+    update: XOR<NfcTagUpdateWithoutBusinessInput, NfcTagUncheckedUpdateWithoutBusinessInput>
+    create: XOR<NfcTagCreateWithoutBusinessInput, NfcTagUncheckedCreateWithoutBusinessInput>
+  }
+
+  export type NfcTagUpdateWithWhereUniqueWithoutBusinessInput = {
+    where: NfcTagWhereUniqueInput
+    data: XOR<NfcTagUpdateWithoutBusinessInput, NfcTagUncheckedUpdateWithoutBusinessInput>
+  }
+
+  export type NfcTagUpdateManyWithWhereWithoutBusinessInput = {
+    where: NfcTagScalarWhereInput
+    data: XOR<NfcTagUpdateManyMutationInput, NfcTagUncheckedUpdateManyWithoutBusinessInput>
+  }
+
+  export type NfcTagScalarWhereInput = {
+    AND?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
+    OR?: NfcTagScalarWhereInput[]
+    NOT?: NfcTagScalarWhereInput | NfcTagScalarWhereInput[]
+    id?: StringFilter<"NfcTag"> | string
+    token?: StringFilter<"NfcTag"> | string
+    label?: StringFilter<"NfcTag"> | string
+    type?: EnumNfcTagTypeFilter<"NfcTag"> | $Enums.NfcTagType
+    active?: BoolFilter<"NfcTag"> | boolean
+    scanCount?: IntFilter<"NfcTag"> | number
+    businessId?: StringFilter<"NfcTag"> | string
+    employeeId?: StringNullableFilter<"NfcTag"> | string | null
+    createdAt?: DateTimeFilter<"NfcTag"> | Date | string
+    updatedAt?: DateTimeFilter<"NfcTag"> | Date | string
+  }
+
   export type OfferUpsertWithWhereUniqueWithoutBusinessInput = {
     where: OfferWhereUniqueInput
     update: XOR<OfferUpdateWithoutBusinessInput, OfferUncheckedUpdateWithoutBusinessInput>
@@ -34066,6 +37690,477 @@ export namespace Prisma {
     businessId?: StringFilter<"CollectionItem"> | string
   }
 
+  export type BusinessCreateWithoutEmployeesInput = {
+    id?: string
+    name: string
+    slug: string
+    imageUrl?: string | null
+    address?: string | null
+    city?: string | null
+    phone?: string | null
+    website?: string | null
+    googleReviewUrl?: string | null
+    instagram?: string | null
+    hours?: string | null
+    description?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    status?: $Enums.BusinessStatus
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category?: CategoryCreateNestedOneWithoutBusinessesInput
+    owner?: UserCreateNestedOneWithoutBusinessesInput
+    reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
+    offers?: OfferCreateNestedManyWithoutBusinessInput
+    photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
+    visits?: VisitCreateNestedManyWithoutBusinessInput
+    followers?: FollowerCreateNestedManyWithoutBusinessInput
+    favorites?: FavoriteCreateNestedManyWithoutBusinessInput
+    collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+  }
+
+  export type BusinessUncheckedCreateWithoutEmployeesInput = {
+    id?: string
+    name: string
+    slug: string
+    imageUrl?: string | null
+    categoryId?: string | null
+    ownerId?: string | null
+    address?: string | null
+    city?: string | null
+    phone?: string | null
+    website?: string | null
+    googleReviewUrl?: string | null
+    instagram?: string | null
+    hours?: string | null
+    description?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    status?: $Enums.BusinessStatus
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
+    offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
+    photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
+    visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
+    followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
+    collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+  }
+
+  export type BusinessCreateOrConnectWithoutEmployeesInput = {
+    where: BusinessWhereUniqueInput
+    create: XOR<BusinessCreateWithoutEmployeesInput, BusinessUncheckedCreateWithoutEmployeesInput>
+  }
+
+  export type ReviewCreateWithoutEmployeeInput = {
+    id?: string
+    title: string
+    content: string
+    rating: number
+    verification?: $Enums.ReviewVerification
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    visit?: VisitCreateNestedOneWithoutReviewInput
+    user: UserCreateNestedOneWithoutReviewsInput
+    business: BusinessCreateNestedOneWithoutReviewsInput
+    votes?: ReviewVoteCreateNestedManyWithoutReviewInput
+  }
+
+  export type ReviewUncheckedCreateWithoutEmployeeInput = {
+    id?: string
+    title: string
+    content: string
+    rating: number
+    verification?: $Enums.ReviewVerification
+    visitId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+    businessId: string
+    votes?: ReviewVoteUncheckedCreateNestedManyWithoutReviewInput
+  }
+
+  export type ReviewCreateOrConnectWithoutEmployeeInput = {
+    where: ReviewWhereUniqueInput
+    create: XOR<ReviewCreateWithoutEmployeeInput, ReviewUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type ReviewCreateManyEmployeeInputEnvelope = {
+    data: ReviewCreateManyEmployeeInput | ReviewCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type NfcTagCreateWithoutEmployeeInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutNfcTagsInput
+  }
+
+  export type NfcTagUncheckedCreateWithoutEmployeeInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcTagCreateOrConnectWithoutEmployeeInput = {
+    where: NfcTagWhereUniqueInput
+    create: XOR<NfcTagCreateWithoutEmployeeInput, NfcTagUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type NfcTagCreateManyEmployeeInputEnvelope = {
+    data: NfcTagCreateManyEmployeeInput | NfcTagCreateManyEmployeeInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BusinessUpsertWithoutEmployeesInput = {
+    update: XOR<BusinessUpdateWithoutEmployeesInput, BusinessUncheckedUpdateWithoutEmployeesInput>
+    create: XOR<BusinessCreateWithoutEmployeesInput, BusinessUncheckedCreateWithoutEmployeesInput>
+    where?: BusinessWhereInput
+  }
+
+  export type BusinessUpdateToOneWithWhereWithoutEmployeesInput = {
+    where?: BusinessWhereInput
+    data: XOR<BusinessUpdateWithoutEmployeesInput, BusinessUncheckedUpdateWithoutEmployeesInput>
+  }
+
+  export type BusinessUpdateWithoutEmployeesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    hours?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneWithoutBusinessesNestedInput
+    owner?: UserUpdateOneWithoutBusinessesNestedInput
+    reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
+    offers?: OfferUpdateManyWithoutBusinessNestedInput
+    photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
+    visits?: VisitUpdateManyWithoutBusinessNestedInput
+    followers?: FollowerUpdateManyWithoutBusinessNestedInput
+    favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
+    collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+  }
+
+  export type BusinessUncheckedUpdateWithoutEmployeesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    hours?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
+    photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
+    followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
+    favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
+    collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+  }
+
+  export type ReviewUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: ReviewWhereUniqueInput
+    update: XOR<ReviewUpdateWithoutEmployeeInput, ReviewUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<ReviewCreateWithoutEmployeeInput, ReviewUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type ReviewUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: ReviewWhereUniqueInput
+    data: XOR<ReviewUpdateWithoutEmployeeInput, ReviewUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type ReviewUpdateManyWithWhereWithoutEmployeeInput = {
+    where: ReviewScalarWhereInput
+    data: XOR<ReviewUpdateManyMutationInput, ReviewUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type NfcTagUpsertWithWhereUniqueWithoutEmployeeInput = {
+    where: NfcTagWhereUniqueInput
+    update: XOR<NfcTagUpdateWithoutEmployeeInput, NfcTagUncheckedUpdateWithoutEmployeeInput>
+    create: XOR<NfcTagCreateWithoutEmployeeInput, NfcTagUncheckedCreateWithoutEmployeeInput>
+  }
+
+  export type NfcTagUpdateWithWhereUniqueWithoutEmployeeInput = {
+    where: NfcTagWhereUniqueInput
+    data: XOR<NfcTagUpdateWithoutEmployeeInput, NfcTagUncheckedUpdateWithoutEmployeeInput>
+  }
+
+  export type NfcTagUpdateManyWithWhereWithoutEmployeeInput = {
+    where: NfcTagScalarWhereInput
+    data: XOR<NfcTagUpdateManyMutationInput, NfcTagUncheckedUpdateManyWithoutEmployeeInput>
+  }
+
+  export type BusinessCreateWithoutNfcTagsInput = {
+    id?: string
+    name: string
+    slug: string
+    imageUrl?: string | null
+    address?: string | null
+    city?: string | null
+    phone?: string | null
+    website?: string | null
+    googleReviewUrl?: string | null
+    instagram?: string | null
+    hours?: string | null
+    description?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    status?: $Enums.BusinessStatus
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    category?: CategoryCreateNestedOneWithoutBusinessesInput
+    owner?: UserCreateNestedOneWithoutBusinessesInput
+    reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    offers?: OfferCreateNestedManyWithoutBusinessInput
+    photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
+    visits?: VisitCreateNestedManyWithoutBusinessInput
+    followers?: FollowerCreateNestedManyWithoutBusinessInput
+    favorites?: FavoriteCreateNestedManyWithoutBusinessInput
+    collections?: CollectionItemCreateNestedManyWithoutBusinessInput
+  }
+
+  export type BusinessUncheckedCreateWithoutNfcTagsInput = {
+    id?: string
+    name: string
+    slug: string
+    imageUrl?: string | null
+    categoryId?: string | null
+    ownerId?: string | null
+    address?: string | null
+    city?: string | null
+    phone?: string | null
+    website?: string | null
+    googleReviewUrl?: string | null
+    instagram?: string | null
+    hours?: string | null
+    description?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    status?: $Enums.BusinessStatus
+    featured?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
+    photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
+    visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
+    followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
+    favorites?: FavoriteUncheckedCreateNestedManyWithoutBusinessInput
+    collections?: CollectionItemUncheckedCreateNestedManyWithoutBusinessInput
+  }
+
+  export type BusinessCreateOrConnectWithoutNfcTagsInput = {
+    where: BusinessWhereUniqueInput
+    create: XOR<BusinessCreateWithoutNfcTagsInput, BusinessUncheckedCreateWithoutNfcTagsInput>
+  }
+
+  export type EmployeeCreateWithoutNfcTagsInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutEmployeesInput
+    reviews?: ReviewCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutNfcTagsInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    reviews?: ReviewUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutNfcTagsInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutNfcTagsInput, EmployeeUncheckedCreateWithoutNfcTagsInput>
+  }
+
+  export type BusinessUpsertWithoutNfcTagsInput = {
+    update: XOR<BusinessUpdateWithoutNfcTagsInput, BusinessUncheckedUpdateWithoutNfcTagsInput>
+    create: XOR<BusinessCreateWithoutNfcTagsInput, BusinessUncheckedCreateWithoutNfcTagsInput>
+    where?: BusinessWhereInput
+  }
+
+  export type BusinessUpdateToOneWithWhereWithoutNfcTagsInput = {
+    where?: BusinessWhereInput
+    data: XOR<BusinessUpdateWithoutNfcTagsInput, BusinessUncheckedUpdateWithoutNfcTagsInput>
+  }
+
+  export type BusinessUpdateWithoutNfcTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    hours?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneWithoutBusinessesNestedInput
+    owner?: UserUpdateOneWithoutBusinessesNestedInput
+    reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    offers?: OfferUpdateManyWithoutBusinessNestedInput
+    photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
+    visits?: VisitUpdateManyWithoutBusinessNestedInput
+    followers?: FollowerUpdateManyWithoutBusinessNestedInput
+    favorites?: FavoriteUpdateManyWithoutBusinessNestedInput
+    collections?: CollectionItemUpdateManyWithoutBusinessNestedInput
+  }
+
+  export type BusinessUncheckedUpdateWithoutNfcTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerId?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    hours?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    latitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    longitude?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: EnumBusinessStatusFieldUpdateOperationsInput | $Enums.BusinessStatus
+    featured?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
+    photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
+    visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
+    followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
+    favorites?: FavoriteUncheckedUpdateManyWithoutBusinessNestedInput
+    collections?: CollectionItemUncheckedUpdateManyWithoutBusinessNestedInput
+  }
+
+  export type EmployeeUpsertWithoutNfcTagsInput = {
+    update: XOR<EmployeeUpdateWithoutNfcTagsInput, EmployeeUncheckedUpdateWithoutNfcTagsInput>
+    create: XOR<EmployeeCreateWithoutNfcTagsInput, EmployeeUncheckedCreateWithoutNfcTagsInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutNfcTagsInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutNfcTagsInput, EmployeeUncheckedUpdateWithoutNfcTagsInput>
+  }
+
+  export type EmployeeUpdateWithoutNfcTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
+    reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutNfcTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeCreateWithoutReviewsInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    business: BusinessCreateNestedOneWithoutEmployeesInput
+    nfcTags?: NfcTagCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeUncheckedCreateWithoutReviewsInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutEmployeeInput
+  }
+
+  export type EmployeeCreateOrConnectWithoutReviewsInput = {
+    where: EmployeeWhereUniqueInput
+    create: XOR<EmployeeCreateWithoutReviewsInput, EmployeeUncheckedCreateWithoutReviewsInput>
+  }
+
   export type VisitCreateWithoutReviewInput = {
     id?: string
     latitude?: number | null
@@ -34165,6 +38260,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -34176,6 +38272,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -34195,6 +38293,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -34204,6 +38303,8 @@ export namespace Prisma {
     featured?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -34239,6 +38340,39 @@ export namespace Prisma {
   export type ReviewVoteCreateManyReviewInputEnvelope = {
     data: ReviewVoteCreateManyReviewInput | ReviewVoteCreateManyReviewInput[]
     skipDuplicates?: boolean
+  }
+
+  export type EmployeeUpsertWithoutReviewsInput = {
+    update: XOR<EmployeeUpdateWithoutReviewsInput, EmployeeUncheckedUpdateWithoutReviewsInput>
+    create: XOR<EmployeeCreateWithoutReviewsInput, EmployeeUncheckedCreateWithoutReviewsInput>
+    where?: EmployeeWhereInput
+  }
+
+  export type EmployeeUpdateToOneWithWhereWithoutReviewsInput = {
+    where?: EmployeeWhereInput
+    data: XOR<EmployeeUpdateWithoutReviewsInput, EmployeeUncheckedUpdateWithoutReviewsInput>
+  }
+
+  export type EmployeeUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutEmployeesNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutReviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
   export type VisitUpsertWithoutReviewInput = {
@@ -34363,6 +38497,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34374,6 +38509,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -34393,6 +38530,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34402,6 +38540,8 @@ export namespace Prisma {
     featured?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -34496,6 +38636,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -34508,6 +38649,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     followers?: FollowerCreateNestedManyWithoutBusinessInput
@@ -34526,6 +38669,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -34536,6 +38680,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
@@ -34556,6 +38702,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    employee?: EmployeeCreateNestedOneWithoutReviewsInput
     user: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
@@ -34567,6 +38714,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -34666,6 +38814,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34678,6 +38827,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
@@ -34696,6 +38847,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34706,6 +38858,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
@@ -34732,6 +38886,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
@@ -34743,6 +38898,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -34759,6 +38915,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -34771,6 +38928,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
     followers?: FollowerCreateNestedManyWithoutBusinessInput
@@ -34789,6 +38948,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -34799,6 +38959,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
@@ -34853,6 +39015,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34865,6 +39028,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
@@ -34883,6 +39048,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34893,6 +39059,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
@@ -35190,6 +39358,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35202,6 +39371,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -35220,6 +39391,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35230,6 +39402,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -35329,6 +39503,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35341,6 +39516,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -35359,6 +39536,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35369,6 +39547,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -35570,6 +39750,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35582,6 +39763,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -35600,6 +39783,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35610,6 +39794,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -35669,6 +39855,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35681,6 +39868,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -35699,6 +39888,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35709,6 +39899,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -35725,6 +39917,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35737,6 +39930,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
     followers?: FollowerCreateNestedManyWithoutBusinessInput
@@ -35755,6 +39950,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35765,6 +39961,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
     followers?: FollowerUncheckedCreateNestedManyWithoutBusinessInput
@@ -35797,6 +39995,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35809,6 +40008,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUpdateManyWithoutBusinessNestedInput
@@ -35827,6 +40028,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -35837,6 +40039,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
     followers?: FollowerUncheckedUpdateManyWithoutBusinessNestedInput
@@ -35914,6 +40118,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35926,6 +40131,8 @@ export namespace Prisma {
     category?: CategoryCreateNestedOneWithoutBusinessesInput
     owner?: UserCreateNestedOneWithoutBusinessesInput
     reviews?: ReviewCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagCreateNestedManyWithoutBusinessInput
     offers?: OfferCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoCreateNestedManyWithoutBusinessInput
     visits?: VisitCreateNestedManyWithoutBusinessInput
@@ -35944,6 +40151,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -35954,6 +40162,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     reviews?: ReviewUncheckedCreateNestedManyWithoutBusinessInput
+    employees?: EmployeeUncheckedCreateNestedManyWithoutBusinessInput
+    nfcTags?: NfcTagUncheckedCreateNestedManyWithoutBusinessInput
     offers?: OfferUncheckedCreateNestedManyWithoutBusinessInput
     photos?: BusinessPhotoUncheckedCreateNestedManyWithoutBusinessInput
     visits?: VisitUncheckedCreateNestedManyWithoutBusinessInput
@@ -36053,6 +40263,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36065,6 +40276,8 @@ export namespace Prisma {
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -36083,6 +40296,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36093,6 +40307,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -36582,6 +40798,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
     user: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
@@ -36593,6 +40810,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36685,6 +40903,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
     user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
@@ -36696,6 +40915,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37171,6 +41391,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -37194,6 +41415,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -37350,6 +41572,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
@@ -37361,6 +41584,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37374,6 +41598,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37410,6 +41635,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37421,6 +41647,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -37439,6 +41667,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37449,6 +41678,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -37467,6 +41698,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37680,6 +41912,7 @@ export namespace Prisma {
     city?: string | null
     phone?: string | null
     website?: string | null
+    googleReviewUrl?: string | null
     instagram?: string | null
     hours?: string | null
     description?: string | null
@@ -37700,6 +41933,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37711,6 +41945,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     owner?: UserUpdateOneWithoutBusinessesNestedInput
     reviews?: ReviewUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutBusinessNestedInput
     offers?: OfferUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUpdateManyWithoutBusinessNestedInput
     visits?: VisitUpdateManyWithoutBusinessNestedInput
@@ -37729,6 +41965,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37739,6 +41976,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     reviews?: ReviewUncheckedUpdateManyWithoutBusinessNestedInput
+    employees?: EmployeeUncheckedUpdateManyWithoutBusinessNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutBusinessNestedInput
     offers?: OfferUncheckedUpdateManyWithoutBusinessNestedInput
     photos?: BusinessPhotoUncheckedUpdateManyWithoutBusinessNestedInput
     visits?: VisitUncheckedUpdateManyWithoutBusinessNestedInput
@@ -37757,6 +41996,7 @@ export namespace Prisma {
     city?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    googleReviewUrl?: NullableStringFieldUpdateOperationsInput | string | null
     instagram?: NullableStringFieldUpdateOperationsInput | string | null
     hours?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37774,10 +42014,32 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    employeeId?: string | null
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
+  }
+
+  export type EmployeeCreateManyBusinessInput = {
+    id?: string
+    name: string
+    role?: string | null
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NfcTagCreateManyBusinessInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    employeeId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type OfferCreateManyBusinessInput = {
@@ -37837,6 +42099,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
     user?: UserUpdateOneRequiredWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
@@ -37848,6 +42111,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37861,10 +42125,78 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EmployeeUpdateWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUpdateManyWithoutEmployeeNestedInput
+    nfcTags?: NfcTagUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviews?: ReviewUncheckedUpdateManyWithoutEmployeeNestedInput
+    nfcTags?: NfcTagUncheckedUpdateManyWithoutEmployeeNestedInput
+  }
+
+  export type EmployeeUncheckedUpdateManyWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTagUpdateWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    employee?: EmployeeUpdateOneWithoutNfcTagsNestedInput
+  }
+
+  export type NfcTagUncheckedUpdateWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTagUncheckedUpdateManyWithoutBusinessInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type OfferUpdateWithoutBusinessInput = {
@@ -38016,6 +42348,108 @@ export namespace Prisma {
   export type CollectionItemUncheckedUpdateManyWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     collectionId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ReviewCreateManyEmployeeInput = {
+    id?: string
+    title: string
+    content: string
+    rating: number
+    verification?: $Enums.ReviewVerification
+    visitId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId: string
+    businessId: string
+  }
+
+  export type NfcTagCreateManyEmployeeInput = {
+    id?: string
+    token: string
+    label: string
+    type: $Enums.NfcTagType
+    active?: boolean
+    scanCount?: number
+    businessId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReviewUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    visit?: VisitUpdateOneWithoutReviewNestedInput
+    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
+    votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
+  }
+
+  export type ReviewUncheckedUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+    votes?: ReviewVoteUncheckedUpdateManyWithoutReviewNestedInput
+  }
+
+  export type ReviewUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    businessId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type NfcTagUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    business?: BusinessUpdateOneRequiredWithoutNfcTagsNestedInput
+  }
+
+  export type NfcTagUncheckedUpdateWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NfcTagUncheckedUpdateManyWithoutEmployeeInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    type?: EnumNfcTagTypeFieldUpdateOperationsInput | $Enums.NfcTagType
+    active?: BoolFieldUpdateOperationsInput | boolean
+    scanCount?: IntFieldUpdateOperationsInput | number
+    businessId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReviewVoteCreateManyReviewInput = {

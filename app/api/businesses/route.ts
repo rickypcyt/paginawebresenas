@@ -4,6 +4,7 @@ import { generateUniqueSlug, slugify } from "@/lib/slug";
 import { awardAction } from "@/lib/gamification";
 import { requireSession, withErrorHandler, rateLimit, rateLimitResponse } from "@/lib/api-utils";
 import { isAdmin as checkIsAdmin } from "@/lib/roles";
+import { randomUUID } from "node:crypto";
 
 export async function GET() {
   const result = await requireSession();
@@ -49,6 +50,7 @@ export const POST = withErrorHandler(async (request: Request) => {
   const city: string | undefined = body.city;
   const phone: string | undefined = body.phone;
   const website: string | undefined = body.website;
+  const googleReviewUrl: string | undefined = body.googleReviewUrl;
   const instagram: string | undefined = body.instagram;
   const hours: string | undefined = body.hours;
   const description: string | undefined = body.description;
@@ -96,6 +98,7 @@ export const POST = withErrorHandler(async (request: Request) => {
         city: city || null,
         phone: phone || null,
         website: website || null,
+        googleReviewUrl: googleReviewUrl || null,
         instagram: instagram || null,
         hours: hours || null,
         description: description || null,
@@ -108,6 +111,15 @@ export const POST = withErrorHandler(async (request: Request) => {
       data: { role: "business" },
     }),
   ]);
+
+  await prisma.nfcTag.create({
+    data: {
+      token: randomUUID(),
+      label: "NFC reseñas de Google",
+      type: "business_google",
+      businessId: business.id,
+    },
+  });
 
   await awardAction(user.id, "add_business");
 

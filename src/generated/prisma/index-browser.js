@@ -158,6 +158,7 @@ exports.Prisma.BusinessScalarFieldEnum = {
   city: 'city',
   phone: 'phone',
   website: 'website',
+  googleReviewUrl: 'googleReviewUrl',
   instagram: 'instagram',
   hours: 'hours',
   description: 'description',
@@ -169,12 +170,36 @@ exports.Prisma.BusinessScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EmployeeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  role: 'role',
+  active: 'active',
+  businessId: 'businessId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NfcTagScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  label: 'label',
+  type: 'type',
+  active: 'active',
+  scanCount: 'scanCount',
+  businessId: 'businessId',
+  employeeId: 'employeeId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ReviewScalarFieldEnum = {
   id: 'id',
   title: 'title',
   content: 'content',
   rating: 'rating',
   verification: 'verification',
+  employeeId: 'employeeId',
   visitId: 'visitId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -361,10 +386,16 @@ exports.BusinessStatus = exports.$Enums.BusinessStatus = {
   premium: 'premium'
 };
 
+exports.NfcTagType = exports.$Enums.NfcTagType = {
+  business_google: 'business_google',
+  employee_review: 'employee_review'
+};
+
 exports.ReviewVerification = exports.$Enums.ReviewVerification = {
   none: 'none',
   location: 'location',
   qr: 'qr',
+  nfc: 'nfc',
   integration: 'integration'
 };
 
@@ -386,6 +417,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   Category: 'Category',
   Business: 'Business',
+  Employee: 'Employee',
+  NfcTag: 'NfcTag',
   Review: 'Review',
   Visit: 'Visit',
   Offer: 'Offer',

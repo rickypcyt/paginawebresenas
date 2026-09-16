@@ -65,34 +65,37 @@ enum BusinessStatus {
 }
 
 model Business {
-  id          String           @id @default(cuid())
-  name        String
-  slug        String           @unique
-  imageUrl    String?
-  categoryId  String?
-  category    Category?        @relation(fields: [categoryId], references: [id])
-  ownerId     String?
-  owner       User?            @relation("BusinessOwner", fields: [ownerId], references: [id])
-  address     String?
-  city        String?
-  phone       String?
-  website     String?
-  instagram   String?
-  hours       String?
-  description String?
-  latitude    Float?
-  longitude   Float?
-  status      BusinessStatus   @default(community)
-  featured    Boolean          @default(false)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  reviews     Review[]
-  offers      Offer[]
-  photos      BusinessPhoto[]
-  visits      Visit[]
-  followers   Follower[]
-  favorites   Favorite[]
-  collections CollectionItem[]
+  id              String           @id @default(cuid())
+  name            String
+  slug            String           @unique
+  imageUrl        String?
+  categoryId      String?
+  category        Category?        @relation(fields: [categoryId], references: [id])
+  ownerId         String?
+  owner           User?            @relation("BusinessOwner", fields: [ownerId], references: [id])
+  address         String?
+  city            String?
+  phone           String?
+  website         String?
+  googleReviewUrl String?
+  instagram       String?
+  hours           String?
+  description     String?
+  latitude        Float?
+  longitude       Float?
+  status          BusinessStatus   @default(community)
+  featured        Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  reviews         Review[]
+  employees       Employee[]
+  nfcTags         NfcTag[]
+  offers          Offer[]
+  photos          BusinessPhoto[]
+  visits          Visit[]
+  followers       Follower[]
+  favorites       Favorite[]
+  collections     CollectionItem[]
 
   @@index([status])
   @@index([featured])
@@ -103,7 +106,46 @@ enum ReviewVerification {
   none
   location
   qr
+  nfc
   integration
+}
+
+model Employee {
+  id         String   @id @default(cuid())
+  name       String
+  role       String?
+  active     Boolean  @default(true)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  reviews    Review[]
+  nfcTags    NfcTag[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([businessId])
+}
+
+enum NfcTagType {
+  business_google
+  employee_review
+}
+
+model NfcTag {
+  id         String     @id @default(cuid())
+  token      String     @unique
+  label      String
+  type       NfcTagType
+  active     Boolean    @default(true)
+  scanCount  Int        @default(0)
+  businessId String
+  business   Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  employeeId String?
+  employee   Employee?  @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([businessId])
+  @@index([employeeId])
 }
 
 model Review {
@@ -112,6 +154,8 @@ model Review {
   content      String
   rating       Int
   verification ReviewVerification @default(none)
+  employeeId   String?
+  employee     Employee?          @relation(fields: [employeeId], references: [id], onDelete: SetNull)
   visitId      String?            @unique
   visit        Visit?             @relation(fields: [visitId], references: [id], onDelete: SetNull)
   createdAt    DateTime           @default(now())

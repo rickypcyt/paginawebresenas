@@ -2,9 +2,9 @@ export const dynamic = "force-dynamic";
 
 export default function HowItWorksPage() {
   const steps = [
-    { icon: "🔍", title: "Descubre", desc: "Encuentra negocios y lee reseñas reales de la comunidad." },
-    { icon: "⭐", title: "Reseña", desc: "Comparte tu experiencia y ayuda a otros usuarios a decidir." },
-    { icon: "🎁", title: "Ahorra", desc: "Reclama ofertas exclusivas y sigue tus negocios favoritos." },
+    { icon: "�", title: "Recibes tus NFCs", desc: "Te entregamos un NFC para Google y los NFC personalizados para tu equipo." },
+    { icon: "📱", title: "El cliente acerca el móvil", desc: "Cada NFC abre automáticamente el destino correcto, sin cámara ni búsquedas." },
+    { icon: "⭐", title: "Recibes feedback", desc: "El cliente reseña tu negocio en Google o valora directamente a quien le atendió." },
   ];
 
   return (
