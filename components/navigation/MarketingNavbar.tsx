@@ -3,9 +3,10 @@ import { AuthButton } from "../auth/AuthButton";
 
 export function MarketingNavbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="text-xl font-extrabold tracking-tight text-[var(--primary)]">
+        <Link href="/" className="flex items-center gap-2 text-xl font-extrabold tracking-tight text-[var(--primary)]">
+          <span className="h-3 w-3 rounded-full bg-[var(--primary)]" aria-hidden="true" />
           Toque
         </Link>
 

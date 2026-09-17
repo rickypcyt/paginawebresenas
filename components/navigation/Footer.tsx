@@ -7,7 +7,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid gap-8 sm:grid-cols-2">
           <div>
-            <h3 className="mb-3 text-lg font-bold text-[var(--foreground)]">Toque</h3>
+            <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-[var(--foreground)]"><span className="h-3 w-3 rounded-full bg-[var(--primary)]" aria-hidden="true" />Toque</h3>
             <p className="text-sm text-[var(--muted-foreground)]">
               Gestiona reseñas con NFC para tu negocio y para cada miembro de tu equipo.
             </p>

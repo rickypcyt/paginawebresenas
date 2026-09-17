@@ -35,8 +35,8 @@ export default function LandingPage() {
       <div className="mx-auto w-full max-w-6xl">
         <section className="mb-20 grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           <div className="text-center lg:text-left">
-            <h1 className="mb-6 text-4xl font-semibold tracking-tight text-[var(--foreground)] md:text-6xl">
-              Deja tu reseña en un Toque.
+            <h1 className="mb-6 text-4xl font-medium tracking-tight text-[var(--foreground)] md:text-6xl">
+              Deja tu reseña en un <span className="italic">Toque.</span>
             </h1>
             <p className="mb-8 text-lg leading-relaxed text-[var(--muted-foreground)] md:text-xl">
               NFCs para negocios: uno lleva a tus clientes a las reseñas de Google; otro les permite valorar a quien les atendió.
@@ -62,7 +62,7 @@ export default function LandingPage() {
         <NfcSimulators />
 
         <section className="mb-20 rounded-3xl bg-[var(--secondary)] p-8 md:p-12">
-          <h2 className="mb-10 text-center text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+          <h2 className="mb-10 text-center text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
             ¿Cómo funciona?
           </h2>
           <div className="grid gap-8 sm:grid-cols-3">
@@ -84,7 +84,7 @@ export default function LandingPage() {
         </section>
 
         <section className="rounded-3xl border border-[var(--border)] p-8 md:p-12">
-          <h2 className="mb-8 text-center text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+          <h2 className="mb-8 text-center text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
             Todo lo que necesitas
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
