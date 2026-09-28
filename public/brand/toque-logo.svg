@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 44">
+  <circle cx="11" cy="22" r="7" fill="#22C55E"/>
+  <path d="M19.3 11.4 A13.5 13.5 0 0 1 19.3 32.6" fill="none" stroke="#22C55E" stroke-width="4.2" stroke-linecap="round"/>
+  <path d="M23.6 5.9 A20.5 20.5 0 0 1 23.6 38.1" fill="none" stroke="#22C55E" stroke-width="4.2" stroke-linecap="round"/>
+  <text x="41" y="30" font-family="Geist, Inter, -apple-system, sans-serif" font-size="26" font-weight="700" letter-spacing="-0.5" fill="#1D1D1F">toque</text>
+</svg>

@@ -129,7 +129,7 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
               key={n}
               type="button"
               onClick={() => setRating(n)}
-              className={`text-2xl ${n <= rating ? "text-yellow-500" : "text-gray-300"}`}
+              className={`text-2xl ${n <= rating ? "text-[var(--star)]" : "text-gray-300"}`}
               aria-label={`${n} estrellas`}
             >
               ★

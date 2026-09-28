@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
 import { isBusiness, isEmployee } from "@/lib/roles";
+import { Logo } from "@/components/brand/Logo";
 import { useState, useRef, useEffect } from "react";
 
 const bottomLinks = [
@@ -24,8 +25,8 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
   const role = (user as { role?: string | null })?.role;
   const menuLinks = [
     { href: "/profile", label: "Tu perfil" },
-    ...(isBusiness(role) ? [{ href: "/dashboard", label: "Panel de negocio" }] : []),
-    ...(isEmployee(role) ? [{ href: "/employee", label: "Panel de empleado" }] : []),
+    ...(isBusiness(role) ? [{ href: "/dashboard", label: "Mi Toque · negocio" }] : []),
+    ...(isEmployee(role) ? [{ href: "/employee", label: "Mi Toque · equipo" }] : []),
     ...(role === "user" ? [{ href: "/employee/join", label: "Unirme como empleado" }] : []),
     ...(isBusiness(role) ? [{ href: "/businesses/new", label: "Registrar negocio" }] : []),
   ];
@@ -58,9 +59,8 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
     <>
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 lg:px-8">
-          <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-semibold tracking-tight text-[var(--foreground)]">
-            <span className="h-3 w-3 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-            Toque
+          <Link href="/" className="flex shrink-0 items-center">
+            <Logo size={20} />
           </Link>
 
           <div className="flex items-center gap-3">

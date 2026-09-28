@@ -1,7 +1,13 @@
 import type { Metadata, Viewport } from "next";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { AuthModalProvider } from "@/components/auth/AuthModalProvider";
 import { LoginModal } from "@/components/auth/LoginModal";
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -32,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" className={geist.variable}>
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
         <AuthModalProvider>
           {children}

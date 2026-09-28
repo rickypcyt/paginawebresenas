@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAuthModal } from "../auth/AuthModalProvider";
+import { Logo } from "@/components/brand/Logo";
 
 export function PublicNavbar() {
   const { open } = useAuthModal();
@@ -9,9 +10,8 @@ export function PublicNavbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 lg:px-8">
-        <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-semibold tracking-tight text-[var(--foreground)]">
-          <span className="h-3 w-3 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-          Toque
+        <Link href="/" className="flex shrink-0 items-center">
+          <Logo size={20} />
         </Link>
 
         <div className="flex shrink-0 items-center gap-3">

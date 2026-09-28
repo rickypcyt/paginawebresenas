@@ -20,7 +20,7 @@ function BusinessPanelPreview() {
       <div className="space-y-4 p-5">
         <div className="grid grid-cols-3 gap-2">
           <div className="rounded-xl bg-[var(--muted)] p-3"><MessageSquareText className="mb-2 h-4 w-4 text-[var(--primary-dark)]" /><p className="text-xl font-bold text-[var(--foreground)]">127</p><p className="text-[9px] text-[var(--muted-foreground)]">Reseñas internas</p></div>
-          <div className="rounded-xl bg-[var(--muted)] p-3"><Star className="mb-2 h-4 w-4 fill-amber-400 text-amber-400" /><p className="text-xl font-bold text-[var(--foreground)]">4.8</p><p className="text-[9px] text-[var(--muted-foreground)]">Rating promedio</p></div>
+          <div className="rounded-xl bg-[var(--muted)] p-3"><Star className="mb-2 h-4 w-4 fill-[var(--star)] text-[var(--star)]" /><p className="text-xl font-bold text-[var(--foreground)]">4.8</p><p className="text-[9px] text-[var(--muted-foreground)]">Rating promedio</p></div>
           <div className="rounded-xl bg-[var(--muted)] p-3"><MousePointerClick className="mb-2 h-4 w-4 text-[var(--primary-dark)]" /><p className="text-xl font-bold text-[var(--foreground)]">342</p><p className="text-[9px] text-[var(--muted-foreground)]">Taps NFC</p></div>
         </div>
 
@@ -47,14 +47,14 @@ function EmployeePanelPreview() {
       <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
         <div className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--primary-light)] text-[var(--primary-dark)]"><UserRound className="h-4 w-4" /></span>
-          <div><p className="text-xs text-[var(--muted-foreground)]">Panel del empleado</p><p className="text-sm font-semibold text-[var(--foreground)]">María González</p></div>
+          <div><p className="text-xs text-[var(--muted-foreground)]">Mi Toque</p><p className="text-sm font-semibold text-[var(--foreground)]">María González</p></div>
         </div>
         <span className="rounded-full bg-[var(--primary-light)] px-2.5 py-1 text-[10px] font-semibold text-[var(--primary-dark)]">Mesera</span>
       </div>
 
       <div className="space-y-4 p-5">
         <div className="rounded-2xl border border-green-200 bg-[var(--primary-light)] p-5 text-[var(--foreground)]">
-          <div className="flex items-start justify-between"><div><p className="text-xs text-[var(--muted-foreground)]">Tu valoración</p><p className="mt-1 text-4xl font-bold">4.9<span className="text-xl text-amber-400">★</span></p></div><TrendingUp className="h-6 w-6 text-[var(--primary-dark)]" /></div>
+          <div className="flex items-start justify-between"><div><p className="text-xs text-[var(--muted-foreground)]">Tu valoración</p><p className="mt-1 text-4xl font-bold">4.9<span className="text-xl text-[var(--star)]">★</span></p></div><TrendingUp className="h-6 w-6 text-[var(--primary-dark)]" /></div>
           <div className="mt-4 flex items-center justify-between text-[10px] text-[var(--muted-foreground)]"><span>38 reseñas recibidas</span><span className="font-semibold text-[var(--primary-dark)]">+0.3 este mes</span></div>
         </div>
 
@@ -66,8 +66,8 @@ function EmployeePanelPreview() {
         <div className="rounded-2xl border border-[var(--border)] p-4">
           <p className="text-xs font-semibold text-[var(--foreground)]">Feedback reciente</p>
           <div className="mt-3 space-y-3">
-            <div className="rounded-xl bg-[var(--muted)] p-3"><div className="flex justify-between"><span className="text-[10px] font-semibold">Atención excelente</span><span className="text-[10px] text-amber-500">5★</span></div><p className="mt-1 text-[9px] leading-relaxed text-[var(--muted-foreground)]">“Muy amable y rápida con nuestro pedido.”</p></div>
-            <div className="rounded-xl bg-[var(--muted)] p-3"><div className="flex justify-between"><span className="text-[10px] font-semibold">Gran experiencia</span><span className="text-[10px] text-amber-500">5★</span></div><p className="mt-1 text-[9px] leading-relaxed text-[var(--muted-foreground)]">“Nos explicó todo el menú con mucha paciencia.”</p></div>
+            <div className="rounded-xl bg-[var(--muted)] p-3"><div className="flex justify-between"><span className="text-[10px] font-semibold">Atención excelente</span><span className="text-[10px] text-[var(--star)]">5★</span></div><p className="mt-1 text-[9px] leading-relaxed text-[var(--muted-foreground)]">“Muy amable y rápida con nuestro pedido.”</p></div>
+            <div className="rounded-xl bg-[var(--muted)] p-3"><div className="flex justify-between"><span className="text-[10px] font-semibold">Gran experiencia</span><span className="text-[10px] text-[var(--star)]">5★</span></div><p className="mt-1 text-[9px] leading-relaxed text-[var(--muted-foreground)]">“Nos explicó todo el menú con mucha paciencia.”</p></div>
           </div>
         </div>
       </div>

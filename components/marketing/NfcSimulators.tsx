@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Building2, Check, CheckCircle2, LoaderCircle, RotateCcw, Send, SmartphoneNfc, Star, UserRound, Wifi } from "lucide-react";
+import { Logo } from "@/components/brand/Logo";
 
 interface SimulatorProps {
   type: "A" | "B";
@@ -67,8 +68,7 @@ function EmployeeReviewScreen() {
   return (
     <div className="flex h-full flex-col bg-[#f8faf8] px-3 pb-3 pt-2 text-[#202124]">
       <div className="mb-3 flex items-center gap-2 border-b border-gray-200 pb-2">
-        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-green-500 text-[10px] font-bold text-white">T</span>
-        <span className="text-xs font-semibold">Toque</span>
+        <Logo size={11} />
       </div>
       {sent ? (
         <div className="flex flex-1 flex-col items-center justify-center text-center">
@@ -125,7 +125,7 @@ function Simulator({ type }: SimulatorProps) {
       <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] p-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary-dark)]">{isBusiness ? <Building2 className="h-5 w-5" /> : <UserRound className="h-5 w-5" />}</div>
-          <div><span className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">Tipo {type}</span><h3 className="font-semibold text-[var(--foreground)]">{isBusiness ? "Reseña de empresa" : "Reseña de empleado"}</h3></div>
+          <div><span className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">Toque {isBusiness ? "Público" : "Personal"} · {type}</span><h3 className="font-semibold text-[var(--foreground)]">{isBusiness ? "Reseña de empresa" : "Reseña de empleado"}</h3></div>
         </div>
         <span className={`rounded-full px-3 py-1 text-xs font-medium transition ${running ? "bg-amber-100 text-amber-700" : phase === "destination" ? "bg-green-100 text-green-700" : "bg-[var(--muted)] text-[var(--muted-foreground)]"}`}>{running ? "Simulando…" : phase === "destination" ? "NFC abierto" : "Demo"}</span>
       </div>
@@ -138,7 +138,7 @@ function Simulator({ type }: SimulatorProps) {
               <div className="absolute left-1/2 top-8 -translate-x-1/2">
                 <div className="relative flex h-24 w-40 items-center justify-center rounded-2xl border border-gray-300 bg-white shadow-xl">
                   <div className="absolute -top-2 h-4 w-20 rounded-full bg-green-500/20 blur-md" />
-                  <SmartphoneNfc className="h-9 w-9 text-green-600" />
+                  <Logo markOnly size={22} />
                   <span className="absolute bottom-2 text-[9px] font-semibold tracking-wider text-gray-500">NFC TIPO {type}</span>
                   {(phase === "approaching" || phase === "detected") && [0, 1, 2].map((ring) => <span key={ring} className="absolute h-16 w-16 animate-ping rounded-full border border-green-500/50" style={{ animationDelay: `${ring * 180}ms`, animationDuration: "1.4s" }} />)}
                 </div>
@@ -146,7 +146,7 @@ function Simulator({ type }: SimulatorProps) {
               <div className={`absolute -bottom-6 left-1/2 -translate-x-1/2 transition-all ease-in-out ${phase === "idle" ? "translate-y-8 rotate-[-8deg]" : phase === "approaching" ? "-translate-y-24 rotate-[5deg] duration-1000" : "-translate-y-28 rotate-[2deg] duration-200"}`}>
                 <PhoneFrame pulse={phase === "detected"}>
                   <div className="flex h-full flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 text-center">
-                    {phase === "detected" ? <><CheckCircle2 className="mb-3 h-10 w-10 text-green-500" /><p className="text-xs font-semibold">NFC detectado</p><p className="mt-1 text-[9px] text-gray-500">Toque · tipo {type}</p></> : phase === "opening" ? <><LoaderCircle className="mb-3 h-9 w-9 animate-spin text-green-600" /><p className="text-xs font-semibold">Abriendo enlace…</p></> : <><Wifi className="mb-3 h-9 w-9 rotate-90 text-gray-400" /><p className="text-xs font-semibold">Listo para detectar</p></>}
+                    {phase === "detected" ? <><CheckCircle2 className="mb-3 h-10 w-10 text-green-500" /><p className="text-xs font-semibold">NFC detectado</p><p className="mt-1 text-[9px] text-gray-500">Toque {type === "A" ? "Público" : "Personal"}</p></> : phase === "opening" ? <><LoaderCircle className="mb-3 h-9 w-9 animate-spin text-green-600" /><p className="text-xs font-semibold">Abriendo enlace…</p></> : <><Wifi className="mb-3 h-9 w-9 rotate-90 text-gray-400" /><p className="text-xs font-semibold">Listo para detectar</p></>}
                   </div>
                 </PhoneFrame>
               </div>

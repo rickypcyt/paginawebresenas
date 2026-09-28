@@ -12,7 +12,7 @@ export function StarRating({ rating, size = "sm" }: StarRatingProps) {
 
   return (
     <span
-      className={`inline-flex text-[var(--primary)] ${sizeClasses[size]}`}
+      className={`inline-flex text-[var(--star)] ${sizeClasses[size]}`}
       aria-label={`Valoración: ${rating} de 5`}
     >
       {[1, 2, 3, 4, 5].map((star) => (

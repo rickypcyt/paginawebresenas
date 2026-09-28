@@ -91,7 +91,7 @@ export function ReviewComposer({
               onMouseLeave={() => setHoverRating(0)}
               className="text-2xl transition-transform hover:scale-110"
             >
-              <span className={star <= (hoverRating || rating) ? "text-[var(--primary)]" : "text-[var(--muted-foreground)]"}>
+              <span className={star <= (hoverRating || rating) ? "text-[var(--star)]" : "text-[var(--muted-foreground)]"}>
                 {star <= (hoverRating || rating) ? "★" : "☆"}
               </span>
             </button>

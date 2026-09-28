@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Check, MessageSquare, Package, Smartphone } from "lucide-react";
+import { Check, Crown, MessageSquare, Package, Radar, Smartphone } from "lucide-react";
 import { ReviewCard3D } from "@/components/marketing/ReviewCard3D";
 import { NfcSimulators } from "@/components/marketing/NfcSimulators";
 import { PlatformPreviews } from "@/components/marketing/PlatformPreviews";
+import { Logo } from "@/components/brand/Logo";
 
 const steps = [
   {
@@ -95,6 +96,37 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="mb-20 rounded-3xl border border-[var(--border)] p-8 md:p-12">
+          <div className="mb-10 flex flex-col items-center gap-4 text-center">
+            <Logo size={26} />
+            <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+              ¿Quién tiene el toque?
+            </h2>
+            <p className="max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)] md:text-base">
+              Una campaña que une gamificación, calidad y marca — con un relato para cada lado del mostrador.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="rounded-2xl bg-[var(--secondary)] p-6">
+              <Radar className="mb-4 h-7 w-7 text-[var(--primary)]" />
+              <h3 className="mb-2 font-semibold text-[var(--foreground)]">Para el dueño</h3>
+              <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
+                Más reseñas reales en Google y un radar de calidad por persona: sabes quién atiende bien y quién necesita apoyo.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-[var(--secondary)] p-6">
+              <Crown className="mb-4 h-7 w-7 text-[var(--star)]" />
+              <h3 className="mb-2 font-semibold text-[var(--foreground)]">Para el equipo</h3>
+              <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
+                Sube en el ranking: cada valoración cuenta y el colaborador del mes se lleva la corona.
+              </p>
+            </div>
+          </div>
+          <p className="mt-10 text-center text-sm italic text-[var(--muted-foreground)]">
+            Cada buen servicio tiene su toque.
+          </p>
         </section>
 
         <PlatformPreviews />

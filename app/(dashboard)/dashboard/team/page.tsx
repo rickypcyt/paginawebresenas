@@ -29,7 +29,7 @@ export default async function DashboardTeamPage() {
   if (businesses.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Personal y ranking</h1>
+        <h1 className="text-2xl font-bold text-[var(--foreground)]">Ranking del equipo</h1>
         <EmptyState
           icon="🏪"
           title="Aún no tienes negocios"
@@ -80,7 +80,10 @@ export default async function DashboardTeamPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-[var(--foreground)]">Personal y ranking</h1>
+      <div>
+        <h1 className="text-2xl font-bold text-[var(--foreground)]">Ranking del equipo</h1>
+        <p className="mt-1 text-sm text-[var(--muted-foreground)]">¿Quién tiene el toque? Tu equipo ordenado por valoración.</p>
+      </div>
 
       {pendingRequests.length > 0 && (
         <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
@@ -128,7 +131,7 @@ export default async function DashboardTeamPage() {
                   <span className="inline-flex items-center gap-1 rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-[var(--primary-dark)]">
                     <Star className="h-3 w-3" /> {emp.good} buenas
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--warning-light)] px-2 py-0.5 text-[var(--warning)]">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[var(--destructive-light)] px-2 py-0.5 text-[var(--destructive)]">
                     {emp.bad} malas
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-[var(--muted)] px-2 py-0.5 text-[var(--foreground)]">

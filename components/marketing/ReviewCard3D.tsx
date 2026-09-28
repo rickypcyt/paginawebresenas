@@ -106,7 +106,20 @@ function googleG(ctx: CanvasRenderingContext2D, cx: number, cy: number, R: numbe
   ctx.restore();
 }
 
-function nfcWaves(ctx: CanvasRenderingContext2D, cx: number, cy: number, s: number, color: string) {
+function nfcWaves(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  s: number,
+  color: string,
+  dot = false
+) {
+  if (dot) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.11, 0, 7);
+    ctx.fill();
+  }
   ctx.strokeStyle = color;
   ctx.lineWidth = s * 0.13;
   ctx.lineCap = "round";
@@ -169,17 +182,40 @@ function qr(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
     for (let j = 0; j < n; j++) if (g[i][j]) ctx.fillRect(x + j * m, y + i * m, m, m);
 }
 
-function toqueLogo(ctx: CanvasRenderingContext2D, cx: number, y: number, fs: number) {
+function toqueLogo(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  y: number,
+  fs: number,
+  ink = "#1d1d1f",
+  align: "center" | "right" = "center"
+) {
   ctx.save();
+  ctx.font = `700 ${fs}px ${FONT()}`;
+  const tw = ctx.measureText("toque").width;
+  const markH = fs * 1.55;
+  const unit = markH / 44;
+  const markW = 34 * unit;
+  const gap = fs * 0.45;
+  const total = markW + gap + tw;
+  const x0 = align === "right" ? cx - total : cx - total / 2;
+  const dcx = x0 + 11 * unit;
   ctx.fillStyle = "#22c55e";
   ctx.beginPath();
-  ctx.arc(cx - fs * 1.42, y, fs * 0.3, 0, 7);
+  ctx.arc(dcx, y, 7 * unit, 0, 7);
   ctx.fill();
-  ctx.fillStyle = "#1d1d1f";
-  ctx.font = `700 ${fs}px ${FONT()}`;
+  ctx.strokeStyle = "#22c55e";
+  ctx.lineWidth = 4.2 * unit;
+  ctx.lineCap = "round";
+  for (const r of [13.5, 20.5]) {
+    ctx.beginPath();
+    ctx.arc(dcx, y, r * unit, -0.91, 0.91);
+    ctx.stroke();
+  }
+  ctx.fillStyle = ink;
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
-  ctx.fillText("toque", cx - fs * 1.0, y);
+  ctx.fillText("toque", x0 + markW + gap, y);
   ctx.restore();
 }
 
@@ -246,7 +282,7 @@ function drawA(ctx: CanvasRenderingContext2D, W: number, H: number) {
     ctx.lineTo(p[4], p[5]);
     ctx.stroke();
   });
-  nfcWaves(ctx, bx + s * 0.5, by + s * 0.5, W * 0.055, "#1d1d1f");
+  nfcWaves(ctx, bx + s * 0.5 - W * 0.026, by + s * 0.5, W * 0.065, "#1d1d1f", true);
   qr(ctx, qx, by, s);
   ctx.fillStyle = "#1d1d1f";
   ctx.font = `600 ${W * 0.024}px ${FONT()}`;
@@ -287,15 +323,7 @@ function drawB(ctx: CanvasRenderingContext2D, W: number, H: number) {
   ctx.fillStyle = "#9a9a9a";
   ctx.font = `600 ${H * 0.042}px ${FONT()}`;
   ctx.fillText("GRILL & BAR", W * 0.15, H * 0.275);
-  ctx.textAlign = "right";
-  ctx.font = `700 ${H * 0.095}px ${FONT()}`;
-  const toqueW = ctx.measureText("toque").width;
-  ctx.fillStyle = "#22c55e";
-  ctx.beginPath();
-  ctx.arc(W * 0.95 - toqueW - H * 0.055, H * 0.185, H * 0.028, 0, 7);
-  ctx.fill();
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText("toque", W * 0.95, H * 0.185);
+  toqueLogo(ctx, W * 0.95, H * 0.185, H * 0.095, "#ffffff", "right");
   ctx.strokeStyle = "rgba(255,255,255,.16)";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -370,15 +398,7 @@ function buildB() {
         ctx.fillStyle = "#141414";
         rr(ctx, 0, 0, W, H, H * 0.14);
         ctx.fill();
-        ctx.fillStyle = "#22c55e";
-        ctx.beginPath();
-        ctx.arc(W * 0.5 - W * 0.09, H * 0.5, W * 0.02, 0, 7);
-        ctx.fill();
-        ctx.fillStyle = "#fff";
-        ctx.font = `700 ${W * 0.08}px ${FONT()}`;
-        ctx.textAlign = "left";
-        ctx.textBaseline = "middle";
-        ctx.fillText("toque", W * 0.5 - W * 0.055, H * 0.5);
+        toqueLogo(ctx, W * 0.5, H * 0.5, W * 0.08, "#ffffff");
       }),
       transparent: true,
     })
