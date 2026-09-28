@@ -5,7 +5,7 @@ import { ReviewCard } from "@/components/reviews/ReviewCard";
 
 export default async function ProfileReviewsPage() {
   const session = await getSession();
-  if (!session?.user?.id) redirect("/explore");
+  if (!session?.user?.id) redirect("/");
 
   const reviews = await prisma.review.findMany({
     where: { userId: session.user.id },

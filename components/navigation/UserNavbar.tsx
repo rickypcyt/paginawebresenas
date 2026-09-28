@@ -1,32 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
-import { isAdmin, isBusiness, isEmployee } from "@/lib/roles";
+import { isAdmin, isBusiness } from "@/lib/roles";
 import { Logo } from "@/components/brand/Logo";
 import { useState, useRef, useEffect } from "react";
-
-const bottomLinks = [
-  { href: "/", label: "Inicio", icon: "🏠" },
-  { href: "/explore", label: "Explorar", icon: "🔍" },
-  { href: "/favorites", label: "Guardados", icon: "❤️" },
-  { href: "/profile", label: "Perfil", icon: "👤" },
-];
 
 interface UserNavbarProps {
   initialUser?: { name?: string | null; email?: string | null; image?: string | null; role?: string | null } | null;
 }
 
 export function UserNavbar({ initialUser }: UserNavbarProps) {
-  const pathname = usePathname();
   const { data: session } = useSession();
   const user = { ...initialUser, ...session?.user };
   const role = (user as { role?: string | null })?.role;
   const menuLinks = [
     { href: "/profile", label: "Tu perfil" },
     ...(isBusiness(role) ? [{ href: "/dashboard", label: "Mi Toque · negocio" }] : []),
-    ...(isEmployee(role) ? [{ href: "/employee", label: "Mi Toque · equipo" }] : []),
     ...(role === "user" ? [{ href: "/employee/join", label: "Unirme como empleado" }] : []),
     ...(isAdmin(role) ? [{ href: "/businesses/new", label: "Crear negocio" }] : []),
     ...(role === "user" ? [{ href: "/business-requests", label: "Solicitar negocio" }] : []),
@@ -120,28 +110,6 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
         </div>
       </div>
       </header>
-
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--background)] pb-safe md:hidden">
-        <div className="flex w-full justify-around py-2">
-          {bottomLinks.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex flex-col items-center gap-1 px-3 py-1 text-xs ${
-                  active
-                    ? "text-[var(--foreground)]"
-                    : "text-[var(--muted-foreground)]"
-                }`}
-              >
-                <span className="text-lg">{link.icon}</span>
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
     </>
   );
 }

@@ -64,12 +64,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           {query && (
             <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
-                href="/explore"
-                className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white"
-              >
-                Explorar todos
-              </Link>
-              <Link
                 href={`/business-requests?name=${encodeURIComponent(params.q || "")}`}
                 className="rounded-lg border border-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary)] hover:bg-[var(--primary-light)]"
               >

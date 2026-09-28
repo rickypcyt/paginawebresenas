@@ -22,7 +22,7 @@ export function PublicNavbar() {
             Solicitar NFCs
           </Link>
           <button
-            onClick={() => open("/dashboard")}
+            onClick={() => open("/profile")}
             className="rounded-full px-4 py-1.5 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--secondary)]"
           >
             Acceder a la app

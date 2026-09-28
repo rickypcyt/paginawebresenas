@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2, Check, CheckCircle2, LoaderCircle, RotateCcw, Send, SmartphoneNfc, Star, UserRound, Wifi } from "lucide-react";
+import { Building2, Check, CheckCircle2, LoaderCircle, Send, Star, UserRound, Wifi } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 
 interface SimulatorProps {
   type: "A" | "B";
+  delay?: number;
 }
 
 type Phase = "idle" | "approaching" | "detected" | "opening" | "destination";
@@ -96,42 +97,42 @@ function EmployeeReviewScreen() {
   );
 }
 
-function Simulator({ type }: SimulatorProps) {
+function Simulator({ type, delay = 0 }: SimulatorProps) {
   const [phase, setPhase] = useState<Phase>("idle");
   const isBusiness = type === "A";
 
   useEffect(() => {
-    if (phase === "approaching") {
-      const timer = window.setTimeout(() => setPhase("detected"), 1100);
-      return () => window.clearTimeout(timer);
-    }
-    if (phase === "detected") {
-      if (navigator.vibrate) navigator.vibrate(80);
-      const timer = window.setTimeout(() => setPhase("opening"), 900);
-      return () => window.clearTimeout(timer);
-    }
-    if (phase === "opening") {
-      const timer = window.setTimeout(() => setPhase("destination"), 1000);
-      return () => window.clearTimeout(timer);
-    }
-  }, [phase]);
-
-  const start = () => setPhase("approaching");
-  const reset = () => setPhase("idle");
-  const running = phase !== "idle" && phase !== "destination";
+    const durations: Record<Phase, number> = {
+      idle: delay || 1600,
+      approaching: 1100,
+      detected: 900,
+      opening: 1000,
+      destination: 5000,
+    };
+    const next: Record<Phase, Phase> = {
+      idle: "approaching",
+      approaching: "detected",
+      detected: "opening",
+      opening: "destination",
+      destination: "idle",
+    };
+    const timer = window.setTimeout(() => {
+      if (phase === "detected" && navigator.vibrate) navigator.vibrate(80);
+      setPhase(next[phase]);
+    }, durations[phase]);
+    return () => window.clearTimeout(timer);
+  }, [phase, delay]);
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
       <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] p-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary-dark)]">{isBusiness ? <Building2 className="h-5 w-5" /> : <UserRound className="h-5 w-5" />}</div>
-          <div><span className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">Toque {isBusiness ? "Público" : "Personal"} · {type}</span><h3 className="font-semibold text-[var(--foreground)]">{isBusiness ? "Reseña de empresa" : "Reseña de empleado"}</h3></div>
+          <div><span className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">Tipo {type} · Toque {isBusiness ? "Público" : "Personal"}</span><h3 className="font-semibold text-[var(--foreground)]">{isBusiness ? "Reseña de empresa" : "Reseña de empleado"}</h3></div>
         </div>
-        <span className={`rounded-full px-3 py-1 text-xs font-medium transition ${running ? "bg-amber-100 text-amber-700" : phase === "destination" ? "bg-green-100 text-green-700" : "bg-[var(--muted)] text-[var(--muted-foreground)]"}`}>{running ? "Simulando…" : phase === "destination" ? "NFC abierto" : "Demo"}</span>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <p className="mb-5 text-sm leading-relaxed text-[var(--muted-foreground)]">{isBusiness ? "El NFC abre directamente la reseña pública de Google del negocio." : "El NFC identifica al empleado y abre su formulario privado de valoración."}</p>
         <div className="relative mb-5 min-h-[560px] flex-1 overflow-hidden rounded-2xl border border-[var(--border)] bg-[radial-gradient(circle_at_50%_25%,#ffffff_0%,#f2f3f1_55%,#e6e8e4_100%)]">
           {phase !== "destination" && (
             <>
@@ -155,47 +156,28 @@ function Simulator({ type }: SimulatorProps) {
           )}
           {phase === "destination" && <div className="absolute inset-0 flex animate-[fade-in_400ms_ease-out] items-center justify-center p-2"><PhoneFrame expanded>{isBusiness ? <GoogleReviewScreen /> : <EmployeeReviewScreen />}</PhoneFrame></div>}
         </div>
-        <button type="button" onClick={phase === "idle" ? start : reset} disabled={running} className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-5 py-3 text-sm font-semibold text-[var(--background)] transition hover:opacity-90 disabled:cursor-wait disabled:opacity-60">
-          {phase === "idle" ? <SmartphoneNfc className="h-4 w-4" /> : phase === "destination" ? <RotateCcw className="h-4 w-4" /> : <LoaderCircle className="h-4 w-4 animate-spin" />}
-          {phase === "idle" ? `Simular NFC tipo ${type}` : phase === "destination" ? "Reiniciar simulación" : "Simulación en curso…"}
-        </button>
+        <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
+          <span className="font-semibold text-[var(--foreground)]">Tag tipo {type}.</span>{" "}
+          {isBusiness
+            ? "El tap redirige directo a la ficha de Google Reviews del negocio — reputación pública. Solo contamos cada lectura."
+            : "El tap abre nuestro formulario interno con el empleado ya identificado — alimenta el ranking del equipo y nunca sale de la plataforma."}
+        </p>
       </div>
     </article>
   );
 }
 
 export function NfcSimulators() {
-  const [selectedType, setSelectedType] = useState<"A" | "B">("A");
-
   return (
     <section className="mb-20">
       <div className="mb-8 text-center">
-        <p className="mb-2 text-sm font-semibold text-[var(--primary-dark)]">Pruébalo tú mismo</p>
+        <p className="mb-2 text-sm font-semibold text-[var(--primary-dark)]">Así funciona</p>
         <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">Dos NFC, dos experiencias</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[var(--muted-foreground)] md:text-base">Mira cómo el teléfono detecta el chip y prueba la experiencia completa del cliente.</p>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[var(--muted-foreground)] md:text-base">Mira cómo el teléfono detecta el chip y qué destino se abre según el tipo de tag.</p>
       </div>
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-4 grid grid-cols-2 rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-1.5">
-          <button
-            type="button"
-            onClick={() => setSelectedType("A")}
-            aria-pressed={selectedType === "A"}
-            className={`flex items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-semibold transition ${selectedType === "A" ? "bg-white text-[var(--foreground)] shadow-[var(--shadow-sm)]" : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"}`}
-          >
-            <Building2 className="h-4 w-4" />
-            Reseña de empresa
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelectedType("B")}
-            aria-pressed={selectedType === "B"}
-            className={`flex items-center justify-center gap-2 rounded-xl px-3 py-3 text-sm font-semibold transition ${selectedType === "B" ? "bg-white text-[var(--foreground)] shadow-[var(--shadow-sm)]" : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"}`}
-          >
-            <UserRound className="h-4 w-4" />
-            Reseña de empleado
-          </button>
-        </div>
-        <Simulator key={selectedType} type={selectedType} />
+      <div className="grid gap-8 md:grid-cols-2">
+        <Simulator type="A" />
+        <Simulator type="B" delay={2200} />
       </div>
     </section>
   );

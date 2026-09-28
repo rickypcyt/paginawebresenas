@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/navigation/Navbar";
-import { Footer } from "@/components/navigation/Footer";
 
 export default function AppLayout({
   children,
@@ -10,7 +9,6 @@ export default function AppLayout({
     <>
       <Navbar />
       <main className="pb-20 md:pb-0">{children}</main>
-      <Footer />
     </>
   );
 }

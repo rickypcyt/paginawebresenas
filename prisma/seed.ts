@@ -211,6 +211,136 @@ async function main() {
     console.log("SEED_ADMIN_EMAIL y SEED_ADMIN_PASSWORD no definidos. Saltando admin.");
   }
 
+  // ---------- Cuentas demo por rol (solo para desarrollo) ----------
+  const demoPassword = process.env.SEED_DEMO_PASSWORD || "demo1234";
+
+  async function upsertDemoUser(email: string, name: string, role: "user" | "employee" | "business" | "admin") {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) return existing;
+    const id = crypto.randomUUID();
+    const now = new Date();
+    const password = await hashPassword(demoPassword);
+    const [user] = await prisma.$transaction([
+      prisma.user.create({
+        data: { id, name, email, emailVerified: true, role, createdAt: now, updatedAt: now },
+      }),
+      prisma.account.create({
+        data: {
+          id: crypto.randomUUID(),
+          accountId: id,
+          providerId: "credential",
+          userId: id,
+          password,
+          createdAt: now,
+          updatedAt: now,
+        },
+      }),
+    ]);
+    console.log(`Cuenta demo ${email} (${role}) creada.`);
+    return user;
+  }
+
+  const jefe = await upsertDemoUser("jefe@toque.test", "Jefe Demo", "business");
+  const empleado = await upsertDemoUser("empleado@toque.test", "María González", "employee");
+  await upsertDemoUser("cliente@toque.test", "Cliente Demo", "user");
+  if (!adminEmail || !adminPassword) {
+    await upsertDemoUser("admin@toque.test", "Admin Demo", "admin");
+  }
+
+  // Negocio demo del jefe con empleados y reseñas para el ranking
+  const cafe = await prisma.business.findFirst({
+    where: { name: "Café Demo", ownerId: jefe.id },
+  });
+  const demoBusiness = cafe ?? (await (async () => {
+    const category = await prisma.category.findUnique({ where: { slug: "cafeterias" } });
+    const slug = generateUniqueSlug("Café Demo", slugs);
+    slugs.push(slug);
+    const created = await prisma.business.create({
+      data: {
+        name: "Café Demo",
+        slug,
+        categoryId: category?.id ?? null,
+        ownerId: jefe.id,
+        city: "Guayaquil",
+        address: "Av. Demo 123",
+        description: "Negocio de prueba para el panel del jefe.",
+        status: "verified",
+      },
+    });
+    await prisma.nfcTag.create({
+      data: {
+        token: crypto.randomUUID(),
+        label: "NFC reseñas de Google",
+        type: "business_google",
+        businessId: created.id,
+      },
+    });
+    return created;
+  })());
+
+  const demoEmployees: Array<{ name: string; role: string; userId?: string }> = [
+    { name: empleado.name, role: "Mesera", userId: empleado.id },
+    { name: "Carlos Rivera", role: "Barista" },
+    { name: "Ana Torres", role: "Caja" },
+  ];
+
+  const employeeIds: string[] = [];
+  for (const e of demoEmployees) {
+    let employee = await prisma.employee.findFirst({
+      where: { businessId: demoBusiness.id, name: e.name },
+    });
+    employee ??= await prisma.employee.create({
+      data: {
+        name: e.name,
+        role: e.role,
+        businessId: demoBusiness.id,
+        userId: e.userId ?? null,
+      },
+    });
+    employeeIds.push(employee.id);
+
+    const hasTag = await prisma.nfcTag.findFirst({
+      where: { employeeId: employee.id, type: "employee_review" },
+    });
+    if (!hasTag) {
+      await prisma.nfcTag.create({
+        data: {
+          token: crypto.randomUUID(),
+          label: `NFC de ${employee.name}`,
+          type: "employee_review",
+          businessId: demoBusiness.id,
+          employeeId: employee.id,
+        },
+      });
+    }
+  }
+
+  const cliente = await prisma.user.findUnique({ where: { email: "cliente@toque.test" } });
+  const demoReviewCount = await prisma.review.count({
+    where: { businessId: demoBusiness.id, employeeId: { not: null } },
+  });
+  if (cliente && demoReviewCount === 0) {
+    const titles = ["Atención excelente", "Muy buen servicio", "Podría mejorar", "Gran experiencia"];
+    const sampleReviews = [
+      { emp: 0, rating: 5, t: 0 }, { emp: 0, rating: 5, t: 3 }, { emp: 0, rating: 4, t: 1 },
+      { emp: 1, rating: 5, t: 1 }, { emp: 1, rating: 4, t: 3 }, { emp: 1, rating: 4, t: 0 },
+      { emp: 2, rating: 4, t: 1 }, { emp: 2, rating: 3, t: 2 }, { emp: 2, rating: 5, t: 3 },
+    ];
+    await prisma.review.createMany({
+      data: sampleReviews.map((r, i) => ({
+        title: titles[r.t],
+        content: "Reseña de prueba para el ranking del equipo.",
+        rating: r.rating,
+        verification: "nfc",
+        userId: cliente.id,
+        businessId: demoBusiness.id,
+        employeeId: employeeIds[r.emp],
+        createdAt: new Date(Date.now() - i * 26 * 60 * 60 * 1000),
+      })),
+    });
+    console.log("Reseñas demo creadas para Café Demo.");
+  }
+
   console.log("Seed completado.");
 }
 

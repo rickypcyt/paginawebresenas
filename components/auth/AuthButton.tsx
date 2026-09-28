@@ -19,7 +19,7 @@ export function AuthButton({ variant = "solid" }: { variant?: "solid" | "outline
   if (session) {
     return (
       <Link
-        href="/"
+        href="/profile"
         className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] transition-colors hover:bg-[var(--primary-dark)]"
       >
         Acceder a la app

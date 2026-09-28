@@ -70,8 +70,6 @@ export default async function OffersPage() {
           icon="🎁"
           title="No hay ofertas activas"
           description="Cuando los negocios publiquen promociones, aparecerán aquí para que las aproveches."
-          actionLabel="Explorar negocios"
-          actionHref="/explore"
         />
       )}
     </div>

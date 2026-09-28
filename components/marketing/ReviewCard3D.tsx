@@ -262,10 +262,10 @@ function drawA(ctx: CanvasRenderingContext2D, W: number, H: number) {
   ctx.fillText("Acerca tu móvil y déjanos", cx, H * 0.545);
   ctx.fillText("tu reseña", cx, H * 0.595);
   // NFC + QR: dos cuadrados iguales, simétricos, con etiqueta debajo de cada uno
-  const s = W * 0.205,
-    by = H * 0.645,
-    bx = W * 0.22,
-    qx = W * 0.575,
+  const s = W * 0.175,
+    by = H * 0.66,
+    bx = W * 0.235,
+    qx = W * 0.59,
     cc = W * 0.035;
   ctx.strokeStyle = "#1d1d1f";
   ctx.lineWidth = W * 0.007;
@@ -342,7 +342,7 @@ function drawB(ctx: CanvasRenderingContext2D, W: number, H: number) {
     gap = H * 0.098,
     x0 = W * 0.1 + sr + W * 0.006;
   for (let i = 0; i < 5; i++) star(ctx, x0 + i * gap, sy, sr, "#e7b53c");
-  nfcWaves(ctx, W * 0.87, H * 0.66, H * 0.11, "#ffffff");
+  nfcWaves(ctx, W * 0.87, H * 0.66, H * 0.09, "#ffffff");
 }
 
 function buildA() {

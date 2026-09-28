@@ -5,7 +5,7 @@ import { OfferCard } from "@/components/offers/OfferCard";
 
 export default async function ProfileOffersPage() {
   const session = await getSession();
-  if (!session?.user?.id) redirect("/explore");
+  if (!session?.user?.id) redirect("/");
 
   const redemptions = await prisma.offerRedemption.findMany({
     where: { userId: session.user.id },

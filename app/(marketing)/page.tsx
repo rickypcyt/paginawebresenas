@@ -50,8 +50,8 @@ export default function LandingPage() {
                 Solicitar NFCs para mi negocio
               </Link>
               <Link
-                href="/"
-                className="rounded-full px-7 py-3 text-sm font-medium text-[var(--primary)] transition hover:bg-[var(--primary-light)]"
+                href="/profile"
+                className="rounded-full bg-[var(--primary)] px-7 py-3 text-sm font-medium text-[var(--primary-foreground)] transition hover:bg-[var(--primary-dark)]"
               >
                 Acceder a la app
               </Link>
