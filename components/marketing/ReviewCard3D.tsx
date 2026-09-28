@@ -346,11 +346,12 @@ function drawB(ctx: CanvasRenderingContext2D, W: number, H: number) {
 }
 
 function buildA() {
+  // Placa NFC 9×9×0.5 cm (1 unidad = 2.5 cm)
   const g = new THREE.Group();
-  const w = 3.3,
-    h = 3.3,
-    d = 0.34,
-    r = 0.34;
+  const w = 3.6,
+    h = 3.6,
+    d = 0.2,
+    r = 0.3;
   g.add(plateMesh(w, h, d, r, 0xffffff));
   const front = new THREE.Mesh(
     new THREE.PlaneGeometry(w, h),
@@ -378,22 +379,23 @@ function buildA() {
 }
 
 function buildB() {
+  // Credencial NFC 8.5×5×0.5 cm (1 unidad = 2.5 cm)
   const g = new THREE.Group();
-  const w = 3.6,
+  const w = 3.4,
     h = 2.0,
-    d = 0.13,
-    r = 0.26;
+    d = 0.2,
+    r = 0.12;
   g.add(plateMesh(w, h, d, r, 0x141414));
   const front = new THREE.Mesh(
     new THREE.PlaneGeometry(w, h),
-    new THREE.MeshBasicMaterial({ map: cvTexture(1024, 569, drawB), transparent: true })
+    new THREE.MeshBasicMaterial({ map: cvTexture(1024, 603, drawB), transparent: true })
   );
   front.position.z = d / 2 + 0.06;
   g.add(front);
   const back = new THREE.Mesh(
     new THREE.PlaneGeometry(w, h),
     new THREE.MeshBasicMaterial({
-      map: cvTexture(512, 284, (ctx, W, H) => {
+      map: cvTexture(512, 301, (ctx, W, H) => {
         ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = "#141414";
         rr(ctx, 0, 0, W, H, H * 0.14);
@@ -411,8 +413,8 @@ function buildB() {
 
 // Radio de la esfera envolvente de cada modelo (para encuadre responsive)
 const BOUNDS: Record<ModelId, number> = {
-  a: Math.hypot(3.3 / 2, 3.3 / 2, 0.34 / 2),
-  b: Math.hypot(3.6 / 2, 2.0 / 2, 0.13 / 2),
+  a: Math.hypot(3.6 / 2, 3.6 / 2, 0.2 / 2),
+  b: Math.hypot(3.4 / 2, 2.0 / 2, 0.2 / 2),
 };
 
 export function ReviewCard3D() {

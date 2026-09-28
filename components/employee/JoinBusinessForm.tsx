@@ -102,7 +102,7 @@ export function JoinBusinessForm({ businesses }: { businesses: BusinessOption[] 
       <button type="submit" disabled={!businessId || loading} className="w-full rounded-full bg-[var(--foreground)] px-5 py-3 text-sm font-semibold text-[var(--background)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
         {loading ? "Enviando solicitud…" : "Solicitar acceso como empleado"}
       </button>
-      <p className="text-center text-xs leading-relaxed text-[var(--muted-foreground)]">No tendrás acceso al negocio hasta que el propietario apruebe tu solicitud.</p>
+      <p className="text-center text-xs leading-relaxed text-[var(--muted-foreground)]">No tendrás acceso al negocio hasta que nuestro equipo apruebe tu solicitud.</p>
     </form>
   );
 }

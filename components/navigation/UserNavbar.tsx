@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "@/lib/auth-client";
-import { isBusiness, isEmployee } from "@/lib/roles";
+import { isAdmin, isBusiness, isEmployee } from "@/lib/roles";
 import { Logo } from "@/components/brand/Logo";
 import { useState, useRef, useEffect } from "react";
 
@@ -28,7 +28,8 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
     ...(isBusiness(role) ? [{ href: "/dashboard", label: "Mi Toque · negocio" }] : []),
     ...(isEmployee(role) ? [{ href: "/employee", label: "Mi Toque · equipo" }] : []),
     ...(role === "user" ? [{ href: "/employee/join", label: "Unirme como empleado" }] : []),
-    ...(isBusiness(role) ? [{ href: "/businesses/new", label: "Registrar negocio" }] : []),
+    ...(isAdmin(role) ? [{ href: "/businesses/new", label: "Crear negocio" }] : []),
+    ...(role === "user" ? [{ href: "/business-requests", label: "Solicitar negocio" }] : []),
   ];
   const [open, setOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);

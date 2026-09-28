@@ -1,3 +1,4 @@
+import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { VerifyButton } from "./VerifyButton";
 
@@ -33,7 +34,12 @@ export default async function AdminBusinessesPage() {
                   {business.status === "premium" && "💎 Premium"}
                 </td>
                 <td className="px-4 py-3">
-                  {business.status === "claim_pending" && <VerifyButton id={business.id} />}
+                  <div className="flex items-center gap-3">
+                    {business.status === "claim_pending" && <VerifyButton id={business.id} />}
+                    <Link href={`/admin/businesses/${business.id}`} className="text-xs font-medium text-[var(--primary-dark)] hover:underline">
+                      Gestionar
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}

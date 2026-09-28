@@ -26,7 +26,7 @@ export default async function EmployeeJoinPage() {
         <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-8 shadow-[var(--shadow-sm)]">
           <Clock3 className="mx-auto mb-4 h-12 w-12 text-[var(--warning)]" />
           <h1 className="text-2xl font-semibold text-[var(--foreground)]">Solicitud pendiente</h1>
-          <p className="mt-3 text-[var(--muted-foreground)]">El propietario de <strong className="text-[var(--foreground)]">{request.business.name}</strong> debe aprobar tu ingreso.</p>
+          <p className="mt-3 text-[var(--muted-foreground)]">Nuestro equipo revisará tu solicitud para unirte a <strong className="text-[var(--foreground)]">{request.business.name}</strong>.</p>
           <p className="mt-2 text-sm text-[var(--muted-foreground)]">Te mostraremos el acceso de empleado cuando sea aprobada.</p>
         </div>
       </main>
@@ -45,7 +45,7 @@ export default async function EmployeeJoinPage() {
         {request?.status === "rejected" ? <XCircle className="mx-auto mb-3 h-10 w-10 text-[var(--destructive)]" /> : <ShieldCheck className="mx-auto mb-3 h-10 w-10 text-[var(--primary-dark)]" />}
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">Únete a tu empresa</h1>
         <p className="mt-3 text-sm leading-relaxed text-[var(--muted-foreground)]">
-          {request?.status === "rejected" ? "Tu solicitud anterior fue rechazada. Puedes comprobar los datos y volver a enviarla." : "Busca el negocio donde trabajas. El propietario verificará tu identidad antes de darte acceso."}
+          {request?.status === "rejected" ? "Tu solicitud anterior fue rechazada. Puedes comprobar los datos y volver a enviarla." : "Busca el negocio donde trabajas. Nuestro equipo verificará tu solicitud antes de darte acceso."}
         </p>
       </div>
       <JoinBusinessForm businesses={businesses} />

@@ -25,6 +25,7 @@ export function BusinessForm({ categories }: { categories: { id: string; name: s
   const [description, setDescription] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
+  const [ownerEmail, setOwnerEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -47,6 +48,7 @@ export function BusinessForm({ categories }: { categories: { id: string; name: s
         description,
         latitude,
         longitude,
+        ownerEmail,
       }),
     });
 
@@ -225,6 +227,24 @@ export function BusinessForm({ categories }: { categories: { id: string; name: s
             Lat: {latitude.toFixed(6)}, Lng: {longitude.toFixed(6)}
           </p>
         )}
+      </div>
+
+      <div>
+        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
+          Email del propietario <span className="font-normal text-[var(--muted-foreground)]">(opcional)</span>
+        </label>
+        <input
+          type="email"
+          value={ownerEmail}
+          onChange={(e) => setOwnerEmail(e.target.value)}
+          placeholder="jefe@negocio.com"
+          autoCapitalize="none"
+          autoCorrect="off"
+          className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
+        />
+        <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+          Si indicas el email de una cuenta existente, esa persona verá el negocio en su panel.
+        </p>
       </div>
 
       <button

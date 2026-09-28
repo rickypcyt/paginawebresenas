@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { generateUniqueSlug, slugify } from "@/lib/slug";
 import { awardAction } from "@/lib/gamification";
-import { requireSession, withErrorHandler, rateLimit, rateLimitResponse } from "@/lib/api-utils";
+import { requireSession, requireAdmin, withErrorHandler, rateLimit, rateLimitResponse } from "@/lib/api-utils";
 import { isAdmin as checkIsAdmin } from "@/lib/roles";
 import { randomUUID } from "node:crypto";
 
@@ -28,12 +28,12 @@ export async function GET() {
 }
 
 export const POST = withErrorHandler(async (request: Request) => {
-  const result = await requireSession();
+  const result = await requireAdmin();
   if ("error" in result) return result.error;
 
   const { user } = result.session;
 
-  if (!rateLimit(`create-business:${user.id}`, 5, 60_000)) {
+  if (!rateLimit(`create-business:${user.id}`, 20, 60_000)) {
     return rateLimitResponse();
   }
 
@@ -56,6 +56,19 @@ export const POST = withErrorHandler(async (request: Request) => {
   const description: string | undefined = body.description;
   const latitude: number | undefined = typeof body.latitude === "number" ? body.latitude : undefined;
   const longitude: number | undefined = typeof body.longitude === "number" ? body.longitude : undefined;
+  const ownerEmail: string | undefined =
+    typeof body.ownerEmail === "string" ? body.ownerEmail.trim().toLowerCase() || undefined : undefined;
+
+  let owner: { id: string } | null = null;
+  if (ownerEmail) {
+    owner = await prisma.user.findUnique({
+      where: { email: ownerEmail },
+      select: { id: true },
+    });
+    if (!owner) {
+      return NextResponse.json({ error: "No existe una cuenta con ese email" }, { status: 400 });
+    }
+  }
 
   const baseSlug = slugify(name);
   const existingSlugs = (
@@ -93,7 +106,7 @@ export const POST = withErrorHandler(async (request: Request) => {
         name,
         slug: generateUniqueSlug(name, existingSlugs),
         categoryId: finalCategoryId,
-        ownerId: user.id,
+        ownerId: owner?.id ?? null,
         address: address || null,
         city: city || null,
         phone: phone || null,
@@ -106,10 +119,14 @@ export const POST = withErrorHandler(async (request: Request) => {
         longitude: longitude ?? null,
       },
     }),
-    prisma.user.updateMany({
-      where: { id: user.id, role: { not: "admin" } },
-      data: { role: "business" },
-    }),
+    ...(owner
+      ? [
+          prisma.user.updateMany({
+            where: { id: owner.id, role: { not: "admin" } },
+            data: { role: "business" },
+          }),
+        ]
+      : []),
   ]);
 
   await prisma.nfcTag.create({
@@ -121,7 +138,7 @@ export const POST = withErrorHandler(async (request: Request) => {
     },
   });
 
-  await awardAction(user.id, "add_business");
+  await awardAction(owner?.id ?? user.id, "add_business");
 
   return NextResponse.json({ business });
 });

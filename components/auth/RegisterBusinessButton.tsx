@@ -22,15 +22,15 @@ export function RegisterBusinessButton({
 
   if (session) {
     return (
-      <Link href="/businesses/new" className={className}>
-        {children ?? "Registrar mi negocio"}
+      <Link href="/business-requests" className={className}>
+        {children ?? "Solicitar NFC para mi negocio"}
       </Link>
     );
   }
 
   return (
-    <button onClick={() => open("/businesses/new")} className={className}>
-      {children ?? "Registrar mi negocio"}
+    <button onClick={() => open("/business-requests")} className={className}>
+      {children ?? "Solicitar NFC para mi negocio"}
     </button>
   );
 }

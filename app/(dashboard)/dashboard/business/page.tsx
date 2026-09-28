@@ -21,17 +21,17 @@ export default async function DashboardBusinessPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-[var(--foreground)]">Mi negocio</h1>
         <Link
-          href="/businesses/new"
+          href="/business-requests"
           className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-white hover:bg-[var(--primary-dark)]"
         >
-          Crear negocio
+          Solicitar negocio
         </Link>
       </div>
       {businesses.length === 0 ? (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center">
           <p className="text-[var(--muted-foreground)]">Aún no tienes negocios registrados.</p>
           <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-            Desde el perfil puedes importar datos de Google Maps y crear tu negocio.
+            Solicita la activación de tu negocio y nuestro equipo lo dará de alta.
           </p>
         </div>
       ) : (

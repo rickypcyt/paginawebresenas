@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
 import { Prisma } from "@/src/generated/prisma/client";
 import prisma from "@/lib/prisma";
-import { rateLimit, rateLimitResponse, requireSession, withErrorHandler } from "@/lib/api-utils";
+import { rateLimit, rateLimitResponse, requireAdmin, withErrorHandler } from "@/lib/api-utils";
 
 interface JoinRequestRouteProps {
   params: Promise<{ id: string }>;
 }
 
 export const PATCH = withErrorHandler(async (request: Request, context: JoinRequestRouteProps) => {
-  const result = await requireSession();
+  const result = await requireAdmin();
   if ("error" in result) return result.error;
   const { user } = result.session;
   if (!rateLimit(`review-employee-join:${user.id}`, 20, 60_000)) return rateLimitResponse();
@@ -18,8 +19,8 @@ export const PATCH = withErrorHandler(async (request: Request, context: JoinRequ
   const action = body.action === "approve" || body.action === "reject" ? body.action : null;
   if (!action) return NextResponse.json({ error: "Acción inválida" }, { status: 400 });
 
-  const joinRequest = await prisma.employeeJoinRequest.findFirst({
-    where: { id, business: { ownerId: user.id } },
+  const joinRequest = await prisma.employeeJoinRequest.findUnique({
+    where: { id },
     include: { user: { select: { id: true, name: true, role: true } } },
   });
   if (!joinRequest) return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
@@ -47,12 +48,21 @@ export const PATCH = withErrorHandler(async (request: Request, context: JoinRequ
       });
       if (existingEmployee) throw new Error("ALREADY_ASSOCIATED");
 
-      await tx.employee.create({
+      const employee = await tx.employee.create({
         data: {
           userId: joinRequest.userId,
           businessId: joinRequest.businessId,
           name: joinRequest.user.name,
           role: joinRequest.jobTitle,
+        },
+      });
+      await tx.nfcTag.create({
+        data: {
+          token: randomUUID(),
+          label: `NFC de ${employee.name}`,
+          type: "employee_review",
+          businessId: joinRequest.businessId,
+          employeeId: employee.id,
         },
       });
       await tx.user.update({ where: { id: joinRequest.userId }, data: { role: "employee" } });

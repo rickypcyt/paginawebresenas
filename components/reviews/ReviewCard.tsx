@@ -11,6 +11,7 @@ interface ReviewCardProps {
     createdAt: Date;
     user?: { name?: string | null; image?: string | null } | null;
     business?: { name: string } | null;
+    employee?: { name: string } | null;
   };
 }
 
@@ -57,6 +58,11 @@ export function ReviewCard({ review }: ReviewCardProps) {
         ) : (
           <span className="rounded-full bg-[var(--muted)] px-2.5 py-0.5 text-[var(--muted-foreground)]">
             Sin verificación
+          </span>
+        )}
+        {review.employee && (
+          <span className="rounded-full bg-[var(--primary-light)] px-2.5 py-0.5 font-medium text-[var(--primary-dark)]">
+            {review.employee.name}
           </span>
         )}
         <span className="text-[var(--muted-foreground)]">

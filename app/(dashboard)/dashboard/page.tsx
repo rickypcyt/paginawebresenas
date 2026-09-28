@@ -82,9 +82,9 @@ export default async function DashboardHomePage({
         <EmptyState
           icon="🏪"
           title="Aún no tienes negocios"
-          description="Registra tu negocio para empezar a gestionar tus NFCs y reseñas."
-          actionLabel="Registrar negocio"
-          actionHref="/businesses/new"
+          description="Solicita la activación de tu negocio y nuestro equipo lo dará de alta."
+          actionLabel="Solicitar negocio"
+          actionHref="/business-requests"
         />
       </div>
     );

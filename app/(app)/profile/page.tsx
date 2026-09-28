@@ -82,12 +82,21 @@ export default async function ProfilePage() {
         </div>
         <div className="flex flex-wrap gap-2">
           <AuthButton />
-          <Link
-            href="/businesses/new"
-            className="rounded-lg border border-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary)] hover:bg-[var(--primary-light)]"
-          >
-            Registrar negocio
-          </Link>
+          {user?.role === "admin" ? (
+            <Link
+              href="/businesses/new"
+              className="rounded-lg border border-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary)] hover:bg-[var(--primary-light)]"
+            >
+              Crear negocio
+            </Link>
+          ) : (
+            <Link
+              href="/business-requests"
+              className="rounded-lg border border-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary)] hover:bg-[var(--primary-light)]"
+            >
+              Solicitar negocio
+            </Link>
+          )}
           {user?.role === "business" && (
             <Link
               href="/dashboard"
