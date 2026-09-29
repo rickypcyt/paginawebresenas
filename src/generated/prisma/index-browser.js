@@ -364,6 +364,25 @@ exports.Prisma.BusinessRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  requestId: 'requestId',
+  processUrl: 'processUrl',
+  product: 'product',
+  description: 'description',
+  quantity: 'quantity',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  buyerName: 'buyerName',
+  buyerEmail: 'buyerEmail',
+  buyerPhone: 'buyerPhone',
+  businessName: 'businessName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.BusinessRequestSupporterScalarFieldEnum = {
   id: 'id',
   requestId: 'requestId',
@@ -432,6 +451,22 @@ exports.BusinessRequestStatus = exports.$Enums.BusinessRequestStatus = {
   rejected: 'rejected'
 };
 
+exports.PaymentProduct = exports.$Enums.PaymentProduct = {
+  tag_a: 'tag_a',
+  plan_starter: 'plan_starter',
+  plan_business: 'plan_business',
+  plan_business_plus: 'plan_business_plus',
+  plan_enterprise: 'plan_enterprise'
+};
+
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  expired: 'expired',
+  failed: 'failed'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Category: 'Category',
@@ -455,6 +490,7 @@ exports.Prisma.ModelName = {
   UserBadge: 'UserBadge',
   ReviewVote: 'ReviewVote',
   BusinessRequest: 'BusinessRequest',
+  Payment: 'Payment',
   BusinessRequestSupporter: 'BusinessRequestSupporter'
 };
 

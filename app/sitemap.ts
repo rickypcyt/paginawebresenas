@@ -23,7 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`, lastModified: new Date(), changeFrequency: "daily", priority: 1.0 },
+    { url: `${baseUrl}/como-conseguir-resenas-google`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/nfc-para-restaurantes`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/feedback-empleados`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${baseUrl}/business-requests`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/negocios`, lastModified: new Date(), changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/ofertas`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.6 },
   ];
 
   const businessRoutes: MetadataRoute.Sitemap = businesses.map((b) => ({

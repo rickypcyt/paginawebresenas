@@ -3,15 +3,25 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ReviewCard } from "@/components/reviews/ReviewCard";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PeriodSelector } from "@/components/dashboard/PeriodSelector";
+import { DevRoleSwitcher } from "@/components/dev/DevRoleSwitcher";
+import { EmployeePanel } from "@/components/employee/EmployeePanel";
+import type { AppSession } from "@/lib/session";
 import {
   Star,
   TrendingUp,
   MousePointerClick,
   MessageSquareText,
-  ExternalLink,
-  ArrowRight,
 } from "lucide-react";
+
+const roleLabels: Record<string, string> = {
+  user: "Usuario",
+  employee: "Empleado",
+  business: "Negocio",
+  admin: "Admin",
+};
 
 interface DashboardHomePageProps {
   searchParams: Promise<{ businessId?: string; period?: string }>;
@@ -46,21 +56,13 @@ function isInRange(date: Date, range: ReturnType<typeof getPeriodRange>) {
   return !range || (date >= range.start && date < range.end);
 }
 
-function getPreviousRange(range: Exclude<ReturnType<typeof getPeriodRange>, null>) {
-  const duration = range.end.getTime() - range.start.getTime();
-  return { start: new Date(range.start.getTime() - duration), end: range.start };
-}
-
-function relativeTime(date: Date) {
-  const diff = (Date.now() - date.getTime()) / 1000;
-  if (diff < 60) return "hace un momento";
-  const mins = Math.floor(diff / 60);
-  if (mins < 60) return `hace ${mins} min`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `hace ${hours} h`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `hace ${days} d`;
-  return date.toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }
 
 export default async function DashboardHomePage({
@@ -69,16 +71,164 @@ export default async function DashboardHomePage({
   const session = await getSession();
   if (!session?.user) redirect("/");
 
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { name: true, email: true, role: true },
+  });
+
+  if (user?.role === "employee" || user?.role === "user") {
+    return <MemberDashboard session={session} user={user} />;
+  }
+
+  return <BusinessDashboard session={session} searchParams={searchParams} />;
+}
+
+function AccountHeader({ user }: { user: { name: string | null; email: string | null; role: string | null } | null }) {
+  return (
+    <div className="mb-8 flex items-center gap-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--primary)] text-2xl text-white">
+        {user?.name?.charAt(0).toUpperCase() || "👤"}
+      </div>
+      <div>
+        <h1 className="text-2xl font-bold text-[var(--foreground)]">
+          {user?.name || "Usuario"}
+        </h1>
+        <p className="text-sm text-[var(--muted-foreground)]">{user?.email}</p>
+        <span className="mt-1 inline-block rounded-full bg-[var(--accent)] px-2 py-0.5 text-xs font-medium text-[var(--accent-foreground)]">
+          {roleLabels[user?.role ?? "user"] ?? user?.role}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+async function MemberDashboard({
+  session,
+  user,
+}: {
+  session: NonNullable<AppSession>;
+  user: { name: string | null; email: string | null; role: string | null } | null;
+}) {
+  const isEmployee = user?.role === "employee";
+
+  const [employee, reviews] = await Promise.all([
+    isEmployee
+      ? prisma.employee.findUnique({
+          where: { userId: session.user.id },
+          include: {
+            business: {
+              select: {
+                name: true,
+                city: true,
+                employees: {
+                  include: { reviews: { select: { rating: true } } },
+                },
+              },
+            },
+            reviews: {
+              orderBy: { createdAt: "desc" },
+              include: {
+                user: { select: { name: true, image: true } },
+                business: { select: { name: true } },
+              },
+            },
+          },
+        })
+      : null,
+    prisma.review.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 4,
+      include: {
+        user: { select: { name: true, image: true } },
+        business: { select: { name: true } },
+      },
+    }),
+  ]);
+
+  return (
+    <div>
+      {process.env.NODE_ENV !== "production" && (
+        <DevRoleSwitcher currentRole={user?.role ?? undefined} />
+      )}
+      <AccountHeader user={user} />
+
+      {isEmployee && !employee && (
+        <div className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <p className="text-sm text-[var(--muted-foreground)]">
+            Tu cuenta de empleado aún no está vinculada a un negocio.
+          </p>
+          <Link
+            href="/employee/join"
+            className="mt-3 inline-block rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:bg-[var(--primary-dark)]"
+          >
+            Solicitar acceso a un negocio
+          </Link>
+        </div>
+      )}
+
+      {isEmployee && employee ? (
+        <>
+          <EmployeePanel employee={employee} />
+          <section className="mb-10">
+            <SectionHeader title="Reseñas que has recibido" subtitle="Lo que los clientes dicen de tu atención" />
+            {employee.reviews.length === 0 ? (
+              <EmptyState
+                icon="⭐"
+                title="Aún no has recibido reseñas"
+                description="Cuando un cliente acerque su teléfono a tu NFC, su valoración aparecerá aquí."
+              />
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2">
+                {employee.reviews.slice(0, 4).map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
+            )}
+          </section>
+        </>
+      ) : (
+        <section className="mb-10">
+          <SectionHeader title="Mis reseñas" subtitle="Tus reseñas publicadas" href="/dashboard/reviews" actionLabel="Ver todas" />
+          {reviews.length === 0 ? (
+            <EmptyState
+              icon="✍️"
+              title="Todavía no has escrito reseñas"
+              description="Acerca tu teléfono a un NFC Toque o visita un negocio para dejar tu reseña."
+            />
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2">
+              {reviews.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+    </div>
+  );
+}
+
+async function BusinessDashboard({
+  session,
+  searchParams,
+}: {
+  session: NonNullable<AppSession>;
+  searchParams: DashboardHomePageProps["searchParams"];
+}) {
   const businesses = await prisma.business.findMany({
     where: { ownerId: session.user.id },
-    select: { id: true, name: true, city: true },
+    select: { id: true, name: true },
     orderBy: { createdAt: "desc" },
   });
 
   if (businesses.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Vista actual</h1>
+        {process.env.NODE_ENV !== "production" && (
+          <DevRoleSwitcher currentRole={session.user.role} />
+        )}
+        <h1 className="text-2xl font-bold text-[var(--foreground)]">Mi negocio</h1>
         <EmptyState
           icon="🏪"
           title="Aún no tienes negocios"
@@ -86,6 +236,11 @@ export default async function DashboardHomePage({
           actionLabel="Solicitar negocio"
           actionHref="/business-requests"
         />
+        {session.user.role === "admin" && (
+          <Link href="/admin" className="inline-block text-sm font-medium text-[var(--primary-dark)] hover:underline">
+            Ir al panel de administración →
+          </Link>
+        )}
       </div>
     );
   }
@@ -100,15 +255,23 @@ export default async function DashboardHomePage({
     where: { id: selectedId },
     include: {
       employees: {
-        include: {
-          reviews: { select: { id: true, rating: true, createdAt: true } },
-        },
         orderBy: { createdAt: "desc" },
+        include: {
+          reviews: {
+            select: { id: true, rating: true, createdAt: true },
+            orderBy: { createdAt: "desc" },
+          },
+        },
       },
       nfcTags: true,
       reviews: {
-        select: { id: true, rating: true, employeeId: true, createdAt: true },
         orderBy: { createdAt: "desc" },
+        take: 6,
+        include: {
+          user: { select: { name: true, image: true } },
+          business: { select: { name: true } },
+          employee: { select: { name: true } },
+        },
       },
     },
   });
@@ -116,7 +279,7 @@ export default async function DashboardHomePage({
   if (!business) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Vista actual</h1>
+        <h1 className="text-2xl font-bold text-[var(--foreground)]">Mi negocio</h1>
         <p className="text-[var(--muted-foreground)]">No se encontró el negocio seleccionado.</p>
       </div>
     );
@@ -124,288 +287,184 @@ export default async function DashboardHomePage({
 
   const now = new Date();
   const periodRange = getPeriodRange(period, now);
-  const previousRange = periodRange ? getPreviousRange(periodRange) : null;
-  const allInternalReviews = business.reviews.filter((r) => r.employeeId != null);
-  const internalReviews = allInternalReviews.filter((r) => isInRange(r.createdAt, periodRange));
-  const previousInternalReviews = previousRange
-    ? allInternalReviews.filter((r) => isInRange(r.createdAt, previousRange))
-    : [];
-  const internalCount = internalReviews.length;
+
+  const allInternal = business.employees.flatMap((e) => e.reviews);
+  const inPeriod = allInternal.filter((r) => isInRange(r.createdAt, periodRange));
   const internalAvg =
-    internalCount > 0
-      ? internalReviews.reduce((sum, review) => sum + review.rating, 0) / internalCount
+    inPeriod.length > 0
+      ? inPeriod.reduce((s, r) => s + r.rating, 0) / inPeriod.length
+      : 0;
+  const goodPct =
+    inPeriod.length > 0
+      ? Math.round((inPeriod.filter((r) => r.rating >= 4).length / inPeriod.length) * 100)
       : 0;
 
-  const typeATags = business.nfcTags.filter((tag) => tag.type === "business_google");
-  const typeBTags = business.nfcTags.filter((tag) => tag.type === "employee_review");
-  const typeATokens = typeATags.map((tag) => tag.token);
+  const generalTags = business.nfcTags.filter((t) => t.type === "business_google");
+  const taps = await prisma.visit.count({
+    where: { businessId: business.id, createdAt: periodRange ? { gte: periodRange.start, lt: periodRange.end } : undefined },
+  });
 
-  const employeeStats = business.employees
-    .map((employee) => {
-      const reviews = employee.reviews.filter((review) => isInRange(review.createdAt, periodRange));
+  const employeeCards = business.employees
+    .map((e) => {
+      const reviews = e.reviews.filter((r) => isInRange(r.createdAt, periodRange));
       const total = reviews.length;
-      const good = reviews.filter((review) => review.rating >= 4).length;
-      const bad = reviews.filter((review) => review.rating <= 2).length;
-      const avg = total > 0 ? reviews.reduce((sum, review) => sum + review.rating, 0) / total : 0;
-      const percent = total > 0 ? Math.round((good / total) * 100) : 0;
+      const good = reviews.filter((r) => r.rating >= 4).length;
+      const bad = reviews.filter((r) => r.rating <= 2).length;
+      const avg = total > 0 ? reviews.reduce((s, r) => s + r.rating, 0) / total : 0;
       return {
-        id: employee.id,
-        name: employee.name,
-        initials: employee.name
-          .split(" ")
-          .map((word) => word[0])
-          .join("")
-          .slice(0, 2)
-          .toUpperCase(),
+        id: e.id,
+        name: e.name,
+        role: e.role,
         total,
         good,
         bad,
         avg,
-        percent,
       };
     })
-    .filter((employee) => employee.total > 0)
-    .sort((a, b) => b.avg - a.avg || b.good - a.good)
-    .slice(0, 3);
-
-  const createdAt = periodRange
-    ? { gte: periodRange.start, lt: periodRange.end }
-    : undefined;
-  const [generalTaps, visits] = await Promise.all([
-    typeATokens.length > 0
-      ? prisma.visit.count({
-          where: { businessId: business.id, token: { in: typeATokens }, createdAt },
-        })
-      : 0,
-    prisma.visit.findMany({
-      where: { businessId: business.id, createdAt },
-      orderBy: { createdAt: "desc" },
-      take: 8,
-      select: { id: true, token: true, createdAt: true },
-    }),
-  ]);
-
-  const tagByToken = new Map(business.nfcTags.map((t) => [t.token, t]));
-
-  const visitEvents = visits.map((v) => {
-    const tag = v.token ? tagByToken.get(v.token) : undefined;
-    let label = "Tap registrado";
-    if (tag) {
-      if (tag.type === "employee_review") {
-        const emp = tag.employeeId
-          ? business.employees.find((e) => e.id === tag.employeeId)
-          : undefined;
-        label = `Tap personal — ${emp?.name || tag.label}`;
-      } else {
-        label = `Tap general — ${tag.label}`;
-      }
-    }
-    return { id: v.id, label, detail: undefined as string | undefined, date: v.createdAt, type: "visit" as const };
-  });
-
-  const reviewEvents = business.reviews.filter((review) => isInRange(review.createdAt, periodRange)).slice(0, 8).map((r) => {
-    let label = "Reseña del negocio registrada";
-    if (r.employeeId) {
-      const emp = business.employees.find((e) => e.id === r.employeeId);
-      label = `Reseña interna registrada — ${emp?.name || "personal"}`;
-    }
-    return {
-      id: r.id,
-      label,
-      detail: `${r.rating}★`,
-      date: r.createdAt,
-      type: "review" as const,
-    };
-  });
-
-  const activity = [...visitEvents, ...reviewEvents]
-    .sort((a, b) => b.date.getTime() - a.date.getTime())
-    .slice(0, 8);
-
-  const trendDiff = periodRange
-    ? internalReviews.length - previousInternalReviews.length
-    : null;
+    .sort((a, b) => b.avg - a.avg || b.total - a.total);
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Vista actual</h1>
-        <p className="text-sm font-semibold text-[var(--foreground)]">
-          {business.name}
-        </p>
-      </div>
-
-      {/* Resumen */}
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-bold text-[var(--foreground)]">Resumen</h2>
-            <p className="text-sm text-[var(--muted-foreground)]">
-              {business.name} · {business.city || "Sin ciudad"}
-            </p>
-          </div>
+      {process.env.NODE_ENV !== "production" && (
+        <DevRoleSwitcher currentRole={session.user.role} />
+      )}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-medium text-[var(--muted-foreground)]">Panel del negocio</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--foreground)]">
+            {business.name}
+          </h1>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          {businesses.length > 1 && (
+            <div className="flex flex-wrap gap-2">
+              {businesses.map((b) => (
+                <Link
+                  key={b.id}
+                  href={`/dashboard?businessId=${b.id}&period=${period}`}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    b.id === business.id
+                      ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                      : "border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)]"
+                  }`}
+                >
+                  {b.name}
+                </Link>
+              ))}
+            </div>
+          )}
           <PeriodSelector value={period} />
         </div>
+      </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+      <section>
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+          Datos en vivo
+        </p>
+        <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-[var(--muted-foreground)]">Reseñas internas (tipo B)</p>
-                <p className="mt-1 text-3xl font-bold text-[var(--foreground)]">{internalCount}</p>
-                {trendDiff !== null && trendDiff !== 0 && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[var(--primary-dark)]">
-                    <TrendingUp className="h-3.5 w-3.5" />
-                    {trendDiff > 0 ? `+${trendDiff}` : trendDiff} vs. periodo anterior
-                  </p>
-                )}
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-light)] text-[var(--primary-dark)]">
-                <MessageSquareText className="h-5 w-5" />
-              </div>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-[var(--muted-foreground)]">Reseñas internas</p>
+              <MessageSquareText className="h-5 w-5 text-[var(--primary-dark)]" />
             </div>
+            <p className="mt-2 text-4xl font-bold text-[var(--foreground)]">{inPeriod.length}</p>
           </div>
-
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-[var(--muted-foreground)]">Rating interno promedio</p>
-                <p className="mt-1 text-3xl font-bold text-[var(--foreground)]">
-                  {internalAvg > 0 ? internalAvg.toFixed(1) : "—"}
-                  {internalAvg > 0 && <span className="text-lg text-[var(--muted-foreground)]">★</span>}
-                </p>
-                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                  de {internalCount} reseñas propias
-                </p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-light)] text-[var(--primary-dark)]">
-                <Star className="h-5 w-5" />
-              </div>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-[var(--muted-foreground)]">Rating promedio</p>
+              <Star className="h-5 w-5 text-[var(--star)]" />
             </div>
+            <p className="mt-2 text-4xl font-bold text-[var(--foreground)]">
+              {internalAvg > 0 ? internalAvg.toFixed(1) : "—"}
+              {internalAvg > 0 && <span className="text-xl text-[var(--star)]">★</span>}
+            </p>
           </div>
-
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-[var(--muted-foreground)]">Taps generales (tipo A)</p>
-                <p className="mt-1 text-3xl font-bold text-[var(--foreground)]">{generalTaps}</p>
-                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                  {typeATags.map((t) => t.label).join(", ") || "sin tags configurados"}
-                </p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-light)] text-[var(--primary-dark)]">
-                <MousePointerClick className="h-5 w-5" />
-              </div>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-[var(--muted-foreground)]">Taps NFC</p>
+              <MousePointerClick className="h-5 w-5 text-[var(--primary-dark)]" />
             </div>
-          </div>
-
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm text-[var(--muted-foreground)]">Google · agregado externo</p>
-                <p className="mt-1 text-3xl font-bold text-[var(--foreground)]">—</p>
-                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                  Sincroniza tu ficha de Google para verlo
-                </p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--muted)] text-[var(--muted-foreground)]">
-                <ExternalLink className="h-5 w-5" />
-              </div>
-            </div>
+            <p className="mt-2 text-4xl font-bold text-[var(--foreground)]">{taps}</p>
           </div>
         </div>
       </section>
 
-      {/* Explicación de tags */}
-      <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--primary-light)] p-5">
-          <h3 className="mb-2 text-base font-bold text-[var(--foreground)]">TAG TIPO A</h3>
-          <p className="text-sm font-semibold text-[var(--foreground)]">
-            {typeATags.length > 0 ? typeATags.map((t) => t.label).join(", ") : "Mesas, entrada, caja"}
-          </p>
-          <p className="mt-1 text-sm leading-relaxed text-[var(--muted-foreground)]">
-            El tap redirige directo a tu ficha de Google. No genera datos propios — solo contamos cuántas veces se tocó.
-          </p>
+      <section>
+        <div className="mb-4">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-[var(--primary-dark)]" />
+            <h2 className="text-lg font-bold text-[var(--foreground)]">Ranking del equipo</h2>
+          </div>
+          <p className="mt-1 text-sm text-[var(--muted-foreground)]">Valoraciones del periodo</p>
         </div>
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-5">
-          <h3 className="mb-2 text-base font-bold text-[var(--foreground)]">TAG TIPO B</h3>
-          <p className="text-sm font-semibold text-[var(--foreground)]">
-            {typeBTags.length > 0 ? "Personal, uno por colaborador" : "Personal, uno por colaborador"}
-          </p>
-          <p className="mt-1 text-sm leading-relaxed text-[var(--muted-foreground)]">
-            El tap abre nuestro propio formulario. Alimenta el ranking interno del equipo — nunca sale de esta plataforma.
-          </p>
-        </div>
-      </section>
-
-      {/* Top del mes */}
-      <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-[var(--foreground)]">Top del periodo</h2>
-          <Link
-            href="/dashboard/team"
-            className="flex items-center gap-1 text-sm font-medium text-[var(--primary-dark)] hover:underline"
-          >
-            Ranking completo en &quot;Personal y ranking&quot; <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-        {employeeStats.length === 0 ? (
+        {employeeCards.length === 0 ? (
           <p className="text-sm text-[var(--muted-foreground)]">
-            Aún no hay reseñas internas en este periodo.
+            Aún no tienes empleados registrados en este negocio.
           </p>
         ) : (
           <div className="space-y-3">
-            {employeeStats.map((emp, idx) => (
-              <div
+            {employeeCards.map((emp, idx) => (
+              <Link
                 key={emp.id}
-                className="flex items-center gap-4 rounded-xl border border-[var(--border)] p-3"
+                href={`/dashboard/employees/${emp.id}`}
+                className="group flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 transition hover:border-[var(--primary)] hover:shadow-[var(--shadow-lg)]"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--primary-light)] text-sm font-bold text-[var(--primary-dark)]">
+                <span
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+                    idx === 0
+                      ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                      : "bg-[var(--primary-light)] text-[var(--primary-dark)]"
+                  }`}
+                >
                   #{idx + 1}
                 </span>
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--muted)] text-sm font-bold text-[var(--foreground)]">
-                  {emp.initials}
-                </div>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--muted)] text-sm font-bold text-[var(--foreground)]">
+                  {initials(emp.name)}
+                </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                  <p className="truncate text-sm font-semibold text-[var(--foreground)] group-hover:text-[var(--primary-dark)]">
                     {emp.name}
                   </p>
                   <p className="text-xs text-[var(--muted-foreground)]">
-                    {emp.good} buenas · {emp.bad} malas · {emp.percent}%
+                    {emp.role || "Colaborador"}
                   </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-bold text-[var(--foreground)]">{emp.avg.toFixed(1)}★</p>
+                <div className="flex items-center gap-6 text-right">
+                  <div>
+                    <p className="text-lg font-bold text-[var(--foreground)]">{emp.total}</p>
+                    <p className="text-xs text-[var(--muted-foreground)]">valoraciones</p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-[var(--foreground)]">
+                      {emp.total > 0 ? emp.avg.toFixed(1) : "—"}
+                      {emp.total > 0 && <span className="text-sm text-[var(--star)]">★</span>}
+                    </p>
+                    <p className="text-xs text-[var(--muted-foreground)]">
+                      {emp.good} buenas · {emp.bad} malas
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
       </section>
 
-      {/* Actividad reciente */}
-      <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-        <h2 className="mb-4 text-lg font-bold text-[var(--foreground)]">Actividad reciente</h2>
-        {activity.length === 0 ? (
+      <section>
+        <div className="mb-4 flex items-center gap-2">
+          <MessageSquareText className="h-5 w-5 text-[var(--primary-dark)]" />
+          <h2 className="text-lg font-bold text-[var(--foreground)]">Últimas reseñas</h2>
+        </div>
+        {business.reviews.length === 0 ? (
           <p className="text-sm text-[var(--muted-foreground)]">
-            Aún no hay actividad reciente.
+            Aún no hay reseñas en este negocio.
           </p>
         ) : (
-          <ul className="space-y-3">
-            {activity.map((item) => (
-              <li key={`${item.type}-${item.id}`} className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium text-[var(--foreground)]">{item.label}</p>
-                  {item.detail && (
-                    <p className="text-xs text-[var(--muted-foreground)]">{item.detail}</p>
-                  )}
-                </div>
-                <span className="shrink-0 text-xs text-[var(--muted-foreground)]">
-                  {relativeTime(item.date)}
-                </span>
-              </li>
+          <div className="grid gap-4">
+            {business.reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
             ))}
-          </ul>
+          </div>
         )}
       </section>
     </div>

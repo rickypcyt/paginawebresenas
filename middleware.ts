@@ -3,9 +3,8 @@ import type { NextRequest } from "next/server";
 
 const protectedPaths = [
   { prefix: "/admin", roles: ["admin"] },
-  { prefix: "/dashboard", roles: ["business", "admin"] },
+  { prefix: "/dashboard", roles: ["user", "employee", "business", "admin"] },
   { prefix: "/employee", roles: ["user", "employee"] },
-  { prefix: "/profile", roles: ["user", "employee", "business", "admin"] },
 ];
 
 export function middleware(request: NextRequest) {
@@ -28,5 +27,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/dashboard/:path*", "/employee/:path*", "/profile/:path*"],
+  matcher: ["/admin/:path*", "/dashboard/:path*", "/employee/:path*"],
 };

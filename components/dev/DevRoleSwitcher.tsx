@@ -11,9 +11,10 @@ const ROLES = [
 ] as const;
 
 const REDIRECTS: Record<string, string> = {
-  employee: "/profile",
+  user: "/dashboard",
+  employee: "/dashboard",
   business: "/dashboard",
-  admin: "/admin",
+  admin: "/dashboard",
 };
 
 export function DevRoleSwitcher({ currentRole }: { currentRole?: string | null }) {

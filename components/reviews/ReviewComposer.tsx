@@ -56,7 +56,7 @@ export function ReviewComposer({
           ¡Reseña publicada!
         </p>
         <p className="mt-1 text-sm text-[var(--accent-foreground)] opacity-80">
-          +50 puntos por compartir tu experiencia
+          +50 puntos por dejar tu reseña
         </p>
       </div>
     );
@@ -69,7 +69,7 @@ export function ReviewComposer({
     >
       <div>
         <h2 className="text-base font-bold text-[var(--foreground)]">
-          Comparte tu experiencia
+          Deja tu reseña
         </h2>
         <p className="mt-0.5 text-sm text-[var(--muted-foreground)]">
           Tu reseña ayuda a otros usuarios a descubrir buenos lugares.
@@ -79,7 +79,7 @@ export function ReviewComposer({
       {/* Star rating selector */}
       <div>
         <label className="mb-1.5 block text-sm font-medium text-[var(--foreground)]">
-          Tu valoración
+          Puntuación
         </label>
         <div className="flex gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -115,7 +115,7 @@ export function ReviewComposer({
 
       <div>
         <label className="mb-1.5 block text-sm font-medium text-[var(--foreground)]">
-          Tu experiencia
+          Tu reseña
         </label>
         <textarea
           value={content}

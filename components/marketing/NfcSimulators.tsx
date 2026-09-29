@@ -1,15 +1,35 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2, Check, CheckCircle2, LoaderCircle, Send, Star, UserRound, Wifi } from "lucide-react";
+import { Building2, Check, CheckCircle2, LoaderCircle, MousePointerClick, Send, Star, UserRound, Wifi } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 
-interface SimulatorProps {
-  type: "A" | "B";
-  delay?: number;
-}
-
+type NfcType = "A" | "B";
 type Phase = "idle" | "approaching" | "detected" | "opening" | "destination";
+
+const TYPE_INFO: Record<
+  NfcType,
+  { name: string; icon: typeof Building2; title: string; desc: string; destination: string; objective: string; footer: string }
+> = {
+  A: {
+    name: "Toque Público",
+    icon: Building2,
+    title: "Más visibilidad para tu negocio",
+    desc: "El cliente accede a la ficha de Google de tu establecimiento y puede dejar su reseña pública.",
+    destination: "Google Reviews",
+    objective: "Facilitar el acceso a las reseñas públicas",
+    footer: "El tap redirige directo a la ficha de Google Reviews del negocio — reputación pública. Solo contamos cada lectura.",
+  },
+  B: {
+    name: "Toque Personal",
+    icon: UserRound,
+    title: "Mejora la experiencia de tu equipo",
+    desc: "El cliente valora la atención recibida mediante un formulario interno asociado al empleado.",
+    destination: "Plataforma Toque",
+    objective: "Feedback, evolución y ranking interno",
+    footer: "El tap abre nuestro formulario interno con el empleado ya identificado — alimenta el ranking del equipo y nunca sale de la plataforma.",
+  },
+};
 
 function GoogleMark() {
   return <span className="text-lg font-bold"><span className="text-[#4285f4]">G</span></span>;
@@ -97,43 +117,93 @@ function EmployeeReviewScreen() {
   );
 }
 
-function Simulator({ type, delay = 0 }: SimulatorProps) {
+export function NfcSimulators() {
+  const [type, setType] = useState<NfcType>("A");
   const [phase, setPhase] = useState<Phase>("idle");
+  const info = TYPE_INFO[type];
   const isBusiness = type === "A";
 
+  function selectType(next: NfcType) {
+    setType(next);
+    setPhase("idle");
+  }
+
+  function handleTap() {
+    if (phase === "idle") setPhase("approaching");
+    else if (phase === "destination") setPhase("idle");
+  }
+
   useEffect(() => {
-    const durations: Record<Phase, number> = {
-      idle: delay || 1600,
-      approaching: 1100,
-      detected: 900,
-      opening: 1000,
-      destination: 5000,
-    };
-    const next: Record<Phase, Phase> = {
-      idle: "approaching",
-      approaching: "detected",
-      detected: "opening",
-      opening: "destination",
-      destination: "idle",
-    };
+    if (phase === "idle" || phase === "destination") return;
+    const durations = { approaching: 1100, detected: 900, opening: 1000 } as const;
+    const next = { approaching: "detected", detected: "opening", opening: "destination" } as const;
     const timer = window.setTimeout(() => {
       if (phase === "detected" && navigator.vibrate) navigator.vibrate(80);
       setPhase(next[phase]);
     }, durations[phase]);
     return () => window.clearTimeout(timer);
-  }, [phase, delay]);
+  }, [phase]);
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
-      <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] p-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary-dark)]">{isBusiness ? <Building2 className="h-5 w-5" /> : <UserRound className="h-5 w-5" />}</div>
-          <div><span className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">Tipo {type} · Toque {isBusiness ? "Público" : "Personal"}</span><h3 className="font-semibold text-[var(--foreground)]">{isBusiness ? "Reseña de empresa" : "Reseña de empleado"}</h3></div>
-        </div>
+    <article className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+      {/* Selector */}
+      <div className="grid grid-cols-2 border-b border-[var(--border)]">
+        {(["A", "B"] as const).map((t) => {
+          const active = t === type;
+          const Icon = TYPE_INFO[t].icon;
+          return (
+            <button
+              key={t}
+              type="button"
+              onClick={() => selectType(t)}
+              className={`flex items-center justify-center gap-2 px-4 py-4 text-sm font-semibold transition-colors ${
+                active
+                  ? "bg-[var(--primary-light)] text-[var(--primary-dark)]"
+                  : "text-[var(--muted-foreground)] hover:bg-[var(--muted)]"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+              Tipo {t} · {TYPE_INFO[t].name}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="flex flex-1 flex-col p-6">
-        <div className="relative mb-5 min-h-[560px] flex-1 overflow-hidden rounded-2xl border border-[var(--border)] bg-[radial-gradient(circle_at_50%_25%,#ffffff_0%,#f2f3f1_55%,#e6e8e4_100%)]">
+      <div className="grid gap-6 p-6 lg:grid-cols-[0.85fr_1.15fr]">
+        {/* Info del tipo seleccionado */}
+        <div className="flex flex-col justify-center">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary-dark)]">
+              <info.icon className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">
+                Tipo {type} · {info.name}
+              </p>
+              <h3 className="font-semibold text-[var(--foreground)]">{info.title}</h3>
+            </div>
+          </div>
+          <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">{info.desc}</p>
+          <dl className="mt-5 divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] bg-[var(--muted)]/40">
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+              <dt className="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Destino</dt>
+              <dd className="text-sm font-semibold text-[var(--foreground)]">{info.destination}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+              <dt className="shrink-0 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Objetivo</dt>
+              <dd className="text-right text-sm text-[var(--foreground)]">{info.objective}</dd>
+            </div>
+          </dl>
+          <p className="mt-4 text-xs leading-relaxed text-[var(--muted-foreground)]">{info.footer}</p>
+        </div>
+
+        {/* Demo interactivo */}
+        <div
+          className="relative min-h-[560px] cursor-pointer overflow-hidden rounded-2xl border border-[var(--border)] bg-[radial-gradient(circle_at_50%_25%,#ffffff_0%,#f2f3f1_55%,#e6e8e4_100%)]"
+          onClick={handleTap}
+          role="button"
+          aria-label={phase === "idle" ? "Toca para probar la animación NFC" : phase === "destination" ? "Toca para reiniciar" : "Demo NFC en curso"}
+        >
           {phase !== "destination" && (
             <>
               <div className="absolute left-1/2 top-8 -translate-x-1/2">
@@ -147,38 +217,34 @@ function Simulator({ type, delay = 0 }: SimulatorProps) {
               <div className={`absolute -bottom-6 left-1/2 -translate-x-1/2 transition-all ease-in-out ${phase === "idle" ? "translate-y-8 rotate-[-8deg]" : phase === "approaching" ? "-translate-y-24 rotate-[5deg] duration-1000" : "-translate-y-28 rotate-[2deg] duration-200"}`}>
                 <PhoneFrame pulse={phase === "detected"}>
                   <div className="flex h-full flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 text-center">
-                    {phase === "detected" ? <><CheckCircle2 className="mb-3 h-10 w-10 text-green-500" /><p className="text-xs font-semibold">NFC detectado</p><p className="mt-1 text-[9px] text-gray-500">Toque {type === "A" ? "Público" : "Personal"}</p></> : phase === "opening" ? <><LoaderCircle className="mb-3 h-9 w-9 animate-spin text-green-600" /><p className="text-xs font-semibold">Abriendo enlace…</p></> : <><Wifi className="mb-3 h-9 w-9 rotate-90 text-gray-400" /><p className="text-xs font-semibold">Listo para detectar</p></>}
+                    {phase === "detected" ? (
+                      <><CheckCircle2 className="mb-3 h-10 w-10 text-green-500" /><p className="text-xs font-semibold">NFC detectado</p><p className="mt-1 text-[9px] text-gray-500">Toque {type === "A" ? "Público" : "Personal"}</p></>
+                    ) : phase === "opening" ? (
+                      <><LoaderCircle className="mb-3 h-9 w-9 animate-spin text-green-600" /><p className="text-xs font-semibold">Abriendo enlace…</p></>
+                    ) : (
+                      <><Wifi className="mb-3 h-9 w-9 rotate-90 text-gray-400" /><p className="text-xs font-semibold">Listo para detectar</p></>
+                    )}
                   </div>
                 </PhoneFrame>
               </div>
-              <p className="absolute bottom-2 left-0 right-0 text-center text-[10px] font-medium text-gray-500">{phase === "idle" ? "" : phase === "approaching" ? "Acercando al chip NFC…" : phase === "detected" ? "Vibración y confirmación instantánea" : "Redirigiendo al destino seguro…"}</p>
+              {phase === "idle" && (
+                <div className="absolute inset-x-0 top-40 flex flex-col items-center gap-2 text-gray-500">
+                  <MousePointerClick className="h-6 w-6 animate-bounce" />
+                  <p className="text-xs font-semibold">Toca la pantalla para probar el tap</p>
+                </div>
+              )}
+              <p className="absolute bottom-2 left-0 right-0 text-center text-[10px] font-medium text-gray-500">
+                {phase === "approaching" ? "Acercando al chip NFC…" : phase === "detected" ? "Vibración y confirmación instantánea" : phase === "opening" ? "Redirigiendo al destino seguro…" : ""}
+              </p>
             </>
           )}
-          {phase === "destination" && <div className="absolute inset-0 flex animate-[fade-in_400ms_ease-out] items-center justify-center p-2"><PhoneFrame expanded>{isBusiness ? <GoogleReviewScreen /> : <EmployeeReviewScreen />}</PhoneFrame></div>}
+          {phase === "destination" && (
+            <div className="absolute inset-0 flex animate-[fade-in_400ms_ease-out] items-center justify-center p-2">
+              <PhoneFrame expanded>{isBusiness ? <GoogleReviewScreen /> : <EmployeeReviewScreen />}</PhoneFrame>
+            </div>
+          )}
         </div>
-        <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">
-          <span className="font-semibold text-[var(--foreground)]">Tag tipo {type}.</span>{" "}
-          {isBusiness
-            ? "El tap redirige directo a la ficha de Google Reviews del negocio — reputación pública. Solo contamos cada lectura."
-            : "El tap abre nuestro formulario interno con el empleado ya identificado — alimenta el ranking del equipo y nunca sale de la plataforma."}
-        </p>
       </div>
     </article>
-  );
-}
-
-export function NfcSimulators() {
-  return (
-    <section className="mb-20">
-      <div className="mb-8 text-center">
-        <p className="mb-2 text-sm font-semibold text-[var(--primary-dark)]">Así funciona</p>
-        <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">Dos NFC, dos experiencias</h2>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[var(--muted-foreground)] md:text-base">Mira cómo el teléfono detecta el chip y qué destino se abre según el tipo de tag.</p>
-      </div>
-      <div className="grid gap-8 md:grid-cols-2">
-        <Simulator type="A" />
-        <Simulator type="B" delay={2200} />
-      </div>
-    </section>
   );
 }

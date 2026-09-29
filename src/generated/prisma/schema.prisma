@@ -433,6 +433,45 @@ model BusinessRequest {
   @@map("businessRequest")
 }
 
+enum PaymentStatus {
+  pending
+  approved
+  rejected
+  expired
+  failed
+}
+
+enum PaymentProduct {
+  tag_a
+  plan_starter
+  plan_business
+  plan_business_plus
+  plan_enterprise
+}
+
+model Payment {
+  id           String         @id @default(cuid())
+  reference    String         @unique
+  requestId    String?
+  processUrl   String?
+  product      PaymentProduct
+  description  String
+  quantity     Int            @default(1)
+  amount       Decimal        @db.Decimal(10, 2)
+  currency     String         @default("USD")
+  status       PaymentStatus  @default(pending)
+  buyerName    String
+  buyerEmail   String
+  buyerPhone   String?
+  businessName String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([status])
+  @@index([buyerEmail])
+  @@map("payment")
+}
+
 model BusinessRequestSupporter {
   id        String          @id @default(cuid())
   requestId String

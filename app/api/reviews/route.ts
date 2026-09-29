@@ -39,7 +39,7 @@ export const POST = withErrorHandler(async (request: Request) => {
     return NextResponse.json({ error: "El título es obligatorio" }, { status: 400 });
   }
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
-    return NextResponse.json({ error: "La valoración debe ser entre 1 y 5" }, { status: 400 });
+    return NextResponse.json({ error: "La puntuación debe ser entre 1 y 5" }, { status: 400 });
   }
 
   let resolvedBusinessId = businessId;
@@ -87,14 +87,25 @@ export const POST = withErrorHandler(async (request: Request) => {
     where: { userId: user.id },
   });
 
-  const recentVisit = await prisma.visit.findFirst({
-    where: {
-      userId: user.id,
-      businessId: resolvedBusinessId,
-      createdAt: { gte: new Date(Date.now() - 4 * 60 * 60 * 1000) },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  let visit = null;
+  if (!nfcTag) {
+    visit = await prisma.visit.findFirst({
+      where: {
+        userId: user.id,
+        businessId: resolvedBusinessId,
+        verification: "qr",
+        review: null,
+        createdAt: { gte: new Date(Date.now() - 4 * 60 * 60 * 1000) },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (!visit) {
+      return NextResponse.json(
+        { error: "Solo puedes reseñar tras escanear el QR o acercar tu teléfono al NFC del negocio" },
+        { status: 403 }
+      );
+    }
+  }
 
   const review = await prisma.review.create({
     data: {
@@ -103,8 +114,8 @@ export const POST = withErrorHandler(async (request: Request) => {
       rating,
       userId: user.id,
       businessId: resolvedBusinessId,
-      verification: nfcTag ? "nfc" : recentVisit ? recentVisit.verification : "none",
-      visitId: recentVisit?.id,
+      verification: nfcTag ? "nfc" : "qr",
+      visitId: visit?.id,
       employeeId,
     },
   });

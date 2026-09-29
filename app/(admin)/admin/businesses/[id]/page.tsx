@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { EmployeeNfcLink } from "@/components/dashboard/EmployeeNfcLink";
+import { AdminEntityActions } from "@/components/admin/AdminEntityActions";
 import { AddEmployeeForm } from "./AddEmployeeForm";
 
 interface AdminBusinessDetailProps {
@@ -19,12 +20,12 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
         orderBy: { createdAt: "asc" },
         include: {
           user: { select: { email: true } },
-          nfcTags: { where: { type: "employee_review" }, select: { token: true }, take: 1 },
+          nfcTags: { where: { type: "employee_review" }, select: { id: true, token: true, label: true, active: true }, take: 1 },
         },
       },
       nfcTags: {
         where: { type: "business_google" },
-        select: { id: true, token: true, label: true, scanCount: true },
+        select: { id: true, token: true, label: true, scanCount: true, active: true },
       },
     },
   });
@@ -56,12 +57,38 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
                   <p className="truncate text-sm font-semibold text-[var(--foreground)]">
                     {employee.name}
                     {employee.role && <span className="ml-2 text-xs font-normal text-[var(--muted-foreground)]">{employee.role}</span>}
+                    {!employee.active && <span className="ml-2 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-medium text-red-600">inactivo</span>}
                   </p>
-                  <p className="shrink-0 text-xs text-[var(--muted-foreground)]">
-                    {employee.user?.email || "sin cuenta vinculada"}
-                  </p>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <p className="text-xs text-[var(--muted-foreground)]">
+                      {employee.user?.email || "sin cuenta vinculada"}
+                    </p>
+                    <AdminEntityActions
+                      endpoint={`/api/admin/employees/${employee.id}`}
+                      fields={[
+                        { name: "name", label: "Nombre" },
+                        { name: "role", label: "Rol" },
+                        { name: "active", label: "Activo", type: "checkbox" },
+                      ]}
+                      values={{ name: employee.name, role: employee.role, active: employee.active }}
+                      deleteConfirm={`¿Eliminar a ${employee.name}?`}
+                    />
+                  </div>
                 </div>
                 <EmployeeNfcLink employeeId={employee.id} token={employee.nfcTags[0]?.token ?? null} />
+                {employee.nfcTags[0] && (
+                  <div className="mt-2">
+                    <AdminEntityActions
+                      endpoint={`/api/admin/nfc-tags/${employee.nfcTags[0].id}`}
+                      fields={[
+                        { name: "label", label: "Etiqueta" },
+                        { name: "active", label: "Tag activo", type: "checkbox" },
+                      ]}
+                      values={{ label: employee.nfcTags[0].label, active: employee.nfcTags[0].active }}
+                      deleteConfirm="¿Eliminar este tag NFC?"
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -80,7 +107,18 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
                   <p className="text-sm font-medium text-[var(--foreground)]">{tag.label}</p>
                   <code className="text-xs text-[var(--muted-foreground)]">/nfc/{tag.token}</code>
                 </div>
-                <p className="text-xs text-[var(--muted-foreground)]">{tag.scanCount} lecturas</p>
+                <div className="flex items-center gap-3">
+                  <p className="text-xs text-[var(--muted-foreground)]">{tag.scanCount} lecturas</p>
+                  <AdminEntityActions
+                    endpoint={`/api/admin/nfc-tags/${tag.id}`}
+                    fields={[
+                      { name: "label", label: "Etiqueta" },
+                      { name: "active", label: "Tag activo", type: "checkbox" },
+                    ]}
+                    values={{ label: tag.label, active: tag.active }}
+                    deleteConfirm="¿Eliminar este tag NFC?"
+                  />
+                </div>
               </div>
             ))}
           </div>

@@ -1,5 +1,7 @@
-import { Building2, Star, Trophy, MessageSquareText } from "lucide-react";
-import { ReviewCard } from "@/components/reviews/ReviewCard";
+import { Trophy, TrendingUp, TrendingDown } from "lucide-react";
+import type { ReviewCard } from "@/components/reviews/ReviewCard";
+
+type PanelReview = Parameters<typeof ReviewCard>[0]["review"];
 
 interface EmployeePanelProps {
   employee: {
@@ -11,97 +13,107 @@ interface EmployeePanelProps {
       city: string | null;
       employees: { id: string; name: string; reviews: { rating: number }[] }[];
     };
-    reviews: Parameters<typeof ReviewCard>[0]["review"][];
+    reviews: PanelReview[];
   };
 }
 
+function startOfMonth(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
 export function EmployeePanel({ employee }: EmployeePanelProps) {
-  const average = employee.reviews.length
-    ? employee.reviews.reduce((sum, review) => sum + review.rating, 0) / employee.reviews.length
+  const total = employee.reviews.length;
+  const average = total
+    ? employee.reviews.reduce((sum, review) => sum + review.rating, 0) / total
     : 0;
+  const positivePct = total
+    ? Math.round((employee.reviews.filter((r) => r.rating >= 4).length / total) * 100)
+    : 0;
+
+  const now = new Date();
+  const thisMonthStart = startOfMonth(now);
+  const lastMonthStart = startOfMonth(new Date(now.getFullYear(), now.getMonth() - 1, 1));
+
+  const thisMonth = employee.reviews.filter((r) => new Date(r.createdAt) >= thisMonthStart);
+  const lastMonth = employee.reviews.filter(
+    (r) => new Date(r.createdAt) >= lastMonthStart && new Date(r.createdAt) < thisMonthStart
+  );
+  const thisMonthAvg = thisMonth.length
+    ? thisMonth.reduce((s, r) => s + r.rating, 0) / thisMonth.length
+    : 0;
+  const lastMonthAvg = lastMonth.length
+    ? lastMonth.reduce((s, r) => s + r.rating, 0) / lastMonth.length
+    : 0;
+  const monthDelta =
+    thisMonthAvg > 0 && lastMonthAvg > 0 ? thisMonthAvg - lastMonthAvg : null;
 
   const ranking = employee.business.employees
     .map((e) => {
-      const total = e.reviews.length;
-      const avg = total > 0 ? e.reviews.reduce((s, r) => s + r.rating, 0) / total : 0;
-      return { id: e.id, name: e.name, total, avg };
+      const count = e.reviews.length;
+      const avg = count > 0 ? e.reviews.reduce((s, r) => s + r.rating, 0) / count : 0;
+      return { id: e.id, name: e.name, count, avg };
     })
-    .sort((a, b) => b.avg - a.avg || b.total - a.total);
+    .sort((a, b) => b.avg - a.avg || b.count - a.count);
 
   const myPosition = ranking.findIndex((e) => e.id === employee.id) + 1;
 
   return (
     <>
-      <section className="mb-8 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
-          <Building2 className="mb-4 h-7 w-7 text-[var(--primary-dark)]" />
-          <p className="text-sm text-[var(--muted-foreground)]">Empresa</p>
-          <p className="mt-1 text-xl font-semibold text-[var(--foreground)]">{employee.business.name}</p>
-          <p className="text-sm text-[var(--muted-foreground)]">{employee.business.city || "Ciudad no indicada"}</p>
-          {employee.role && <span className="mt-3 inline-block rounded-full bg-[var(--primary-light)] px-3 py-1 text-xs font-medium text-[var(--primary-dark)]">{employee.role}</span>}
-        </div>
-        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
-          <Star className="mb-4 h-7 w-7 text-[var(--star)]" />
-          <p className="text-sm text-[var(--muted-foreground)]">Valoración interna</p>
-          <p className="mt-1 text-3xl font-semibold text-[var(--foreground)]">{average ? `${average.toFixed(1)}★` : "—"}</p>
-          <p className="text-sm text-[var(--muted-foreground)]">{employee.reviews.length} reseñas recibidas</p>
-        </div>
+      <section className="mb-8">
+        <p className="text-sm font-medium text-[var(--primary-dark)]">Mi Toque</p>
+        <h2 className="mt-1 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+          {employee.name}
+        </h2>
+        <p className="text-sm text-[var(--muted-foreground)]">
+          {employee.role || "Colaborador"} · {employee.business.name}
+        </p>
       </section>
 
-      <section className="mb-8 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
-        <div className="mb-4 flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-[var(--primary-dark)]" />
-          <h2 className="font-semibold text-[var(--foreground)]">Ranking de {employee.business.name}</h2>
-          {myPosition > 0 && (
-            <span className="ml-auto rounded-full bg-[var(--primary-light)] px-2.5 py-0.5 text-xs font-semibold text-[var(--primary-dark)]">
-              Estás #{myPosition}
-            </span>
+      <section className="mb-8 grid gap-4 sm:grid-cols-3">
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <p className="text-sm text-[var(--muted-foreground)]">Tu valoración</p>
+          <p className="mt-2 text-4xl font-bold text-[var(--foreground)]">
+            {average > 0 ? average.toFixed(1) : "—"}
+            {average > 0 && <span className="text-2xl text-[var(--star)]">★</span>}
+          </p>
+          <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+            {total} reseña{total === 1 ? "" : "s"} recibida{total === 1 ? "" : "s"}
+          </p>
+          {monthDelta !== null && monthDelta !== 0 && (
+            <p className="mt-2 flex items-center gap-1 text-xs font-medium text-[var(--primary-dark)]">
+              {monthDelta > 0 ? (
+                <TrendingUp className="h-3.5 w-3.5" />
+              ) : (
+                <TrendingDown className="h-3.5 w-3.5" />
+              )}
+              {monthDelta > 0 ? "+" : ""}
+              {monthDelta.toFixed(1)} este mes
+            </p>
           )}
         </div>
-        {ranking.every((e) => e.total === 0) ? (
-          <p className="text-sm text-[var(--muted-foreground)]">Aún no hay reseñas internas en tu equipo.</p>
-        ) : (
-          <div className="space-y-2">
-            {ranking.map((e, idx) => (
-              <div
-                key={e.id}
-                className={`flex items-center gap-3 rounded-xl border p-3 ${
-                  e.id === employee.id
-                    ? "border-[var(--primary)] bg-[var(--primary-light)]"
-                    : "border-[var(--border)]"
-                }`}
-              >
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--muted)] text-xs font-bold text-[var(--foreground)]">
-                  #{idx + 1}
-                </span>
-                <p className="min-w-0 flex-1 truncate text-sm font-semibold text-[var(--foreground)]">
-                  {e.name}{e.id === employee.id && " (tú)"}
-                </p>
-                <p className="text-xs text-[var(--muted-foreground)]">{e.total} reseñas</p>
-                <p className="text-sm font-bold text-[var(--foreground)]">
-                  {e.total > 0 ? `${e.avg.toFixed(1)}★` : "—"}
-                </p>
-              </div>
-            ))}
+
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <p className="text-sm text-[var(--muted-foreground)]">Experiencias positivas</p>
+          <p className="mt-2 text-4xl font-bold text-[var(--foreground)]">
+            {total > 0 ? `${positivePct}%` : "—"}
+          </p>
+          <p className="mt-1 text-xs text-[var(--muted-foreground)]">valoraciones de 4★ o más</p>
+        </div>
+
+        <div className="rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-[var(--muted-foreground)]">Posición en el equipo</p>
+            <Trophy className="h-5 w-5 text-[var(--primary-dark)]" />
           </div>
-        )}
+          <p className="mt-2 text-4xl font-bold text-[var(--foreground)]">
+            {myPosition > 0 ? `#${myPosition}` : "—"}
+          </p>
+          <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+            de {employee.business.employees.length} en {employee.business.name}
+          </p>
+        </div>
       </section>
 
-      <section className="mb-10">
-        <div className="mb-4 flex items-center gap-2">
-          <MessageSquareText className="h-5 w-5 text-[var(--primary-dark)]" />
-          <h2 className="font-semibold text-[var(--foreground)]">Tus comentarios</h2>
-        </div>
-        {employee.reviews.length === 0 ? (
-          <p className="text-sm text-[var(--muted-foreground)]">Aún no has recibido reseñas.</p>
-        ) : (
-          <div className="grid gap-4">
-            {employee.reviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
-          </div>
-        )}
-      </section>
     </>
   );
 }

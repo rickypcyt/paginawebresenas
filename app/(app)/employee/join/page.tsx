@@ -12,7 +12,7 @@ export default async function EmployeeJoinPage() {
     where: { userId: session.user.id },
     select: { id: true },
   });
-  if (employee) redirect("/profile");
+  if (employee) redirect("/dashboard");
 
   const request = await prisma.employeeJoinRequest.findFirst({
     where: { userId: session.user.id },

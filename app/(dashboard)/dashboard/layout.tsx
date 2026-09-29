@@ -1,26 +1,10 @@
 import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/navigation/Sidebar";
+import type { Metadata } from "next";
 import { getSession } from "@/lib/session";
-import { isBusiness } from "@/lib/roles";
-import {
-  LayoutDashboard,
-  MousePointerClick,
-  Users,
-  Tag,
-  MessageSquareText,
-  SmartphoneNfc,
-  House,
-} from "lucide-react";
-
-const links = [
-  { href: "/dashboard/taps", label: "Toque", icon: <MousePointerClick className="h-4 w-4" /> },
-  { href: "/dashboard", label: "Resumen", icon: <LayoutDashboard className="h-4 w-4" /> },
-  { href: "/dashboard/team", label: "Ranking", icon: <Users className="h-4 w-4" /> },
-  { href: "/dashboard/nfc-tags", label: "Tags NFC", icon: <Tag className="h-4 w-4" /> },
-  { href: "/dashboard/reviews", label: "Reseñas", icon: <MessageSquareText className="h-4 w-4" /> },
-  { href: "/dashboard/simulator", label: "Simulador de tap", icon: <SmartphoneNfc className="h-4 w-4" /> },
-  { href: "/", label: "Volver al inicio", icon: <House className="h-4 w-4" /> },
-];
+import { Navbar } from "@/components/navigation/Navbar";
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default async function DashboardLayout({
   children,
@@ -28,14 +12,14 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  if (!session?.user || !isBusiness(session.user.role)) {
-    redirect("/profile");
+  if (!session?.user) {
+    redirect("/");
   }
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 md:flex-row">
-      <Sidebar title="Mi Toque" items={links} />
-      <div className="flex-1">{children}</div>
-    </div>
+    <>
+      <Navbar />
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 pb-20 md:pb-8">{children}</main>
+    </>
   );
 }

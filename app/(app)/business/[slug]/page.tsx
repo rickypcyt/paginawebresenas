@@ -167,7 +167,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
           href={`/business/${business.slug}/review`}
           className="shrink-0 rounded-xl border border-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-[var(--primary)] transition-colors hover:bg-[var(--primary-light)]"
         >
-          ✍️ Compartir experiencia
+          ✍️ Escribir reseña
         </Link>
       </div>
 
@@ -263,7 +263,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
           <EmptyState
             icon="✍️"
             title="Aún no hay reseñas"
-            description="Sé el primero en compartir tu experiencia sobre este negocio."
+            description="Sé el primero en dejar tu reseña sobre este negocio."
             actionLabel="Escribir reseña"
             actionHref={`/business/${business.slug}/review`}
           />

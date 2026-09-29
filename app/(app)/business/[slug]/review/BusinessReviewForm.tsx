@@ -145,7 +145,7 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
           onChange={(e) => setContent(e.target.value)}
           required
           rows={4}
-          placeholder="Cuenta tu experiencia..."
+          placeholder="Cuenta tu reseña..."
           className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
         />
       </div>
