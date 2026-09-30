@@ -11440,6 +11440,7 @@ export namespace Prisma {
     verification: $Enums.ReviewVerification | null
     employeeId: string | null
     visitId: string | null
+    nfcScanHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -11455,6 +11456,7 @@ export namespace Prisma {
     verification: $Enums.ReviewVerification | null
     employeeId: string | null
     visitId: string | null
+    nfcScanHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -11470,6 +11472,7 @@ export namespace Prisma {
     verification: number
     employeeId: number
     visitId: number
+    nfcScanHash: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -11495,6 +11498,7 @@ export namespace Prisma {
     verification?: true
     employeeId?: true
     visitId?: true
+    nfcScanHash?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -11510,6 +11514,7 @@ export namespace Prisma {
     verification?: true
     employeeId?: true
     visitId?: true
+    nfcScanHash?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -11525,6 +11530,7 @@ export namespace Prisma {
     verification?: true
     employeeId?: true
     visitId?: true
+    nfcScanHash?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -11627,6 +11633,7 @@ export namespace Prisma {
     verification: $Enums.ReviewVerification
     employeeId: string | null
     visitId: string | null
+    nfcScanHash: string | null
     createdAt: Date
     updatedAt: Date
     userId: string | null
@@ -11661,6 +11668,7 @@ export namespace Prisma {
     verification?: boolean
     employeeId?: boolean
     visitId?: boolean
+    nfcScanHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -11682,6 +11690,7 @@ export namespace Prisma {
     verification?: boolean
     employeeId?: boolean
     visitId?: boolean
+    nfcScanHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -11701,6 +11710,7 @@ export namespace Prisma {
     verification?: boolean
     employeeId?: boolean
     visitId?: boolean
+    nfcScanHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -11720,6 +11730,7 @@ export namespace Prisma {
     verification?: boolean
     employeeId?: boolean
     visitId?: boolean
+    nfcScanHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -11727,7 +11738,7 @@ export namespace Prisma {
     businessId?: boolean
   }
 
-  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "rating" | "verification" | "employeeId" | "visitId" | "createdAt" | "updatedAt" | "userId" | "guestName" | "businessId", ExtArgs["result"]["review"]>
+  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "rating" | "verification" | "employeeId" | "visitId" | "nfcScanHash" | "createdAt" | "updatedAt" | "userId" | "guestName" | "businessId", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
@@ -11766,6 +11777,7 @@ export namespace Prisma {
       verification: $Enums.ReviewVerification
       employeeId: string | null
       visitId: string | null
+      nfcScanHash: string | null
       createdAt: Date
       updatedAt: Date
       userId: string | null
@@ -12206,6 +12218,7 @@ export namespace Prisma {
     readonly verification: FieldRef<"Review", 'ReviewVerification'>
     readonly employeeId: FieldRef<"Review", 'String'>
     readonly visitId: FieldRef<"Review", 'String'>
+    readonly nfcScanHash: FieldRef<"Review", 'String'>
     readonly createdAt: FieldRef<"Review", 'DateTime'>
     readonly updatedAt: FieldRef<"Review", 'DateTime'>
     readonly userId: FieldRef<"Review", 'String'>
@@ -31569,6 +31582,7 @@ export namespace Prisma {
     verification: 'verification',
     employeeId: 'employeeId',
     visitId: 'visitId',
+    nfcScanHash: 'nfcScanHash',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId',
@@ -32659,6 +32673,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFilter<"Review"> | $Enums.ReviewVerification
     employeeId?: StringNullableFilter<"Review"> | string | null
     visitId?: StringNullableFilter<"Review"> | string | null
+    nfcScanHash?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
     userId?: StringNullableFilter<"Review"> | string | null
@@ -32679,6 +32694,7 @@ export namespace Prisma {
     verification?: SortOrder
     employeeId?: SortOrderInput | SortOrder
     visitId?: SortOrderInput | SortOrder
+    nfcScanHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -32694,6 +32710,7 @@ export namespace Prisma {
   export type ReviewWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     visitId?: string
+    nfcScanHash?: string
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
@@ -32712,7 +32729,7 @@ export namespace Prisma {
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
     votes?: ReviewVoteListRelationFilter
-  }, "id" | "visitId">
+  }, "id" | "visitId" | "nfcScanHash">
 
   export type ReviewOrderByWithAggregationInput = {
     id?: SortOrder
@@ -32722,6 +32739,7 @@ export namespace Prisma {
     verification?: SortOrder
     employeeId?: SortOrderInput | SortOrder
     visitId?: SortOrderInput | SortOrder
+    nfcScanHash?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -32745,6 +32763,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationWithAggregatesFilter<"Review"> | $Enums.ReviewVerification
     employeeId?: StringNullableWithAggregatesFilter<"Review"> | string | null
     visitId?: StringNullableWithAggregatesFilter<"Review"> | string | null
+    nfcScanHash?: StringNullableWithAggregatesFilter<"Review"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
     userId?: StringNullableWithAggregatesFilter<"Review"> | string | null
@@ -34612,6 +34631,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -34630,6 +34650,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -34644,6 +34665,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34662,6 +34684,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34678,6 +34701,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -34691,6 +34715,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34704,6 +34729,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -36689,6 +36715,7 @@ export namespace Prisma {
     verification?: SortOrder
     employeeId?: SortOrder
     visitId?: SortOrder
+    nfcScanHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -36708,6 +36735,7 @@ export namespace Prisma {
     verification?: SortOrder
     employeeId?: SortOrder
     visitId?: SortOrder
+    nfcScanHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -36723,6 +36751,7 @@ export namespace Prisma {
     verification?: SortOrder
     employeeId?: SortOrder
     visitId?: SortOrder
+    nfcScanHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -39888,6 +39917,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -39905,6 +39935,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -40381,6 +40412,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFilter<"Review"> | $Enums.ReviewVerification
     employeeId?: StringNullableFilter<"Review"> | string | null
     visitId?: StringNullableFilter<"Review"> | string | null
+    nfcScanHash?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
     userId?: StringNullableFilter<"Review"> | string | null
@@ -40932,6 +40964,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -40949,6 +40982,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -41698,6 +41732,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -41714,6 +41749,7 @@ export namespace Prisma {
     rating: number
     verification?: $Enums.ReviewVerification
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -43020,6 +43056,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -43036,6 +43073,7 @@ export namespace Prisma {
     rating: number
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -43212,6 +43250,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -43228,6 +43267,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45202,6 +45242,7 @@ export namespace Prisma {
     content: string
     rating: number
     verification?: $Enums.ReviewVerification
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -45219,6 +45260,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -45313,6 +45355,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45330,6 +45373,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -45827,6 +45871,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     guestName?: string | null
@@ -46015,6 +46060,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46032,6 +46078,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46047,6 +46094,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46498,6 +46546,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     employeeId?: string | null
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -46591,6 +46640,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46608,6 +46658,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46623,6 +46674,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46887,6 +46939,7 @@ export namespace Prisma {
     rating: number
     verification?: $Enums.ReviewVerification
     visitId?: string | null
+    nfcScanHash?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -46912,6 +46965,7 @@ export namespace Prisma {
     content?: StringFieldUpdateOperationsInput | string
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     guestName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46928,6 +46982,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46943,6 +46998,7 @@ export namespace Prisma {
     rating?: IntFieldUpdateOperationsInput | number
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
+    nfcScanHash?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null

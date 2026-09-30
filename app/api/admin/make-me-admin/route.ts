@@ -2,8 +2,15 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 
-export async function POST() {
+function keyMatches(provided: string, expected: string): boolean {
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+export async function POST(request: Request) {
   const adminInitKey = process.env.ADMIN_INIT_KEY;
   if (!adminInitKey || adminInitKey.length < 16) {
     return NextResponse.json(
@@ -12,8 +19,18 @@ export async function POST() {
     );
   }
 
+  const headersList = await headers();
+  const body = await request.json().catch(() => null);
+  const provided =
+    headersList.get("x-admin-init-key") ??
+    (typeof body?.key === "string" ? body.key : null);
+
+  if (!provided || !keyMatches(provided, adminInitKey)) {
+    return NextResponse.json({ error: "Clave inválida" }, { status: 403 });
+  }
+
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headersList,
   });
 
   if (!session?.user?.id) {

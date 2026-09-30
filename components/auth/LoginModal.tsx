@@ -18,13 +18,22 @@ export function LoginModal() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Destino post-login: redirectTo explícito o el ?redirect= que puso el middleware.
+  function postLoginTarget() {
+    if (redirectTo) return redirectTo;
+    const param = new URLSearchParams(window.location.search).get("redirect");
+    return param && param.startsWith("/") && !param.startsWith("//")
+      ? param
+      : "/auth/redirect";
+  }
+
   useEffect(() => {
-    if (!isOpen) return;
+    if (step !== "onboarding") return;
     fetch("/api/businesses")
       .then((r) => (r.ok ? r.json() : { businesses: [] }))
       .then((d) => setBusinesses(d.businesses ?? []))
       .catch(() => setBusinesses([]));
-  }, [isOpen]);
+  }, [step]);
 
   if (!isOpen) return null;
 
@@ -32,10 +41,10 @@ export function LoginModal() {
     setGoogleLoading(true);
     setError(null);
     try {
-      // En flujo de cliente (reseña) volvemos a la misma página; si no, /auth/redirect decide
+      // En flujo de cliente (reseña) volvemos a la misma página; si no, al destino post-login
       const result = await signIn.social({
         provider: "google",
-        callbackURL: intent === "customer" ? window.location.href : "/auth/redirect",
+        callbackURL: intent === "customer" ? window.location.href : postLoginTarget(),
       });
       if (result?.error) {
         setError(result.error.message || "No se pudo iniciar sesión con Google");
@@ -55,7 +64,7 @@ export function LoginModal() {
     try {
       const signInResult = await signIn.email({ email, password });
       if (!signInResult.error) {
-        window.location.assign("/auth/redirect");
+        window.location.assign(postLoginTarget());
         return;
       }
 
@@ -106,6 +115,7 @@ export function LoginModal() {
         window.location.assign("/employee/join");
       } else {
         window.location.assign(redirectTo || "/dashboard");
+        return;
       }
     } catch {
       setError("Error inesperado. Inténtalo de nuevo.");

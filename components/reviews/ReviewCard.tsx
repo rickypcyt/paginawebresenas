@@ -19,6 +19,7 @@ interface ReviewCardProps {
 const verificationLabels: Record<string, { icon: string; label: string }> = {
   location: { icon: "📍", label: "Visita verificada por ubicación" },
   qr: { icon: "📱", label: "Visita verificada por QR" },
+  nfc: { icon: "📶", label: "Visita verificada por NFC" },
   integration: { icon: "✓", label: "Visita verificada" },
 };
 

@@ -13,7 +13,12 @@ export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
   const markerRef = useRef<Marker | null>(null);
+  const onSelectRef = useRef(onSelect);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
 
   useEffect(() => {
     let isMounted = true;
@@ -26,7 +31,7 @@ export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
 
       if (!mapInstanceRef.current) {
         const map = L.map(mapRef.current).setView(
-          [latitude || 40.4168, longitude || -3.7038],
+          [latitude ?? 40.4168, longitude ?? -3.7038],
           13
         );
 
@@ -37,7 +42,7 @@ export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
 
         map.on("click", (e: LeafletMouseEvent) => {
           const { lat, lng } = e.latlng;
-          onSelect(lat, lng);
+          onSelectRef.current(lat, lng);
 
           if (markerRef.current) {
             markerRef.current.setLatLng([lat, lng]);
@@ -49,7 +54,7 @@ export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
         mapInstanceRef.current = map;
       }
 
-      if (latitude && longitude) {
+      if (latitude != null && longitude != null) {
         mapInstanceRef.current.setView([latitude, longitude], 13);
         if (markerRef.current) {
           markerRef.current.setLatLng([latitude, longitude]);
@@ -73,7 +78,7 @@ export function MapPicker({ latitude, longitude, onSelect }: MapPickerProps) {
         markerRef.current = null;
       }
     };
-  }, [latitude, longitude, onSelect]);
+  }, [latitude, longitude]);
 
   return (
     <div>

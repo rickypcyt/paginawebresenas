@@ -208,7 +208,7 @@ async function ensureOffers(businessId: string) {
   });
 }
 
-async function ensureCustomerActivity(userId: string, businessIds: string[], authorIds: string[]) {
+async function ensureCustomerActivity(userId: string, businessIds: string[]) {
   const authored = await prisma.review.count({ where: { userId } });
   if (authored < 3 && businessIds.length > 0) {
     await prisma.review.createMany({
@@ -340,7 +340,7 @@ export async function seedDemoDataForUser(userId: string) {
   const businessIds = (
     await prisma.business.findMany({ take: 4, select: { id: true } })
   ).map((b) => b.id);
-  await ensureCustomerActivity(user.id, businessIds, authorIds);
+  await ensureCustomerActivity(user.id, businessIds);
   done.push("reseñas propias, favoritos e insignia de cliente");
 
   return { ok: true, seeded: done };

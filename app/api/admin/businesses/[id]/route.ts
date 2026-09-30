@@ -23,17 +23,47 @@ export const PATCH = withErrorHandler(async (request: Request, { params }: Ctx) 
   }
   if (typeof body.status === "string" && STATUSES.includes(body.status)) data.status = body.status;
   if (typeof body.featured === "boolean") data.featured = body.featured;
-  if ("ownerId" in body) {
-    const ownerId = typeof body.ownerId === "string" && body.ownerId ? body.ownerId : null;
-    if (ownerId) {
-      const owner = await prisma.user.findUnique({ where: { id: ownerId }, select: { id: true } });
+
+  const ownerChanged = "ownerId" in body;
+  let newOwnerId: string | null = null;
+  if (ownerChanged) {
+    newOwnerId = typeof body.ownerId === "string" && body.ownerId ? body.ownerId : null;
+    if (newOwnerId) {
+      const owner = await prisma.user.findUnique({ where: { id: newOwnerId }, select: { id: true } });
       if (!owner) return NextResponse.json({ error: "El dueño seleccionado no existe" }, { status: 400 });
-      await prisma.user.update({ where: { id: ownerId }, data: { role: "business" } });
     }
-    data.ownerId = ownerId;
+    data.ownerId = newOwnerId;
   }
 
-  const business = await prisma.business.update({ where: { id }, data });
+  const business = await prisma.$transaction(async (tx) => {
+    const previous = ownerChanged
+      ? await tx.business.findUnique({ where: { id }, select: { ownerId: true } })
+      : null;
+
+    const updated = await tx.business.update({ where: { id }, data });
+
+    if (ownerChanged) {
+      if (newOwnerId) {
+        await tx.user.updateMany({
+          where: { id: newOwnerId, role: { not: "admin" } },
+          data: { role: "business" },
+        });
+      }
+      // Si el dueño anterior ya no posee ningún negocio, vuelve a rol user.
+      const prevId = previous?.ownerId;
+      if (prevId && prevId !== newOwnerId) {
+        const stillOwns = await tx.business.count({ where: { ownerId: prevId } });
+        if (stillOwns === 0) {
+          await tx.user.updateMany({
+            where: { id: prevId, role: "business" },
+            data: { role: "user" },
+          });
+        }
+      }
+    }
+
+    return updated;
+  });
   return NextResponse.json({ business });
 });
 

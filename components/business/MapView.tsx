@@ -14,36 +14,38 @@ export function MapView({ latitude, longitude, address, city }: MapViewProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
-    latitude != null && longitude != null ? { lat: latitude, lng: longitude } : null
-  );
+  // Resultado de geocoding, claveado por la consulta que lo produjo.
+  const [geocoded, setGeocoded] = useState<{ query: string; lat: number; lng: number } | null>(null);
+
+  const query = [address, city].filter(Boolean).join(", ");
+  // Las coordenadas explícitas tienen prioridad; si no, se usa el geocoding.
+  const coords =
+    latitude != null && longitude != null
+      ? { lat: latitude, lng: longitude }
+      : geocoded?.query === query
+        ? { lat: geocoded.lat, lng: geocoded.lng }
+        : null;
 
   useEffect(() => {
-    const query = [address, city].filter(Boolean).join(", ");
-    if (!query) return;
+    // Ya hay coordenadas o no hay consulta: no geocodificar.
+    if ((latitude != null && longitude != null) || !query) return;
 
-    const fallbackCoords =
-      latitude != null && longitude != null ? { lat: latitude, lng: longitude } : null;
     let cancelled = false;
     fetch(`/api/geocode?q=${encodeURIComponent(query)}`)
       .then((res) => res.json())
       .then((data) => {
         if (cancelled) return;
         const result = data.results?.[0];
-        setCoords(
-          result?.lat && result?.lon
-            ? { lat: Number(result.lat), lng: Number(result.lon) }
-            : fallbackCoords
-        );
+        if (result?.lat != null && result?.lon != null) {
+          setGeocoded({ query, lat: Number(result.lat), lng: Number(result.lon) });
+        }
       })
-      .catch(() => {
-        if (!cancelled) setCoords(fallbackCoords);
-      });
+      .catch(() => {});
 
     return () => {
       cancelled = true;
     };
-  }, [latitude, longitude, address, city]);
+  }, [latitude, longitude, query]);
 
   useEffect(() => {
     let isMounted = true;
@@ -73,9 +75,11 @@ export function MapView({ latitude, longitude, address, city }: MapViewProps) {
       });
 
       if (coords) {
+        const popupEl = document.createElement("div");
+        popupEl.textContent = address || city || "Ubicación";
         L.marker([coords.lat, coords.lng], { icon: pinIcon })
           .addTo(map)
-          .bindPopup(address || city || "Ubicación")
+          .bindPopup(popupEl)
           .openPopup();
       }
 
@@ -92,7 +96,9 @@ export function MapView({ latitude, longitude, address, city }: MapViewProps) {
         mapInstanceRef.current = null;
       }
     };
-  }, [coords, address, city]);
+    // Deps escalares: reinicia el mapa solo si cambian las coords reales.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coords?.lat, coords?.lng, address, city]);
 
   return (
     <div className="relative w-full">

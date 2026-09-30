@@ -39,8 +39,8 @@ export const PATCH = withErrorHandler(async (request: Request, context: Business
     })
   ).map((b) => b.slug);
 
-  const [business] = await prisma.$transaction([
-    prisma.business.create({
+  const business = await prisma.$transaction(async (tx) => {
+    const created = await tx.business.create({
       data: {
         name: businessRequest.name,
         slug: generateUniqueSlug(businessRequest.name, existingSlugs),
@@ -51,29 +51,24 @@ export const PATCH = withErrorHandler(async (request: Request, context: Business
         description: businessRequest.description,
         status: "verified",
       },
-    }),
-    prisma.businessRequest.update({
+    });
+    await tx.businessRequest.update({
       where: { id },
-      data: { status: "registered" },
-    }),
-    prisma.user.updateMany({
+      data: { status: "registered", registeredBusinessId: created.id },
+    });
+    await tx.user.updateMany({
       where: { id: businessRequest.requesterId, role: { not: "admin" } },
       data: { role: "business" },
-    }),
-  ]);
-
-  await prisma.businessRequest.update({
-    where: { id },
-    data: { registeredBusinessId: business.id },
-  });
-
-  await prisma.nfcTag.create({
-    data: {
-      token: randomUUID(),
-      label: "NFC reseñas de Google",
-      type: "business_google",
-      businessId: business.id,
-    },
+    });
+    await tx.nfcTag.create({
+      data: {
+        token: randomUUID(),
+        label: "NFC reseñas de Google",
+        type: "business_google",
+        businessId: created.id,
+      },
+    });
+    return created;
   });
 
   await awardAction(businessRequest.requesterId, "add_business");

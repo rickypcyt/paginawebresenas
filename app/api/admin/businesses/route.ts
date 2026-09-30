@@ -31,25 +31,30 @@ export const POST = withErrorHandler(async (request: Request) => {
     }
   }
 
-  const business = await prisma.business.create({
-    data: {
-      name,
-      slug: generateUniqueSlug(name, existing),
-      categoryId: body.categoryId || null,
-      ownerId,
-      city: typeof body.city === "string" && body.city.trim() ? body.city.trim() : null,
-      address: typeof body.address === "string" && body.address.trim() ? body.address.trim() : null,
-      phone: typeof body.phone === "string" && body.phone.trim() ? body.phone.trim() : null,
-      status: STATUSES.includes(body.status) ? body.status : "community",
-      featured: body.featured === true,
-      imageUrl: typeof body.imageUrl === "string" && body.imageUrl.trim() ? body.imageUrl.trim() : null,
-    },
+  const business = await prisma.$transaction(async (tx) => {
+    const created = await tx.business.create({
+      data: {
+        name,
+        slug: generateUniqueSlug(name, existing),
+        categoryId: body.categoryId || null,
+        ownerId,
+        city: typeof body.city === "string" && body.city.trim() ? body.city.trim() : null,
+        address: typeof body.address === "string" && body.address.trim() ? body.address.trim() : null,
+        phone: typeof body.phone === "string" && body.phone.trim() ? body.phone.trim() : null,
+        status: STATUSES.includes(body.status) ? body.status : "community",
+        featured: body.featured === true,
+        imageUrl: typeof body.imageUrl === "string" && body.imageUrl.trim() ? body.imageUrl.trim() : null,
+      },
+    });
+    // El dueño de un negocio pasa a rol business en la misma transacción.
+    if (ownerId) {
+      await tx.user.updateMany({
+        where: { id: ownerId, role: { not: "admin" } },
+        data: { role: "business" },
+      });
+    }
+    return created;
   });
-
-  // El dueño de un negocio pasa a rol business.
-  if (ownerId) {
-    await prisma.user.update({ where: { id: ownerId }, data: { role: "business" } });
-  }
 
   return NextResponse.json({ business }, { status: 201 });
 });

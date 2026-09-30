@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
+import { getBusinessRatingMap } from "@/lib/ratings";
 import { BusinessCard } from "@/components/business/BusinessCard";
 import { CategoryCard } from "@/components/categories/CategoryCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -22,7 +23,6 @@ export default async function NegociosPage() {
       where: { status: { in: ["community", "verified", "premium"] } },
       include: {
         category: true,
-        reviews: { select: { rating: true } },
         offers: {
           where: { OR: [{ endDate: { gte: new Date() } }, { endDate: null }] },
           select: { id: true },
@@ -33,12 +33,12 @@ export default async function NegociosPage() {
     prisma.category.findMany({ orderBy: { name: "asc" } }),
   ]);
 
+  const ratingMap = await getBusinessRatingMap(businesses.map((b) => b.id));
+
   const businessesWithStats = businesses.map((b) => ({
     ...b,
-    rating: b.reviews.length
-      ? b.reviews.reduce((sum, r) => sum + r.rating, 0) / b.reviews.length
-      : 0,
-    reviewCount: b.reviews.length,
+    rating: ratingMap.get(b.id)?.avg ?? 0,
+    reviewCount: ratingMap.get(b.id)?.count ?? 0,
   }));
 
   return (

@@ -49,15 +49,20 @@ export function withErrorHandler<TArgs extends unknown[] = unknown[]>(
       return await handler(...args);
     } catch (error) {
       console.error("[API Error]", error);
-      return NextResponse.json(
-        { error: error instanceof Error ? error.message : "Error desconocido" },
-        { status: 500 }
-      );
+      // En producción no se filtran mensajes internos (Prisma, provider, etc.).
+      const message =
+        process.env.NODE_ENV === "production"
+          ? "Error interno del servidor"
+          : error instanceof Error
+            ? error.message
+            : "Error desconocido";
+      return NextResponse.json({ error: message }, { status: 500 });
     }
   };
 }
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX_KEYS = 10_000;
 
 export function rateLimit(
   key: string,
@@ -65,6 +70,14 @@ export function rateLimit(
   windowMs: number
 ): boolean {
   const now = Date.now();
+
+  // Poda acotada: evita crecimiento ilimitado por claves únicas (IPs, ids…).
+  if (rateLimitMap.size > RATE_LIMIT_MAX_KEYS) {
+    for (const [k, v] of rateLimitMap) {
+      if (now > v.resetAt) rateLimitMap.delete(k);
+    }
+  }
+
   const entry = rateLimitMap.get(key);
 
   if (!entry || now > entry.resetAt) {

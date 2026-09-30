@@ -13,6 +13,12 @@ const categories = [
 ];
 
 async function main() {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "El seed borra datos y crea cuentas demo. No debe ejecutarse en producción."
+    );
+  }
+
   await prisma.review.deleteMany();
   await prisma.business.deleteMany();
 
@@ -212,14 +218,14 @@ async function main() {
   }
 
   // ---------- Cuentas demo por rol (solo para desarrollo) ----------
-  const demoPassword = process.env.SEED_DEMO_PASSWORD || "demo1234";
+  const demoPassword = process.env.SEED_DEMO_PASSWORD;
 
   async function upsertDemoUser(email: string, name: string, role: "user" | "employee" | "business" | "admin") {
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return existing;
     const id = crypto.randomUUID();
     const now = new Date();
-    const password = await hashPassword(demoPassword);
+    const password = await hashPassword(demoPassword!);
     const [user] = await prisma.$transaction([
       prisma.user.create({
         data: { id, name, email, emailVerified: true, role, createdAt: now, updatedAt: now },
@@ -240,6 +246,7 @@ async function main() {
     return user;
   }
 
+  if (demoPassword) {
   const jefe = await upsertDemoUser("jefe@toque.test", "Jefe Demo", "business");
   const empleado = await upsertDemoUser("empleado@toque.test", "María González", "employee");
   await upsertDemoUser("cliente@toque.test", "Cliente Demo", "user");
@@ -339,6 +346,9 @@ async function main() {
       })),
     });
     console.log("Reseñas demo creadas para Café Demo.");
+  }
+  } else {
+    console.log("SEED_DEMO_PASSWORD no definido. Saltando cuentas demo.");
   }
 
   console.log("Seed completado.");

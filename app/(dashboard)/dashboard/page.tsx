@@ -300,12 +300,6 @@ async function BusinessDashboard({
     inPeriod.length > 0
       ? inPeriod.reduce((s, r) => s + r.rating, 0) / inPeriod.length
       : 0;
-  const goodPct =
-    inPeriod.length > 0
-      ? Math.round((inPeriod.filter((r) => r.rating >= 4).length / inPeriod.length) * 100)
-      : 0;
-
-  const generalTags = business.nfcTags.filter((t) => t.type === "business_google");
   const taps = await prisma.visit.count({
     where: { businessId: business.id, createdAt: periodRange ? { gte: periodRange.start, lt: periodRange.end } : undefined },
   });

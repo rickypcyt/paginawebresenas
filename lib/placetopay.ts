@@ -41,6 +41,9 @@ function config() {
 }
 
 export function placetopayMockMode(): boolean {
+  // El mock nunca puede activarse en producción: aunque falten credenciales,
+  // un deploy mal configurado no debe permitir aprobar pagos falsos.
+  if (process.env.NODE_ENV === "production") return false;
   return process.env.PLACETOPAY_MOCK === "true" || !config();
 }
 
@@ -75,10 +78,10 @@ export function verifyNotificationSignature(body: {
       `${body.requestId}${body.status.status}${body.status.date}${cfg.tranKey}`
     )
     .digest("hex");
-  return crypto.timingSafeEqual(
-    Buffer.from(expected),
-    Buffer.from(String(body.signature))
-  );
+  const expectedBuf = Buffer.from(expected);
+  const givenBuf = Buffer.from(String(body.signature));
+  if (expectedBuf.length !== givenBuf.length) return false;
+  return crypto.timingSafeEqual(expectedBuf, givenBuf);
 }
 
 export function mapPlacetopayStatus(

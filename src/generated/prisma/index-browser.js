@@ -213,6 +213,7 @@ exports.Prisma.ReviewScalarFieldEnum = {
   verification: 'verification',
   employeeId: 'employeeId',
   visitId: 'visitId',
+  nfcScanHash: 'nfcScanHash',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',

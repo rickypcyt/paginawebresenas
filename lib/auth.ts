@@ -7,6 +7,21 @@ const betterAuthURL =
   process.env.BETTER_AUTH_URL || "http://localhost:3000";
 const isSecureURL = betterAuthURL.startsWith("https");
 
+// Orígenes extra de confianza vía env (ej. túnel ngrok en desarrollo), separados por coma.
+const extraOrigins = (process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+// Google OAuth solo se registra si hay credenciales configuradas.
+const googleCreds =
+  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+    ? {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      }
+    : null;
+
 export const auth = betterAuth({
   baseURL: betterAuthURL,
   database: prismaAdapter(prisma, {
@@ -14,7 +29,7 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    minPasswordLength: 4,
+    minPasswordLength: 8,
   },
   user: {
     additionalFields: {
@@ -28,16 +43,13 @@ export const auth = betterAuth({
   },
   plugins: [dash()],
   socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
+    ...(googleCreds ? { google: googleCreds } : {}),
   },
   trustedOrigins: [
     "http://localhost:3000",
     "http://localhost:3001",
-    "https://efficient-multipolar-fritz.ngrok-free.dev",
     betterAuthURL,
+    ...extraOrigins,
   ],
   advanced: {
     cookies: {

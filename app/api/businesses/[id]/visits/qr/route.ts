@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { verifyQrToken } from "@/lib/verification";
 import { requireSession, withErrorHandler, rateLimit, rateLimitResponse, RouteContext } from "@/lib/api-utils";
 
+const RECENT_VISIT_WINDOW_MS = 4 * 60 * 60 * 1000; // 4 h
+
 export const POST = withErrorHandler(async (
   request: Request,
   { params }: RouteContext<{ id: string }>
@@ -17,6 +19,14 @@ export const POST = withErrorHandler(async (
     return rateLimitResponse();
   }
 
+  const business = await prisma.business.findUnique({
+    where: { id },
+    select: { id: true },
+  });
+  if (!business) {
+    return NextResponse.json({ error: "Negocio no encontrado" }, { status: 404 });
+  }
+
   const body = await request.json();
   const token = typeof body.token === "string" ? body.token : "";
   const mode: string = body.mode ?? "day";
@@ -25,9 +35,28 @@ export const POST = withErrorHandler(async (
     return NextResponse.json({ error: "Token requerido" }, { status: 400 });
   }
 
-  if (!verifyQrToken(id, token, mode === "30s" ? "30s" : "day")) {
+  const window = mode === "30s" ? "30s" : "day";
+  if (!verifyQrToken(id, token, window)) {
     return NextResponse.json({ error: "QR inválido o expirado" }, { status: 403 });
   }
+
+  // Idempotente: el mismo usuario no acumula visitas duplicadas en la ventana.
+  const recent = await prisma.visit.findFirst({
+    where: {
+      userId: user.id,
+      businessId: id,
+      createdAt: { gte: new Date(Date.now() - RECENT_VISIT_WINDOW_MS) },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  if (recent) {
+    return NextResponse.json({ visit: recent, message: "Visita ya registrada" });
+  }
+
+  const expiresAt =
+    window === "30s"
+      ? new Date(Date.now() + 30 * 1000)
+      : new Date(new Date().setHours(24, 0, 0, 0));
 
   const visit = await prisma.visit.create({
     data: {
@@ -35,6 +64,7 @@ export const POST = withErrorHandler(async (
       businessId: id,
       verification: "qr",
       token,
+      expiresAt,
     },
   });
 

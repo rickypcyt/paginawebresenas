@@ -18,8 +18,9 @@ function appBaseUrl(req: NextRequest): string {
 
 export const POST = withErrorHandler(async (req: NextRequest) => {
   const headersList = await headers();
+  // Último IP de la cadena: el que añade el proxy confiable (el primero lo puede falsificar el cliente).
   const ip =
-    headersList.get("x-forwarded-for")?.split(",")[0].trim() ??
+    headersList.get("x-forwarded-for")?.split(",").pop()?.trim() ??
     headersList.get("x-real-ip") ??
     "127.0.0.1";
   const userAgent = headersList.get("user-agent") ?? "Toque Checkout";

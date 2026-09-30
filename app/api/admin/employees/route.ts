@@ -36,20 +36,22 @@ export const POST = withErrorHandler(async (request: Request) => {
     }
   }
 
-  const employee = await prisma.employee.create({
-    data: {
-      name,
-      role: typeof body.role === "string" && body.role.trim() ? body.role.trim() : null,
-      businessId,
-      userId,
-      active: body.active !== false,
-    },
+  const employee = await prisma.$transaction(async (tx) => {
+    const created = await tx.employee.create({
+      data: {
+        name,
+        role: typeof body.role === "string" && body.role.trim() ? body.role.trim() : null,
+        businessId,
+        userId,
+        active: body.active !== false,
+      },
+    });
+    // El usuario vinculado pasa a rol employee en la misma transacción.
+    if (userId) {
+      await tx.user.update({ where: { id: userId }, data: { role: "employee" } });
+    }
+    return created;
   });
-
-  // El usuario vinculado pasa a rol employee.
-  if (userId) {
-    await prisma.user.update({ where: { id: userId }, data: { role: "employee" } });
-  }
 
   return NextResponse.json({ employee }, { status: 201 });
 });

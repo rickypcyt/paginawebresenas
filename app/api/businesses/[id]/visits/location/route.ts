@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { isWithinRadius } from "@/lib/verification";
 import { requireSession, withErrorHandler, rateLimit, rateLimitResponse, RouteContext } from "@/lib/api-utils";
 
+const RECENT_VISIT_WINDOW_MS = 4 * 60 * 60 * 1000; // 4 h
+
 export const POST = withErrorHandler(async (
   request: Request,
   { params }: RouteContext<{ id: string }>
@@ -21,7 +23,15 @@ export const POST = withErrorHandler(async (
   const latitude = typeof body.latitude === "number" ? body.latitude : null;
   const longitude = typeof body.longitude === "number" ? body.longitude : null;
 
-  if (latitude === null || longitude === null) {
+  const coordsValid =
+    latitude !== null &&
+    longitude !== null &&
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude) &&
+    Math.abs(latitude) <= 90 &&
+    Math.abs(longitude) <= 180;
+
+  if (!coordsValid) {
     return NextResponse.json({ error: "Coordenadas inválidas" }, { status: 400 });
   }
 
@@ -39,6 +49,19 @@ export const POST = withErrorHandler(async (
       { error: "No estás dentro del radio permitido (50 m)" },
       { status: 403 }
     );
+  }
+
+  // Idempotente: una visita reciente del mismo usuario al mismo negocio no se duplica.
+  const recent = await prisma.visit.findFirst({
+    where: {
+      userId: user.id,
+      businessId: id,
+      createdAt: { gte: new Date(Date.now() - RECENT_VISIT_WINDOW_MS) },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  if (recent) {
+    return NextResponse.json({ visit: recent, message: "Visita ya registrada" });
   }
 
   const visit = await prisma.visit.create({

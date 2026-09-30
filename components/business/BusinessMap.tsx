@@ -15,10 +15,22 @@ interface BusinessMapProps {
   businesses: BusinessPin[];
 }
 
+function escapeHtml(text: string): string {
+  const el = document.createElement("div");
+  el.textContent = text;
+  return el.innerHTML;
+}
+
 export function BusinessMap({ businesses }: BusinessMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<LeafletMap | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Clave estable por contenido: evita reinicializar el mapa si el padre
+  // pasa un array nuevo con los mismos pines.
+  const pinsKey = businesses
+    .map((b) => `${b.id}:${b.latitude},${b.longitude}:${b.slug}:${b.name}`)
+    .join("|");
 
   useEffect(() => {
     let isMounted = true;
@@ -29,7 +41,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
 
       if (!mapRef.current || !isMounted) return;
 
-      const pins = businesses.filter((b) => b.latitude && b.longitude);
+      const pins = businesses.filter((b) => b.latitude != null && b.longitude != null);
 
       const lat = pins[0]?.latitude ?? -2.1894;
       const lng = pins[0]?.longitude ?? -79.8891;
@@ -53,7 +65,7 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
         L.marker([b.latitude, b.longitude], { icon: pinIcon })
           .addTo(map)
           .bindPopup(
-            `<a href="/business/${b.slug}" style="font-weight:600;color:var(--primary);text-decoration:none;">${b.name}</a>`
+            `<a href="/business/${encodeURIComponent(b.slug)}" style="font-weight:600;color:var(--primary);text-decoration:none;">${escapeHtml(b.name)}</a>`
           );
       });
 
@@ -75,7 +87,8 @@ export function BusinessMap({ businesses }: BusinessMapProps) {
         mapInstanceRef.current = null;
       }
     };
-  }, [businesses]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pinsKey]);
 
   return (
     <div className="relative h-full w-full">

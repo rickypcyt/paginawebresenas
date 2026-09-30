@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import prisma from "@/lib/prisma";
 import { rateLimit, rateLimitResponse, requireSession, withErrorHandler } from "@/lib/api-utils";
+import { isAdmin } from "@/lib/roles";
 
 interface NfcTagRouteProps {
   params: Promise<{ id: string }>;
@@ -15,7 +16,11 @@ export const POST = withErrorHandler(async (_request: Request, context: NfcTagRo
 
   const { id } = await context.params;
   const employee = await prisma.employee.findFirst({
-    where: { id, business: { ownerId: user.id } },
+    where: {
+      id,
+      // Dueño del negocio o admin
+      ...(isAdmin(user.role) ? {} : { business: { ownerId: user.id } }),
+    },
     include: { nfcTags: { where: { type: "employee_review" }, take: 1 } },
   });
   if (!employee) return NextResponse.json({ error: "Empleado no encontrado" }, { status: 404 });

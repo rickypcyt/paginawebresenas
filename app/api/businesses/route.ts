@@ -6,13 +6,34 @@ import { requireSession, requireAdmin, withErrorHandler, rateLimit, rateLimitRes
 import { isAdmin as checkIsAdmin } from "@/lib/roles";
 import { randomUUID } from "node:crypto";
 
+const PUBLIC_BUSINESS_SELECT = {
+  id: true,
+  name: true,
+  slug: true,
+  imageUrl: true,
+  categoryId: true,
+  address: true,
+  city: true,
+  phone: true,
+  website: true,
+  instagram: true,
+  hours: true,
+  description: true,
+  latitude: true,
+  longitude: true,
+  status: true,
+  featured: true,
+  createdAt: true,
+  category: true,
+} as const;
+
 export async function GET() {
   const result = await requireSession();
   if ("error" in result) {
     const businesses = await prisma.business.findMany({
       where: { status: { in: ["community", "verified", "premium"] } },
       orderBy: { createdAt: "desc" },
-      include: { category: true },
+      select: PUBLIC_BUSINESS_SELECT,
     });
     return NextResponse.json({ businesses, isAdmin: false });
   }
@@ -21,7 +42,8 @@ export async function GET() {
   const businesses = await prisma.business.findMany({
     where: admin ? {} : { status: { in: ["community", "verified", "premium"] } },
     orderBy: { createdAt: "desc" },
-    include: { category: true },
+    select: admin ? undefined : PUBLIC_BUSINESS_SELECT,
+    ...(admin ? { include: { category: true } } : {}),
   });
 
   return NextResponse.json({ businesses, isAdmin: admin });

@@ -74,8 +74,10 @@ export function AdminEntityActions({ endpoint, fields, values }: AdminEntityActi
 
   async function remove() {
     setConfirming(false);
+    // Optimista: oculta la fila padre (fuera del árbol de este componente) mientras borra.
     const row =
       actionsRef.current?.closest<HTMLElement>("div.rounded-xl") ?? actionsRef.current?.parentElement ?? null;
+    // eslint-disable-next-line react-hooks/immutability -- mutación DOM imperativa fuera del árbol React
     if (row) row.style.display = "none";
     setLoading(true);
     const res = await fetch(endpoint, { method: "DELETE" });

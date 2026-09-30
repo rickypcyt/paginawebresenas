@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@/src/generated/prisma/client";
 import { requireSession, withErrorHandler, RouteContext } from "@/lib/api-utils";
 
 export const POST = withErrorHandler(async (
@@ -12,20 +13,33 @@ export const POST = withErrorHandler(async (
   const { id } = await params;
   const userId = result.session.user.id;
 
-  const existing = await prisma.businessRequestSupporter.findUnique({
-    where: { requestId_userId: { requestId: id, userId } },
+  const request = await prisma.businessRequest.findUnique({
+    where: { id },
+    select: { id: true, status: true },
   });
-
-  if (existing) {
-    await prisma.businessRequestSupporter.delete({
-      where: { id: existing.id },
-    });
-    return NextResponse.json({ supported: false });
+  if (!request) {
+    return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
+  }
+  if (request.status === "rejected") {
+    return NextResponse.json({ error: "No puedes apoyar una solicitud rechazada" }, { status: 400 });
   }
 
-  await prisma.businessRequestSupporter.create({
-    data: { requestId: id, userId },
-  });
-
-  return NextResponse.json({ supported: true });
+  try {
+    const deleted = await prisma.businessRequestSupporter.deleteMany({
+      where: { requestId: id, userId },
+    });
+    if (deleted.count > 0) {
+      return NextResponse.json({ supported: false });
+    }
+    await prisma.businessRequestSupporter.create({
+      data: { requestId: id, userId },
+    });
+    return NextResponse.json({ supported: true });
+  } catch (error) {
+    // Doble click / requests concurrentes: responde según el estado final.
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return NextResponse.json({ supported: true });
+    }
+    throw error;
+  }
 });

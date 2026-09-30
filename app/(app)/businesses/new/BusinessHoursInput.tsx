@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const DAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
@@ -20,22 +20,46 @@ function parseSchedule(value: string): ScheduleEntry[] {
   return value.split("; ").map((part) => {
     const match = part.match(/^([\wáéíóúÁÉÍÓÚ\-,\s]+)\s+(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/i);
     if (!match) return { days: [], open: "", close: "" };
-    const daysText = match[1];
-    const days = daysText
-      .split(/[-,]/)
-      .map((d) => d.trim())
+    // "Lun-Vie" es un rango (expande); "Lun,Mié" son días sueltos.
+    const days = match[1]
+      .split(",")
+      .flatMap((segment) => {
+        const trimmed = segment.trim();
+        const range = trimmed.match(/^(\w+)\s*-\s*(\w+)$/u);
+        if (!range) return [trimmed];
+        const from = DAYS.indexOf(range[1]);
+        const to = DAYS.indexOf(range[2]);
+        return from !== -1 && to !== -1 && to >= from
+          ? DAYS.slice(from, to + 1)
+          : [range[1], range[2]];
+      })
       .filter(Boolean);
     return { days, open: match[2], close: match[3] };
   });
 }
 
+function formatDays(days: string[]): string {
+  // Agrupa solo tramos contiguos como "Lun-Vie"; el resto va con comas.
+  const sorted = [...days].sort((a, b) => DAYS.indexOf(a) - DAYS.indexOf(b));
+  const parts: string[] = [];
+  let runStart = 0;
+  for (let i = 1; i <= sorted.length; i++) {
+    if (i === sorted.length || DAYS.indexOf(sorted[i]) !== DAYS.indexOf(sorted[i - 1]) + 1) {
+      parts.push(
+        i - runStart > 2
+          ? `${sorted[runStart]}-${sorted[i - 1]}`
+          : sorted.slice(runStart, i).join(",")
+      );
+      runStart = i;
+    }
+  }
+  return parts.join(",");
+}
+
 function formatSchedule(entries: ScheduleEntry[]): string {
   return entries
     .filter((e) => e.days.length > 0 && e.open && e.close)
-    .map((e) => {
-      const days = e.days.length > 1 ? `${e.days[0]}-${e.days[e.days.length - 1]}` : e.days[0];
-      return `${days} ${e.open}-${e.close}`;
-    })
+    .map((e) => `${formatDays(e.days)} ${e.open}-${e.close}`)
     .join("; ");
 }
 
@@ -48,20 +72,22 @@ function toggleDay(entry: ScheduleEntry, day: string): string[] {
 export function BusinessHoursInput({ value, onChange }: BusinessHoursInputProps) {
   const [entries, setEntries] = useState<ScheduleEntry[]>(() => parseSchedule(value));
 
-  useEffect(() => {
-    onChange(formatSchedule(entries));
-  }, [entries, onChange]);
+  // Notifica solo en cambios del usuario (no al montar, para no pisar el estado del padre).
+  function commit(next: ScheduleEntry[]) {
+    setEntries(next);
+    onChange(formatSchedule(next));
+  }
 
   function addEntry() {
-    setEntries([...entries, { days: ["Sáb", "Dom"], open: "09:00", close: "14:00" }]);
+    commit([...entries, { days: ["Sáb", "Dom"], open: "09:00", close: "14:00" }]);
   }
 
   function removeEntry(index: number) {
-    setEntries(entries.filter((_, i) => i !== index));
+    commit(entries.filter((_, i) => i !== index));
   }
 
   function updateEntry(index: number, updates: Partial<ScheduleEntry>) {
-    setEntries(entries.map((e, i) => (i === index ? { ...e, ...updates } : e)));
+    commit(entries.map((e, i) => (i === index ? { ...e, ...updates } : e)));
   }
 
   return (

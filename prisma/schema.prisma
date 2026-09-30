@@ -189,6 +189,7 @@ model Review {
   employee     Employee?          @relation(fields: [employeeId], references: [id], onDelete: SetNull)
   visitId       String?            @unique
   visit         Visit?             @relation(fields: [visitId], references: [id], onDelete: SetNull)
+  nfcScanHash   String?            @unique
   createdAt     DateTime           @default(now())
   updatedAt     DateTime         @updatedAt
   userId        String?

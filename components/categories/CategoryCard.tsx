@@ -14,7 +14,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       href={`/categoria/${category.slug}`}
-      className="group flex min-h-[120px] flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:shadow-[var(--shadow)]"
+      className="group relative flex min-h-[120px] flex-col items-center justify-center gap-2 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:shadow-[var(--shadow)]"
     >
       {category.imageUrl ? (
         <>

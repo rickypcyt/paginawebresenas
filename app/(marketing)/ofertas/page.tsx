@@ -18,6 +18,8 @@ export default async function OfertasPage() {
   const offers = await prisma.offer.findMany({
     where: {
       OR: [{ endDate: { gte: new Date() } }, { endDate: null }],
+      AND: [{ OR: [{ startDate: { lte: new Date() } }, { startDate: null }] }],
+      business: { status: { in: ["verified", "premium"] } },
     },
     include: { business: { select: { name: true, slug: true } } },
     orderBy: { createdAt: "desc" },

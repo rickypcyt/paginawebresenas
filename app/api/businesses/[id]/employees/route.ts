@@ -1,17 +1,18 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import prisma from "@/lib/prisma";
-import { rateLimit, rateLimitResponse, requireAdmin, withErrorHandler } from "@/lib/api-utils";
+import { rateLimit, rateLimitResponse, requireSession, withErrorHandler } from "@/lib/api-utils";
+import { isAdmin } from "@/lib/roles";
 
 interface EmployeesRouteProps {
   params: Promise<{ id: string }>;
 }
 
 export const POST = withErrorHandler(async (request: Request, context: EmployeesRouteProps) => {
-  const result = await requireAdmin();
+  const result = await requireSession();
   if ("error" in result) return result.error;
-  const { user: admin } = result.session;
-  if (!rateLimit(`create-employee:${admin.id}`, 30, 60_000)) return rateLimitResponse();
+  const { user: actor } = result.session;
+  if (!rateLimit(`create-employee:${actor.id}`, 30, 60_000)) return rateLimitResponse();
 
   const { id } = await context.params;
   const body = await request.json();
@@ -20,8 +21,16 @@ export const POST = withErrorHandler(async (request: Request, context: Employees
   const userEmail = typeof body.userEmail === "string" ? body.userEmail.trim().toLowerCase() : "";
   if (!name) return NextResponse.json({ error: "El nombre es obligatorio" }, { status: 400 });
 
-  const business = await prisma.business.findUnique({ where: { id }, select: { id: true } });
+  const business = await prisma.business.findUnique({
+    where: { id },
+    select: { id: true, ownerId: true },
+  });
   if (!business) return NextResponse.json({ error: "Negocio no encontrado" }, { status: 404 });
+
+  // Solo el dueño del negocio o un admin puede dar de alta empleados.
+  if (business.ownerId !== actor.id && !isAdmin(actor.role)) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+  }
 
   let user: { id: string; role: string; name: string } | null = null;
   if (userEmail) {

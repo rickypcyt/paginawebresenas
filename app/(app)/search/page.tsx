@@ -1,5 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
+import { getBusinessRatingMap } from "@/lib/ratings";
 import { SearchBar } from "@/components/search/SearchBar";
 import { BusinessCard } from "@/components/business/BusinessCard";
 
@@ -27,18 +28,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         orderBy: { createdAt: "desc" },
         include: {
           category: true,
-          reviews: { select: { rating: true } },
         },
         take: 20,
       })
     : [];
 
+  const ratingMap = await getBusinessRatingMap(businesses.map((b) => b.id));
+
   const results = businesses.map((b) => ({
     ...b,
-    rating: b.reviews.length
-      ? b.reviews.reduce((sum, r) => sum + r.rating, 0) / b.reviews.length
-      : 0,
-    reviewCount: b.reviews.length,
+    rating: ratingMap.get(b.id)?.avg ?? 0,
+    reviewCount: ratingMap.get(b.id)?.count ?? 0,
   }));
 
   return (

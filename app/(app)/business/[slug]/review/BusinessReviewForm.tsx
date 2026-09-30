@@ -18,7 +18,6 @@ interface ReviewFormProps {
 }
 
 export function BusinessReviewForm({ business, employee, nfcToken, isGuest }: ReviewFormProps) {
-  const [title, setTitle] = useState("");
   const [guestName, setGuestName] = useState("");
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(5);
@@ -27,7 +26,7 @@ export function BusinessReviewForm({ business, employee, nfcToken, isGuest }: Re
   const [published, setPublished] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const reviewText = `⭐`.repeat(rating) + "\n" + (title ? `${title}\n` : "") + content + `\n— ${employee ? `atención de ${employee.name} en ` : "en "}${business.name}${business.address ? `, ${business.address}` : ""}`;
+  const reviewText = `⭐`.repeat(rating) + "\n" + content + `\n— ${employee ? `atención de ${employee.name} en ` : "en "}${business.name}${business.address ? `, ${business.address}` : ""}`;
 
   const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     `${business.name} ${business.city || ""} ${business.address || ""}`.trim()
@@ -41,7 +40,7 @@ export function BusinessReviewForm({ business, employee, nfcToken, isGuest }: Re
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        title,
+        title: "",
         content,
         rating,
         businessId: business.id,

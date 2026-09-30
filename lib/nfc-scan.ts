@@ -6,11 +6,12 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 const TTL_MS = 10 * 60 * 1000; // 10 minutos
 
 function secret() {
-  return (
-    process.env.NFC_SCAN_SECRET ||
-    process.env.BETTER_AUTH_SECRET ||
-    "toque-nfc-scan-dev-secret"
-  );
+  const value = process.env.NFC_SCAN_SECRET || process.env.BETTER_AUTH_SECRET;
+  if (value) return value;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("NFC_SCAN_SECRET must be set in production");
+  }
+  return "toque-nfc-scan-dev-secret";
 }
 
 function sign(payload: string) {
