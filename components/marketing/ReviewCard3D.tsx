@@ -23,7 +23,7 @@ function roundedRectShape(w: number, h: number, r: number) {
   return s;
 }
 
-function plateMesh(w: number, h: number, depth: number, r: number, color: number) {
+function plateMesh(w: number, h: number, depth: number, r: number, color: number, edgeColor?: number) {
   const geo = new THREE.ExtrudeGeometry(roundedRectShape(w, h, r), {
     depth,
     bevelEnabled: true,
@@ -33,10 +33,11 @@ function plateMesh(w: number, h: number, depth: number, r: number, color: number
     steps: 1,
   });
   geo.translate(0, 0, -depth / 2);
-  return new THREE.Mesh(
-    geo,
-    new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.04 })
-  );
+  const face = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.04 });
+  if (edgeColor === undefined) return new THREE.Mesh(geo, face);
+  // ExtrudeGeometry: grupo 0 = caras, grupo 1 = laterales
+  const edge = new THREE.MeshStandardMaterial({ color: edgeColor, roughness: 0.45, metalness: 0.06 });
+  return new THREE.Mesh(geo, [face, edge]);
 }
 
 function cvTexture(wpx: number, hpx: number, draw: (ctx: CanvasRenderingContext2D, w: number, h: number) => void) {
@@ -259,8 +260,8 @@ function drawA(ctx: CanvasRenderingContext2D, W: number, H: number) {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.font = `500 ${W * 0.047}px ${FONT()}`;
-  ctx.fillText("Acerca tu móvil y déjanos", cx, H * 0.545);
-  ctx.fillText("tu reseña", cx, H * 0.595);
+  ctx.fillText("Acerca tu teléfono y", cx, H * 0.545);
+  ctx.fillText("déjanos tu reseña", cx, H * 0.595);
   // NFC + QR: dos cuadrados iguales, simétricos, con etiqueta debajo de cada uno
   const s = W * 0.175,
     by = H * 0.66,
@@ -288,21 +289,21 @@ function drawA(ctx: CanvasRenderingContext2D, W: number, H: number) {
   ctx.font = `600 ${W * 0.024}px ${FONT()}`;
   ctx.fillText("NFC", bx + s * 0.5, by + s + H * 0.028);
   ctx.fillText("QR", qx + s * 0.5, by + s + H * 0.028);
-  toqueLogo(ctx, cx, H * 0.91, W * 0.055);
+  toqueLogo(ctx, cx, H * 0.91, W * 0.042);
 }
 
 // ---------- TIPO B: credencial/membrete de personal ----------
 function drawB(ctx: CanvasRenderingContext2D, W: number, H: number) {
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = "#141414";
-  rr(ctx, 0, 0, W, H, H * 0.14);
+  rr(ctx, 0, 0, W, H, H * 0.17);
   ctx.fill();
   ctx.strokeStyle = "#E4002B";
   ctx.lineWidth = H * 0.022;
-  rr(ctx, H * 0.055, H * 0.055, W - H * 0.11, H - H * 0.11, H * 0.095);
+  rr(ctx, H * 0.014, H * 0.014, W - H * 0.028, H - H * 0.028, H * 0.156);
   ctx.stroke();
   ctx.save();
-  ctx.translate(W * 0.105, H * 0.185);
+  ctx.translate(W * 0.12, H * 0.185);
   ctx.fillStyle = "#E4002B";
   ctx.beginPath();
   ctx.ellipse(0, 0, W * 0.016, H * 0.072, 0.5, 0, 7);
@@ -327,20 +328,20 @@ function drawB(ctx: CanvasRenderingContext2D, W: number, H: number) {
   ctx.strokeStyle = "rgba(255,255,255,.16)";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(W * 0.1, H * 0.4);
+  ctx.moveTo(W * 0.06, H * 0.4);
   ctx.lineTo(W * 0.96, H * 0.4);
   ctx.stroke();
   ctx.textAlign = "left";
   ctx.fillStyle = "#ffffff";
   ctx.font = `700 ${H * 0.155}px ${FONT()}`;
-  ctx.fillText("Juan Sotomayor", W * 0.1, H * 0.585);
+  ctx.fillText("Juan Sotomayor", W * 0.06, H * 0.585);
   ctx.fillStyle = "#E4002B";
   ctx.font = `700 ${H * 0.07}px ${FONT()}`;
-  ctx.fillText("M A N A G E R", W * 0.1, H * 0.72);
+  ctx.fillText("M A N A G E R", W * 0.06, H * 0.72);
   const sy = H * 0.86,
     sr = H * 0.062,
     gap = H * 0.098,
-    x0 = W * 0.1 + sr + W * 0.006;
+    x0 = W * 0.06 + sr + W * 0.006;
   for (let i = 0; i < 5; i++) star(ctx, x0 + i * gap, sy, sr, "#e7b53c");
   nfcWaves(ctx, W * 0.87, H * 0.66, H * 0.09, "#ffffff");
 }
@@ -384,8 +385,8 @@ function buildB() {
   const w = 3.4,
     h = 2.0,
     d = 0.2,
-    r = 0.12;
-  g.add(plateMesh(w, h, d, r, 0x141414));
+    r = 0.32;
+  g.add(plateMesh(w, h, d, r, 0x141414, 0x0a0a0a));
   const front = new THREE.Mesh(
     new THREE.PlaneGeometry(w, h),
     new THREE.MeshBasicMaterial({ map: cvTexture(1024, 603, drawB), transparent: true })
@@ -398,7 +399,7 @@ function buildB() {
       map: cvTexture(512, 301, (ctx, W, H) => {
         ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = "#141414";
-        rr(ctx, 0, 0, W, H, H * 0.14);
+        rr(ctx, 0, 0, W, H, H * 0.17);
         ctx.fill();
         toqueLogo(ctx, W * 0.5, H * 0.5, W * 0.08, "#ffffff");
       }),
@@ -408,6 +409,29 @@ function buildB() {
   back.position.z = -(d / 2 + 0.06);
   back.rotation.y = Math.PI;
   g.add(back);
+
+  // Lámina de acrílico sobre la cara frontal
+  const acrylicGeo = new THREE.ExtrudeGeometry(roundedRectShape(w, h, r), {
+    depth: 0.015,
+    bevelEnabled: false,
+    steps: 1,
+  });
+  const acrylic = new THREE.Mesh(
+    acrylicGeo,
+    new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.14,
+      roughness: 0.05,
+      metalness: 0,
+      clearcoat: 1,
+      clearcoatRoughness: 0.08,
+      reflectivity: 0.6,
+      depthWrite: false,
+    })
+  );
+  acrylic.position.z = d / 2 + 0.065;
+  g.add(acrylic);
   return g;
 }
 
@@ -501,7 +525,8 @@ export function ReviewCard3D() {
 
     // Distancia para que el modelo quepa completo (esfera envolvente) en el viewport
     const fit = () => {
-      const radius = BOUNDS[modelRef.current] * 1.08;
+      const padding = modelRef.current === "b" ? 0.82 : 1.08;
+      const radius = BOUNDS[modelRef.current] * padding;
       const t = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
       const limiting = t * Math.min(1, camera.aspect);
       const fitZ = radius / limiting;

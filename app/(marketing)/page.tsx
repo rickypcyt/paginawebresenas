@@ -4,6 +4,7 @@ import { Check, Package, Smartphone, MessageSquare, Zap, MousePointerClick, BarC
 import { ReviewCard3D } from "@/components/marketing/ReviewCard3D";
 import { NfcSimulators } from "@/components/marketing/NfcSimulators";
 import { PlatformPreviews } from "@/components/marketing/PlatformPreviews";
+import { PricingSection } from "@/components/marketing/PricingSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
@@ -64,45 +65,6 @@ const teamBenefits = [
   "Participa en dinámicas de reconocimiento interno",
 ];
 
-const plans = [
-  {
-    slug: "starter",
-    name: "Starter",
-    tagline: "Básico",
-    employees: "1–5 empleados",
-    tagPrice: "$20",
-    monthly: "$19.99",
-    featured: false,
-  },
-  {
-    slug: "business",
-    name: "Business",
-    tagline: "Negocio",
-    employees: "6–10 empleados",
-    tagPrice: "$15",
-    monthly: "$29.99",
-    featured: true,
-  },
-  {
-    slug: "business-plus",
-    name: "Business Plus",
-    tagline: "Negocio Plus",
-    employees: "11–20 empleados",
-    tagPrice: "$12",
-    monthly: "$49.99",
-    featured: false,
-  },
-  {
-    slug: "enterprise",
-    name: "Enterprise",
-    tagline: "Empresarial",
-    employees: "21–50 empleados",
-    tagPrice: "$10",
-    monthly: "$79.99",
-    featured: false,
-  },
-];
-
 const faqs = [
   {
     q: "¿Necesitan mis clientes descargar una aplicación?",
@@ -132,19 +94,19 @@ const faqs = [
 
 export default function LandingPage() {
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-[var(--background)] px-6 py-16 md:py-24">
+    <main className="min-h-[calc(100vh-4rem)] bg-[var(--background)] px-4 py-10 sm:px-6 md:py-24">
       <JsonLd />
       <div className="mx-auto w-full max-w-6xl">
         {/* Hero */}
-        <section className="mb-16 grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+        <section className="mb-10 grid items-center gap-8 md:mb-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           <div className="text-center lg:text-left">
             <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--primary-dark)]">
               Cada experiencia cuenta. Cada toque, también.
             </p>
-            <h1 className="mb-6 text-4xl font-medium tracking-tight text-[var(--foreground)] md:text-6xl">
+            <h1 className="mb-4 text-3xl font-medium tracking-tight text-[var(--foreground)] sm:text-4xl md:mb-6 md:text-6xl">
               Consigue reseñas de Google con un toque
             </h1>
-            <p className="mb-8 text-lg leading-relaxed text-[var(--muted-foreground)] md:text-xl">
+            <p className="mb-6 text-base leading-relaxed text-[var(--muted-foreground)] md:mb-8 md:text-xl">
               Somos Toque: ofrecemos tags NFC y códigos QR para que tus clientes dejen su reseña en Google con un solo gesto. Además, incluimos un sistema interno de valoraciones útil tanto para empleados como para el equipo administrativo.
             </p>
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
@@ -161,7 +123,7 @@ export default function LandingPage() {
         </section>
 
         {/* Barra de valor */}
-        <section className="mb-20 grid gap-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 sm:grid-cols-3">
+        <section className="mb-10 grid gap-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 sm:grid-cols-3 sm:p-6 md:mb-20">
           {valueProps.map((prop) => {
             const Icon = prop.icon;
             return (
@@ -179,8 +141,8 @@ export default function LandingPage() {
         </section>
 
         {/* Cómo funciona */}
-        <section id="como-funciona" className="mb-20 scroll-mt-20 rounded-3xl bg-[var(--secondary)] p-8 md:p-12">
-          <div className="mb-10 text-center">
+        <section id="como-funciona" className="mb-10 scroll-mt-20 rounded-3xl bg-[var(--secondary)] p-5 sm:p-8 md:mb-20 md:p-12">
+          <div className="mb-6 text-center md:mb-10">
             <h2 className="text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
               ¿Cómo funciona?
             </h2>
@@ -188,7 +150,7 @@ export default function LandingPage() {
               De la atención al feedback en segundos.
             </p>
           </div>
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-3 sm:gap-8">
             {steps.map((step, i) => {
               const Icon = step.icon;
               return (
@@ -207,8 +169,8 @@ export default function LandingPage() {
         </section>
 
         {/* Dos NFC, dos experiencias */}
-        <section id="nfc" className="mb-20 scroll-mt-20">
-          <div className="mb-10 text-center">
+        <section id="nfc" className="mb-10 scroll-mt-20 md:mb-20">
+          <div className="mb-6 text-center md:mb-10">
             <h2 className="text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
               Dos NFC. Dos objetivos. Una plataforma.
             </h2>
@@ -217,8 +179,8 @@ export default function LandingPage() {
         </section>
 
         {/* Beneficios */}
-        <section id="beneficios" className="mb-20 scroll-mt-20 rounded-3xl border border-[var(--border)] p-8 md:p-12">
-          <div className="mb-10 text-center">
+        <section id="beneficios" className="mb-10 scroll-mt-20 rounded-3xl border border-[var(--border)] p-5 sm:p-8 md:mb-20 md:p-12">
+          <div className="mb-6 text-center md:mb-10">
             <h2 className="text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
               Una mejor experiencia para todos
             </h2>
@@ -247,9 +209,6 @@ export default function LandingPage() {
               </ul>
             </div>
           </div>
-          <p className="mt-10 text-center text-sm italic text-[var(--muted-foreground)]">
-            Cada buen servicio tiene su toque.
-          </p>
         </section>
 
         {/* Plataforma */}
@@ -258,7 +217,7 @@ export default function LandingPage() {
         </div>
 
         {/* Precios */}
-        <section id="precios" className="mb-20 mt-20 scroll-mt-20">
+        <section id="precios" className="mb-10 mt-10 scroll-mt-20 md:mb-20 md:mt-20">
           <div className="mb-4 text-center">
             <h2 className="text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
               Precios simples: compra tu tag o elige tu plan
@@ -271,111 +230,12 @@ export default function LandingPage() {
             Precios en USD, impuestos no incluidos. Los tags incluyen personalización, preparación y envío.
           </div>
 
-          {/* Tipo A — compra única */}
-          <div className="mx-auto mb-10 flex max-w-3xl flex-col items-center gap-6 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 sm:flex-row sm:justify-between sm:p-8">
-            <div className="flex items-center gap-4">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary-dark)]">
-                <MousePointerClick className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--primary-dark)]">
-                  Tipo A · Toque Público
-                </p>
-                <h3 className="mt-1 text-lg font-semibold text-[var(--foreground)]">
-                  Tag NFC para Google Reviews
-                </h3>
-                <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                  El cliente acerca su teléfono y llega directo a la ficha de Google de tu negocio. Sin suscripción.
-                </p>
-              </div>
-            </div>
-            <div className="shrink-0 text-center sm:text-right">
-              <p className="text-3xl font-bold text-[var(--foreground)]">
-                $30
-                <span className="text-sm font-normal text-[var(--muted-foreground)]"> pago único</span>
-              </p>
-              <Link
-                href="/checkout?product=tag-a"
-                className="mt-3 inline-block rounded-full bg-[var(--primary)] px-5 py-2.5 text-sm font-medium text-[var(--primary-foreground)] transition hover:bg-[var(--primary-dark)]"
-              >
-                Comprar tag
-              </Link>
-            </div>
-          </div>
-
-          <p className="mb-6 text-center text-sm font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
-            Tipo B · Toque Personal — planes por tamaño de equipo
-          </p>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative flex flex-col rounded-3xl p-6 ${
-                  plan.featured
-                    ? "border-2 border-[var(--primary)] bg-[var(--card)] shadow-[var(--shadow-lg)]"
-                    : "border border-[var(--border)] bg-[var(--card)]"
-                }`}
-              >
-                {plan.featured && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[var(--primary)] px-3 py-1 text-xs font-semibold text-[var(--primary-foreground)]">
-                    Más popular
-                  </span>
-                )}
-                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
-                  {plan.tagline}
-                </p>
-                <h3 className="mt-1 text-xl font-semibold text-[var(--foreground)]">
-                  {plan.name}
-                </h3>
-                <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                  {plan.employees}
-                </p>
-                <p className="mt-4 text-3xl font-bold text-[var(--foreground)]">
-                  {plan.monthly}
-                  <span className="text-sm font-normal text-[var(--muted-foreground)]">/mes</span>
-                </p>
-                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                  Tag por empleado: <span className="font-semibold text-[var(--foreground)]">{plan.tagPrice}</span> (pago único)
-                </p>
-                <ul className="mt-5 flex-1 space-y-2 text-sm text-[var(--foreground)]">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-[var(--primary)]" />
-                    NFC tipo B por empleado
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-[var(--primary)]" />
-                    Panel y ranking interno
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-[var(--primary)]" />
-                    Reseñas internas de clientes
-                  </li>
-                </ul>
-                <Link
-                  href={`/checkout?plan=${plan.slug}`}
-                  className={`mt-6 rounded-full px-4 py-2.5 text-center text-sm font-medium transition ${
-                    plan.featured
-                      ? "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-dark)]"
-                      : "border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--secondary)]"
-                  }`}
-                >
-                  Comprar plan
-                </Link>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 text-center text-sm text-[var(--muted-foreground)]">
-            ¿Más de 50 empleados?{" "}
-            <Link href="/business-requests" className="font-semibold text-[var(--primary-dark)] hover:underline">
-              Contacta con nosotros
-            </Link>{" "}
-            para un presupuesto a medida.
-          </p>
+          <PricingSection />
         </section>
 
         {/* FAQ */}
-        <section id="faq" className="mb-20 scroll-mt-20 rounded-3xl border border-[var(--border)] p-8 md:p-12">
-          <h2 className="mb-8 text-center text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-3xl">
+        <section id="faq" className="mb-10 scroll-mt-20 rounded-3xl border border-[var(--border)] p-5 sm:p-8 md:mb-20 md:p-12">
+          <h2 className="mb-6 text-center text-2xl font-medium tracking-tight text-[var(--foreground)] md:mb-8 md:text-3xl">
             Preguntas frecuentes
           </h2>
           <div className="mx-auto max-w-3xl space-y-3">
@@ -397,14 +257,14 @@ export default function LandingPage() {
         </section>
 
         {/* CTA final */}
-        <section className="rounded-3xl bg-[var(--secondary)] p-8 text-center md:p-14">
+        <section className="rounded-3xl bg-[var(--secondary)] p-6 text-center sm:p-8 md:p-14">
           <h2 className="text-2xl font-medium tracking-tight text-[var(--foreground)] md:text-4xl">
             Tu próximo buen servicio empieza con un toque.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[var(--muted-foreground)] md:text-base">
             Facilita las reseñas, escucha a tus clientes y reconoce el trabajo de tu equipo con Toque.
           </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row md:mt-8">
             <Link
               href="/business-requests"
               className="rounded-full bg-[var(--foreground)] px-7 py-3 text-sm font-medium text-[var(--background)] transition hover:opacity-90"

@@ -48,7 +48,7 @@ export default async function EmployeeJoinPage() {
           {request?.status === "rejected" ? "Tu solicitud anterior fue rechazada. Puedes comprobar los datos y volver a enviarla." : "Busca el negocio donde trabajas. Nuestro equipo verificará tu solicitud antes de darte acceso."}
         </p>
       </div>
-      <JoinBusinessForm businesses={businesses} />
+      <JoinBusinessForm businesses={businesses} initialName={session.user.name || ""} />
     </main>
   );
 }

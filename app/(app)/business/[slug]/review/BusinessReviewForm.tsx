@@ -52,7 +52,8 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
     if (res.ok) {
       setPublished(true);
     } else {
-      alert("Error al publicar la reseña");
+      const data = await res.json().catch(() => null);
+      alert(data?.error ?? "Error al publicar la reseña");
     }
   }
 
@@ -116,6 +117,7 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
           placeholder="Ej. Excelente atención"
           className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
         />

@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pencil, Trash2, X } from "lucide-react";
+import { AdminImageInput } from "./AdminImageInput";
 
 export interface AdminField {
   name: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "select" | "checkbox";
+  type?: "text" | "textarea" | "number" | "select" | "checkbox" | "image" | "password";
   options?: { value: string; label: string }[];
 }
 
@@ -15,15 +16,32 @@ interface AdminEntityActionsProps {
   endpoint: string;
   fields: AdminField[];
   values: Record<string, string | number | boolean | null>;
-  deleteConfirm?: string;
 }
 
-export function AdminEntityActions({ endpoint, fields, values, deleteConfirm }: AdminEntityActionsProps) {
+export function AdminEntityActions({ endpoint, fields, values }: AdminEntityActionsProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
   const [form, setForm] = useState<Record<string, string | number | boolean>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const actionsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!confirming) return;
+    function onPointerDown(e: MouseEvent) {
+      if (actionsRef.current && !actionsRef.current.contains(e.target as Node)) setConfirming(false);
+    }
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setConfirming(false);
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [confirming]);
 
   function openEditor() {
     const initial: Record<string, string | number | boolean> = {};
@@ -55,12 +73,17 @@ export function AdminEntityActions({ endpoint, fields, values, deleteConfirm }: 
   }
 
   async function remove() {
-    if (!window.confirm(deleteConfirm ?? "¿Eliminar este registro? Esta acción no se puede deshacer.")) return;
+    setConfirming(false);
+    const row =
+      actionsRef.current?.closest<HTMLElement>("div.rounded-xl") ?? actionsRef.current?.parentElement ?? null;
+    if (row) row.style.display = "none";
     setLoading(true);
     const res = await fetch(endpoint, { method: "DELETE" });
     setLoading(false);
-    if (res.ok) router.refresh();
-    else {
+    if (res.ok) {
+      router.refresh();
+    } else {
+      if (row) row.style.display = "";
       const data = await res.json().catch(() => null);
       alert(data?.error ?? "Error al eliminar");
     }
@@ -68,7 +91,7 @@ export function AdminEntityActions({ endpoint, fields, values, deleteConfirm }: 
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div ref={actionsRef} className="relative flex items-center gap-2">
         <button
           type="button"
           onClick={openEditor}
@@ -79,12 +102,31 @@ export function AdminEntityActions({ endpoint, fields, values, deleteConfirm }: 
         </button>
         <button
           type="button"
-          onClick={remove}
+          onClick={() => setConfirming((v) => !v)}
           disabled={loading}
           className="inline-flex items-center gap-1 rounded-lg border border-red-200 px-2.5 py-1 text-xs font-medium text-red-600 hover:bg-red-50 disabled:opacity-50"
         >
           <Trash2 className="h-3 w-3" /> Eliminar
         </button>
+        {confirming && (
+          <div className="absolute right-0 top-full z-40 mt-1 flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--card)] p-2 shadow-lg">
+            <span className="whitespace-nowrap text-xs font-medium text-[var(--foreground)]">¿Eliminar?</span>
+            <button
+              type="button"
+              onClick={remove}
+              className="rounded-lg bg-red-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-red-700"
+            >
+              Sí
+            </button>
+            <button
+              type="button"
+              onClick={() => setConfirming(false)}
+              className="rounded-lg border border-[var(--input)] px-2.5 py-1 text-xs font-medium text-[var(--foreground)] hover:bg-[var(--muted)]"
+            >
+              No
+            </button>
+          </div>
+        )}
       </div>
 
       {open && (
@@ -116,7 +158,12 @@ export function AdminEntityActions({ endpoint, fields, values, deleteConfirm }: 
                 ) : (
                   <>
                     <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">{field.label}</label>
-                    {field.type === "textarea" ? (
+                    {field.type === "image" ? (
+                      <AdminImageInput
+                        value={String(form[field.name] ?? "")}
+                        onChange={(url) => setForm({ ...form, [field.name]: url })}
+                      />
+                    ) : field.type === "textarea" ? (
                       <textarea
                         value={String(form[field.name] ?? "")}
                         onChange={(e) => setForm({ ...form, [field.name]: e.target.value })}
@@ -135,7 +182,7 @@ export function AdminEntityActions({ endpoint, fields, values, deleteConfirm }: 
                       </select>
                     ) : (
                       <input
-                        type={field.type === "number" ? "number" : "text"}
+                        type={field.type === "number" ? "number" : field.type === "password" ? "password" : "text"}
                         value={String(form[field.name] ?? "")}
                         onChange={(e) =>
                           setForm({

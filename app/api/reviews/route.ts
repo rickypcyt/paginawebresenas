@@ -99,12 +99,6 @@ export const POST = withErrorHandler(async (request: Request) => {
       },
       orderBy: { createdAt: "desc" },
     });
-    if (!visit) {
-      return NextResponse.json(
-        { error: "Solo puedes reseñar tras escanear el QR o acercar tu teléfono al NFC del negocio" },
-        { status: 403 }
-      );
-    }
   }
 
   const review = await prisma.review.create({
@@ -114,7 +108,7 @@ export const POST = withErrorHandler(async (request: Request) => {
       rating,
       userId: user.id,
       businessId: resolvedBusinessId,
-      verification: nfcTag ? "nfc" : "qr",
+      verification: nfcTag ? "nfc" : visit ? "qr" : "none",
       visitId: visit?.id,
       employeeId,
     },

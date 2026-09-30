@@ -2,7 +2,11 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
-export default async function DashboardBusinessPage() {
+interface DashboardBusinessPageProps {
+  searchParams: Promise<{ business?: string }>;
+}
+
+export default async function DashboardBusinessPage({ searchParams }: DashboardBusinessPageProps) {
   const session = await getSession();
   const businesses = await prisma.business.findMany({
     where: { ownerId: session?.user?.id },
@@ -16,6 +20,9 @@ export default async function DashboardBusinessPage() {
     },
   });
 
+  const { business: selectedParam } = await searchParams;
+  const selected = businesses.find((b) => b.id === selectedParam) ?? businesses[0] ?? null;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -27,7 +34,24 @@ export default async function DashboardBusinessPage() {
           Solicitar negocio
         </Link>
       </div>
-      {businesses.length === 0 ? (
+      {businesses.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          {businesses.map((b) => (
+            <Link
+              key={b.id}
+              href={`/dashboard/business?business=${b.id}`}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                b.id === selected?.id
+                  ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                  : "border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)]"
+              }`}
+            >
+              {b.name}
+            </Link>
+          ))}
+        </div>
+      )}
+      {!selected ? (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center">
           <p className="text-[var(--muted-foreground)]">Aún no tienes negocios registrados.</p>
           <p className="mt-2 text-sm text-[var(--muted-foreground)]">
@@ -36,7 +60,7 @@ export default async function DashboardBusinessPage() {
         </div>
       ) : (
         <div className="grid gap-4">
-          {businesses.map((b) => (
+          {[selected].map((b) => (
             <div key={b.id} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
               <Link href={`/business/${b.slug}`} className="flex items-center justify-between hover:text-[var(--primary)]">
                 <div>

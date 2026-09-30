@@ -17,7 +17,9 @@ export async function getSession(): Promise<AppSession> {
   const session = (await auth.api.getSession({ headers: h })) as AppSession;
 
   if (!session?.user?.id) return session;
+  if (session.user.role) return session;
 
+  // Fallback por si la sesión fue emitida antes de exponer `role` como additionalField
   const dbUser = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: { role: true },

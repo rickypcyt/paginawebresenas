@@ -16,6 +16,16 @@ export const auth = betterAuth({
     enabled: true,
     minPasswordLength: 4,
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "user",
+        input: false,
+      },
+    },
+  },
   plugins: [dash()],
   socialProviders: {
     google: {

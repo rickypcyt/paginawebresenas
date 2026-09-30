@@ -71,7 +71,6 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
                         { name: "active", label: "Activo", type: "checkbox" },
                       ]}
                       values={{ name: employee.name, role: employee.role, active: employee.active }}
-                      deleteConfirm={`¿Eliminar a ${employee.name}?`}
                     />
                   </div>
                 </div>
@@ -85,7 +84,6 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
                         { name: "active", label: "Tag activo", type: "checkbox" },
                       ]}
                       values={{ label: employee.nfcTags[0].label, active: employee.nfcTags[0].active }}
-                      deleteConfirm="¿Eliminar este tag NFC?"
                     />
                   </div>
                 )}
@@ -116,7 +114,6 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
                       { name: "active", label: "Tag activo", type: "checkbox" },
                     ]}
                     values={{ label: tag.label, active: tag.active }}
-                    deleteConfirm="¿Eliminar este tag NFC?"
                   />
                 </div>
               </div>

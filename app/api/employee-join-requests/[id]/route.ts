@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { Prisma } from "@/src/generated/prisma/client";
 import prisma from "@/lib/prisma";
+import { sendEmail, employeeApprovedEmail } from "@/lib/email";
 import { rateLimit, rateLimitResponse, requireAdmin, withErrorHandler } from "@/lib/api-utils";
 
 interface JoinRequestRouteProps {
@@ -21,7 +22,10 @@ export const PATCH = withErrorHandler(async (request: Request, context: JoinRequ
 
   const joinRequest = await prisma.employeeJoinRequest.findUnique({
     where: { id },
-    include: { user: { select: { id: true, name: true, role: true } } },
+    include: {
+      user: { select: { id: true, name: true, email: true, role: true } },
+      business: { select: { name: true } },
+    },
   });
   if (!joinRequest) return NextResponse.json({ error: "Solicitud no encontrada" }, { status: 404 });
   if (joinRequest.status !== "pending") {
@@ -74,7 +78,7 @@ export const PATCH = withErrorHandler(async (request: Request, context: JoinRequ
         where: { userId: joinRequest.userId, id: { not: id }, status: "pending" },
         data: { status: "rejected", reviewedAt: new Date() },
       });
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    }, { timeout: 15000, maxWait: 15000 });
   } catch (error) {
     if (error instanceof Error && error.message === "ALREADY_ASSOCIATED") {
       return NextResponse.json({ error: "El usuario ya pertenece a un negocio" }, { status: 409 });
@@ -84,6 +88,11 @@ export const PATCH = withErrorHandler(async (request: Request, context: JoinRequ
     }
     throw error;
   }
+
+  const mail = employeeApprovedEmail(joinRequest.user.name, joinRequest.business.name);
+  sendEmail(joinRequest.user.email, mail.subject, mail.html).catch((e) =>
+    console.error("[email] Error enviando aprobación de empleado:", e)
+  );
 
   return NextResponse.json({ status: "approved" });
 });

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import type { AdminField } from "./AdminEntityActions";
+import { AdminImageInput } from "./AdminImageInput";
 
 interface AdminCreateButtonProps {
   endpoint: string;
@@ -87,7 +88,12 @@ export function AdminCreateButton({ endpoint, fields, label, title }: AdminCreat
                 ) : (
                   <>
                     <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">{field.label}</label>
-                    {field.type === "textarea" ? (
+                    {field.type === "image" ? (
+                      <AdminImageInput
+                        value={String(form[field.name] ?? "")}
+                        onChange={(url) => setForm({ ...form, [field.name]: url })}
+                      />
+                    ) : field.type === "textarea" ? (
                       <textarea
                         value={String(form[field.name] ?? "")}
                         onChange={(e) => setForm({ ...form, [field.name]: e.target.value })}
@@ -106,7 +112,7 @@ export function AdminCreateButton({ endpoint, fields, label, title }: AdminCreat
                       </select>
                     ) : (
                       <input
-                        type={field.type === "number" ? "number" : "text"}
+                        type={field.type === "number" ? "number" : field.type === "password" ? "password" : "text"}
                         value={String(form[field.name] ?? "")}
                         onChange={(e) =>
                           setForm({

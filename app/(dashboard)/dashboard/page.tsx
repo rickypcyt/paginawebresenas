@@ -6,7 +6,6 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PeriodSelector } from "@/components/dashboard/PeriodSelector";
-import { DevRoleSwitcher } from "@/components/dev/DevRoleSwitcher";
 import { EmployeePanel } from "@/components/employee/EmployeePanel";
 import type { AppSession } from "@/lib/session";
 import {
@@ -75,6 +74,18 @@ export default async function DashboardHomePage({
     where: { id: session.user.id },
     select: { name: true, email: true, role: true },
   });
+
+  // El admin solo usa el panel de administración
+  if (user?.role === "admin") redirect("/admin");
+
+  if (user?.role === "user") {
+    // Si ya pidió unirse a un negocio, su vista es la pantalla de espera de empleado, no la de cliente
+    const pendingJoin = await prisma.employeeJoinRequest.findFirst({
+      where: { userId: session.user.id, status: "pending" },
+      select: { id: true },
+    });
+    if (pendingJoin) redirect("/employee/join");
+  }
 
   if (user?.role === "employee" || user?.role === "user") {
     return <MemberDashboard session={session} user={user} />;
@@ -148,9 +159,6 @@ async function MemberDashboard({
 
   return (
     <div>
-      {process.env.NODE_ENV !== "production" && (
-        <DevRoleSwitcher currentRole={user?.role ?? undefined} />
-      )}
       <AccountHeader user={user} />
 
       {isEmployee && !employee && (
@@ -216,8 +224,9 @@ async function BusinessDashboard({
   session: NonNullable<AppSession>;
   searchParams: DashboardHomePageProps["searchParams"];
 }) {
+  const isAdminUser = session.user.role === "admin";
   const businesses = await prisma.business.findMany({
-    where: { ownerId: session.user.id },
+    where: isAdminUser ? {} : { ownerId: session.user.id },
     select: { id: true, name: true },
     orderBy: { createdAt: "desc" },
   });
@@ -225,9 +234,6 @@ async function BusinessDashboard({
   if (businesses.length === 0) {
     return (
       <div className="space-y-6">
-        {process.env.NODE_ENV !== "production" && (
-          <DevRoleSwitcher currentRole={session.user.role} />
-        )}
         <h1 className="text-2xl font-bold text-[var(--foreground)]">Mi negocio</h1>
         <EmptyState
           icon="🏪"
@@ -325,15 +331,17 @@ async function BusinessDashboard({
 
   return (
     <div className="space-y-8">
-      {process.env.NODE_ENV !== "production" && (
-        <DevRoleSwitcher currentRole={session.user.role} />
-      )}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-[var(--muted-foreground)]">Panel del negocio</p>
           <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--foreground)]">
             {business.name}
           </h1>
+          {session.user.role === "admin" && (
+            <Link href="/admin" className="mt-2 inline-block text-sm font-medium text-[var(--primary-dark)] hover:underline">
+              Ir al panel de administración →
+            </Link>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {businesses.length > 1 && (

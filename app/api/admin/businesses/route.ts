@@ -42,6 +42,7 @@ export const POST = withErrorHandler(async (request: Request) => {
       phone: typeof body.phone === "string" && body.phone.trim() ? body.phone.trim() : null,
       status: STATUSES.includes(body.status) ? body.status : "community",
       featured: body.featured === true,
+      imageUrl: typeof body.imageUrl === "string" && body.imageUrl.trim() ? body.imageUrl.trim() : null,
     },
   });
 

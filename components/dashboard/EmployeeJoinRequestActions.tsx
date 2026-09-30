@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, X } from "lucide-react";
 
@@ -8,10 +8,13 @@ export function EmployeeJoinRequestActions({ requestId }: { requestId: string })
   const router = useRouter();
   const [loading, setLoading] = useState<"approve" | "reject" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   async function review(action: "approve" | "reject") {
     setLoading(action);
     setError(null);
+    const row =
+      rootRef.current?.closest<HTMLElement>("div.rounded-xl") ?? rootRef.current?.parentElement ?? null;
     try {
       const response = await fetch(`/api/employee-join-requests/${requestId}`, {
         method: "PATCH",
@@ -23,6 +26,7 @@ export function EmployeeJoinRequestActions({ requestId }: { requestId: string })
         setError(data.error || "No se pudo revisar la solicitud");
         return;
       }
+      if (row) row.style.display = "none";
       router.refresh();
     } catch {
       setError("No se pudo revisar la solicitud");
@@ -32,7 +36,7 @@ export function EmployeeJoinRequestActions({ requestId }: { requestId: string })
   }
 
   return (
-    <div>
+    <div ref={rootRef}>
       <div className="flex gap-2">
         <button type="button" onClick={() => review("approve")} disabled={loading !== null} className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--primary)] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[var(--primary-dark)] disabled:opacity-50">
           <Check className="h-3.5 w-3.5" /> {loading === "approve" ? "Aprobando…" : "Aprobar"}

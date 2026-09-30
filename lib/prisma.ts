@@ -4,6 +4,7 @@ import { neonConfig } from "@neondatabase/serverless";
 import ws from "ws";
 
 neonConfig.webSocketConstructor = ws;
+// Nota: no usar poolQueryViaFetch — las transacciones interactivas ($transaction) requieren WebSocket
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 

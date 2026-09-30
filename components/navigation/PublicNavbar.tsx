@@ -40,12 +40,6 @@ export function PublicNavbar() {
           >
             Acceder
           </button>
-          <Link
-            href="/business-requests"
-            className="rounded-full bg-[var(--primary)] px-4 py-1.5 text-sm font-medium text-[var(--primary-foreground)] transition hover:bg-[var(--primary-dark)]"
-          >
-            Solicitar Toque
-          </Link>
         </div>
       </div>
     </header>

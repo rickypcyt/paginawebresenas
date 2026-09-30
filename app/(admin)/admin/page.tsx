@@ -1,24 +1,17 @@
 import Link from "next/link";
 import prisma from "@/lib/prisma";
-import { Store, Users, Building2, Star, Tag, Tags, CreditCard, UserCog } from "lucide-react";
+import { Store, Users, Building2, Star, CreditCard, UserCog } from "lucide-react";
 import { ReviewCard } from "@/components/reviews/ReviewCard";
-import { OfferCard } from "@/components/offers/OfferCard";
 import { AdminEntityActions } from "@/components/admin/AdminEntityActions";
+import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
+import { AdminEmployeeList } from "@/components/admin/AdminEmployeeList";
 import { AdminCreateButton } from "@/components/admin/AdminCreateButton";
 import { BusinessRequestActions } from "@/components/admin/BusinessRequestActions";
 import { EmployeeJoinRequestActions } from "@/components/dashboard/EmployeeJoinRequestActions";
 import { ShowMore } from "@/components/admin/ShowMore";
-import { CategoryForm } from "@/components/admin/CategoryForm";
 import { VerifyButton } from "./businesses/VerifyButton";
 
 const INITIAL = 5;
-
-const STATUS_LABELS: Record<string, string> = {
-  community: "👥 Comunidad",
-  claim_pending: "⏳ Reclamación",
-  verified: "✅ Verificado",
-  premium: "💎 Premium",
-};
 
 const PAYMENT_STATUS_LABELS: Record<string, { label: string; className: string }> = {
   pending: { label: "Pendiente", className: "bg-amber-50 text-amber-700" },
@@ -50,7 +43,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+    <section className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
       <div className="mb-4 flex items-center gap-2">
         {icon}
         <h2 className="font-semibold text-[var(--foreground)]">{title}</h2>
@@ -63,14 +56,17 @@ function Section({
 }
 
 export default async function AdminDashboardPage() {
-  const [users, businesses, reviews, offers, categories, businessRequests, employeeJoinRequests, payments, employees] = await Promise.all([
-    prisma.user.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
+  const [users, businesses, reviews, businessRequests, employeeJoinRequests, payments, employees] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      include: { employee: { select: { id: true } } },
+    }),
     prisma.business.findMany({
       orderBy: { createdAt: "desc" },
       take: 50,
       include: {
         owner: { select: { id: true, name: true } },
-        category: { select: { name: true } },
         _count: { select: { reviews: true, employees: true, nfcTags: true } },
       },
     }),
@@ -82,12 +78,6 @@ export default async function AdminDashboardPage() {
         business: { select: { name: true } },
       },
     }),
-    prisma.offer.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 24,
-      include: { business: { select: { name: true, slug: true } } },
-    }),
-    prisma.category.findMany({ orderBy: { name: "asc" } }),
     prisma.businessRequest.findMany({
       where: { status: "pending" },
       orderBy: { createdAt: "asc" },
@@ -112,7 +102,7 @@ export default async function AdminDashboardPage() {
       orderBy: { createdAt: "desc" },
       take: 50,
       include: {
-        business: { select: { name: true } },
+        business: { select: { id: true, name: true } },
         user: { select: { name: true, email: true } },
       },
     }),
@@ -123,10 +113,11 @@ export default async function AdminDashboardPage() {
     ...users.map((u) => ({ value: u.id, label: `${u.name} (${u.email})` })),
   ];
   const businessOptions = businesses.map((b) => ({ value: b.id, label: b.name }));
-  const categoryOptions = [
-    { value: "", label: "Sin categoría" },
-    ...categories.map((c) => ({ value: c.id, label: c.name })),
-  ];
+
+  // Usuarios con rol employee que aún no tienen ficha de empleado en ningún negocio
+  const unassignedEmployees = users
+    .filter((u) => u.role === "employee" && !u.employee)
+    .map((u) => ({ id: u.id, name: u.name, email: u.email }));
 
   const pendingCount = businessRequests.length + employeeJoinRequests.length;
 
@@ -153,26 +144,7 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Pagos */}
-      <Section icon={<CreditCard className="h-5 w-5 text-[var(--primary-dark)]" />} title="Pagos" count={payments.length}>
-        {payments.length === 0 ? (
-          <p className="text-sm text-[var(--muted-foreground)]">Sin pagos registrados.</p>
-        ) : (
-          <div className="space-y-3">
-            {payments.slice(0, INITIAL).map((payment) => (
-              <PaymentRow key={payment.id} payment={payment} />
-            ))}
-            <ShowMore count={payments.length - INITIAL}>
-              {payments.slice(INITIAL).map((payment) => (
-                <div key={payment.id} className="mb-3">
-                  <PaymentRow payment={payment} />
-                </div>
-              ))}
-            </ShowMore>
-          </div>
-        )}
-      </Section>
-
+      <div className="grid items-start gap-6 lg:grid-cols-2">
       {/* Solicitudes */}
       <Section icon={<Store className="h-5 w-5 text-[var(--primary-dark)]" />} title="Solicitudes pendientes" count={pendingCount}>
         {pendingCount === 0 ? (
@@ -182,7 +154,10 @@ export default async function AdminDashboardPage() {
             {businessRequests.slice(0, INITIAL).map((request) => (
               <div key={request.id} className="flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">{request.name}</p>
+                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                    {request.name}
+                    <span className="ml-2 rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)]">Nuevo negocio</span>
+                  </p>
                   <p className="truncate text-xs text-[var(--muted-foreground)]">
                     {[request.categoryName, request.city, request.address].filter(Boolean).join(" · ") || "Sin datos"}
                   </p>
@@ -196,7 +171,10 @@ export default async function AdminDashboardPage() {
             {employeeJoinRequests.slice(0, INITIAL).map((request) => (
               <div key={request.id} className="flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">{request.user.name}</p>
+                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                    {request.user.name}
+                    <span className="ml-2 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Quiere ser empleado</span>
+                  </p>
                   <p className="truncate text-xs text-[var(--muted-foreground)]">
                     {request.user.email} · {request.business.name}{request.jobTitle ? ` · ${request.jobTitle}` : ""}
                   </p>
@@ -208,7 +186,10 @@ export default async function AdminDashboardPage() {
               {businessRequests.slice(INITIAL).map((request) => (
                 <div key={request.id} className="mb-3 flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">{request.name}</p>
+                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                      {request.name}
+                      <span className="ml-2 rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)]">Nuevo negocio</span>
+                    </p>
                     <p className="mt-1 text-xs text-[var(--muted-foreground)]">
                       Solicita: {request.requester.name} ({request.requester.email})
                     </p>
@@ -219,12 +200,61 @@ export default async function AdminDashboardPage() {
               {employeeJoinRequests.slice(INITIAL).map((request) => (
                 <div key={request.id} className="mb-3 flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">{request.user.name}</p>
+                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                      {request.user.name}
+                      <span className="ml-2 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Quiere ser empleado</span>
+                    </p>
                     <p className="truncate text-xs text-[var(--muted-foreground)]">
                       {request.user.email} · {request.business.name}
                     </p>
                   </div>
                   <EmployeeJoinRequestActions requestId={request.id} />
+                </div>
+              ))}
+            </ShowMore>
+          </div>
+        )}
+      </Section>
+
+      {/* Usuarios */}
+      <Section
+        icon={<Users className="h-5 w-5 text-[var(--primary-dark)]" />}
+        title="Usuarios"
+        count={users.length}
+        action={
+          <AdminCreateButton
+            endpoint="/api/admin/users"
+            label="Nuevo usuario"
+            fields={[
+              { name: "name", label: "Nombre" },
+              { name: "email", label: "Email" },
+              { name: "password", label: "Contraseña", type: "password" },
+              {
+                name: "role",
+                label: "Rol",
+                type: "select",
+                options: [
+                  { value: "user", label: "Usuario" },
+                  { value: "employee", label: "Empleado" },
+                  { value: "business", label: "Negocio" },
+                  { value: "admin", label: "Admin" },
+                ],
+              },
+            ]}
+          />
+        }
+      >
+        {users.length === 0 ? (
+          <p className="text-sm text-[var(--muted-foreground)]">Sin usuarios.</p>
+        ) : (
+          <div className="space-y-3">
+            {users.slice(0, INITIAL).map((user) => (
+              <UserRow key={user.id} user={user} />
+            ))}
+            <ShowMore count={users.length - INITIAL}>
+              {users.slice(INITIAL).map((user) => (
+                <div key={user.id} className="mb-3">
+                  <UserRow user={user} />
                 </div>
               ))}
             </ShowMore>
@@ -243,23 +273,8 @@ export default async function AdminDashboardPage() {
             label="Nuevo negocio"
             fields={[
               { name: "name", label: "Nombre del negocio" },
-              { name: "categoryId", label: "Categoría", type: "select", options: categoryOptions },
               { name: "ownerId", label: "Dueño (jefe)", type: "select", options: userOptions },
-              { name: "city", label: "Ciudad" },
-              { name: "address", label: "Dirección" },
-              { name: "phone", label: "Teléfono" },
-              {
-                name: "status",
-                label: "Estado",
-                type: "select",
-                options: [
-                  { value: "community", label: "Comunidad" },
-                  { value: "claim_pending", label: "Reclamación" },
-                  { value: "verified", label: "Verificado" },
-                  { value: "premium", label: "Premium" },
-                ],
-              },
-              { name: "featured", label: "Destacado", type: "checkbox" },
+              { name: "imageUrl", label: "Logo", type: "image" },
             ]}
           />
         }
@@ -286,7 +301,7 @@ export default async function AdminDashboardPage() {
       <Section
         icon={<UserCog className="h-5 w-5 text-[var(--primary-dark)]" />}
         title="Empleados"
-        count={employees.length}
+        count={employees.length + unassignedEmployees.length}
         action={
           <AdminCreateButton
             endpoint="/api/admin/employees"
@@ -301,41 +316,14 @@ export default async function AdminDashboardPage() {
           />
         }
       >
-        {employees.length === 0 ? (
+        {employees.length === 0 && unassignedEmployees.length === 0 ? (
           <p className="text-sm text-[var(--muted-foreground)]">Sin empleados registrados.</p>
         ) : (
-          <div className="space-y-3">
-            {employees.slice(0, INITIAL).map((employee) => (
-              <EmployeeRow key={employee.id} employee={employee} />
-            ))}
-            <ShowMore count={employees.length - INITIAL}>
-              {employees.slice(INITIAL).map((employee) => (
-                <div key={employee.id} className="mb-3">
-                  <EmployeeRow employee={employee} />
-                </div>
-              ))}
-            </ShowMore>
-          </div>
-        )}
-      </Section>
-
-      {/* Usuarios */}
-      <Section icon={<Users className="h-5 w-5 text-[var(--primary-dark)]" />} title="Usuarios" count={users.length}>
-        {users.length === 0 ? (
-          <p className="text-sm text-[var(--muted-foreground)]">Sin usuarios.</p>
-        ) : (
-          <div className="space-y-3">
-            {users.slice(0, INITIAL).map((user) => (
-              <UserRow key={user.id} user={user} />
-            ))}
-            <ShowMore count={users.length - INITIAL}>
-              {users.slice(INITIAL).map((user) => (
-                <div key={user.id} className="mb-3">
-                  <UserRow user={user} />
-                </div>
-              ))}
-            </ShowMore>
-          </div>
+          <AdminEmployeeList
+            employees={employees}
+            businesses={businesses}
+            unassigned={unassignedEmployees}
+          />
         )}
       </Section>
 
@@ -363,78 +351,27 @@ export default async function AdminDashboardPage() {
         )}
       </Section>
 
-      {/* Campañas */}
-      <Section icon={<Tag className="h-5 w-5 text-[var(--primary-dark)]" />} title="Campañas" count={offers.length}>
-        {offers.length === 0 ? (
-          <p className="text-sm text-[var(--muted-foreground)]">Sin ofertas.</p>
+      {/* Pagos */}
+      <Section icon={<CreditCard className="h-5 w-5 text-[var(--primary-dark)]" />} title="Pagos" count={payments.length}>
+        {payments.length === 0 ? (
+          <p className="text-sm text-[var(--muted-foreground)]">Sin pagos registrados.</p>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {offers.slice(0, INITIAL).map((offer) => (
-              <div key={offer.id} className="space-y-2">
-                <OfferCard offer={offer} />
-                <OfferActions offer={offer} />
-              </div>
+          <div className="space-y-3">
+            {payments.slice(0, INITIAL).map((payment) => (
+              <PaymentRow key={payment.id} payment={payment} />
             ))}
-            <ShowMore count={offers.length - INITIAL}>
-              {offers.slice(INITIAL).map((offer) => (
-                <div key={offer.id} className="space-y-2">
-                  <OfferCard offer={offer} />
-                  <OfferActions offer={offer} />
+            <ShowMore count={payments.length - INITIAL}>
+              {payments.slice(INITIAL).map((payment) => (
+                <div key={payment.id} className="mb-3">
+                  <PaymentRow payment={payment} />
                 </div>
               ))}
             </ShowMore>
           </div>
         )}
       </Section>
+      </div>
 
-      {/* Categorías */}
-      <Section icon={<Tags className="h-5 w-5 text-[var(--primary-dark)]" />} title="Categorías" count={categories.length}>
-        <CategoryForm />
-        <div className="space-y-3">
-          {categories.slice(0, INITIAL).map((category) => (
-            <div key={category.id} className="flex items-center justify-between gap-4 rounded-xl border border-[var(--border)] p-4">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-[var(--foreground)]">
-                  <span className="mr-2">{category.icon || "🏷️"}</span>{category.name}
-                </p>
-                <p className="truncate text-xs text-[var(--muted-foreground)]">{category.slug}</p>
-              </div>
-              <AdminEntityActions
-                endpoint={`/api/admin/categories/${category.id}`}
-                fields={[
-                  { name: "name", label: "Nombre" },
-                  { name: "slug", label: "Slug" },
-                  { name: "icon", label: "Icono" },
-                ]}
-                values={{ name: category.name, slug: category.slug, icon: category.icon }}
-                deleteConfirm={`¿Eliminar la categoría ${category.name}? Los negocios quedarán sin categoría.`}
-              />
-            </div>
-          ))}
-          <ShowMore count={categories.length - INITIAL}>
-            {categories.slice(INITIAL).map((category) => (
-              <div key={category.id} className="mb-3 flex items-center justify-between gap-4 rounded-xl border border-[var(--border)] p-4">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
-                    <span className="mr-2">{category.icon || "🏷️"}</span>{category.name}
-                  </p>
-                  <p className="truncate text-xs text-[var(--muted-foreground)]">{category.slug}</p>
-                </div>
-                <AdminEntityActions
-                  endpoint={`/api/admin/categories/${category.id}`}
-                  fields={[
-                    { name: "name", label: "Nombre" },
-                    { name: "slug", label: "Slug" },
-                    { name: "icon", label: "Icono" },
-                  ]}
-                  values={{ name: category.name, slug: category.slug, icon: category.icon }}
-                  deleteConfirm={`¿Eliminar la categoría ${category.name}? Los negocios quedarán sin categoría.`}
-                />
-              </div>
-            ))}
-          </ShowMore>
-        </div>
-      </Section>
     </div>
   );
 }
@@ -442,31 +379,30 @@ export default async function AdminDashboardPage() {
 type BusinessRow = {
   id: string;
   name: string;
-  city: string | null;
-  address: string | null;
-  phone: string | null;
   status: string;
-  featured: boolean;
   owner: { id: string; name: string } | null;
-  category: { name: string } | null;
+  imageUrl: string | null;
   _count: { reviews: number; employees: number; nfcTags: number };
 };
 
 function BusinessRow({ business, userOptions }: { business: BusinessRow; userOptions: { value: string; label: string }[] }) {
   return (
     <div className="flex flex-col justify-between gap-3 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-[var(--foreground)]">{business.name}</p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">
-          {[business.category?.name, business.city].filter(Boolean).join(" · ") || "Sin datos"}
-          {" · "}{STATUS_LABELS[business.status] ?? business.status}
-        </p>
-        <p className="mt-1 truncate text-xs text-[var(--muted-foreground)]">
+      <div className="flex min-w-0 items-center gap-3">
+        {business.imageUrl ? (
+          <img src={business.imageUrl} alt={business.name} className="h-10 w-10 shrink-0 rounded-xl object-cover" />
+        ) : (
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--muted)] text-lg">🏪</span>
+        )}
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-[var(--foreground)]">{business.name}</p>
+          <p className="mt-1 truncate text-xs text-[var(--muted-foreground)]">
           {business.owner ? `Jefe: ${business.owner.name}` : "Sin dueño"}
           {" · "}{business._count.employees} empleados
           {" · "}{business._count.reviews} reseñas
           {" · "}{business._count.nfcTags} tags
-        </p>
+          </p>
+        </div>
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-2">
         {business.status === "claim_pending" && <VerifyButton id={business.id} />}
@@ -478,32 +414,13 @@ function BusinessRow({ business, userOptions }: { business: BusinessRow; userOpt
           fields={[
             { name: "name", label: "Nombre" },
             { name: "ownerId", label: "Dueño (jefe)", type: "select", options: userOptions },
-            { name: "city", label: "Ciudad" },
-            { name: "address", label: "Dirección" },
-            { name: "phone", label: "Teléfono" },
-            {
-              name: "status",
-              label: "Estado",
-              type: "select",
-              options: [
-                { value: "community", label: "Comunidad" },
-                { value: "claim_pending", label: "Reclamación" },
-                { value: "verified", label: "Verificado" },
-                { value: "premium", label: "Premium" },
-              ],
-            },
-            { name: "featured", label: "Destacado", type: "checkbox" },
+            { name: "imageUrl", label: "Logo", type: "image" },
           ]}
           values={{
             name: business.name,
             ownerId: business.owner?.id ?? "",
-            city: business.city,
-            address: business.address,
-            phone: business.phone,
-            status: business.status,
-            featured: business.featured,
+            imageUrl: business.imageUrl,
           }}
-          deleteConfirm={`¿Eliminar ${business.name}? Se borrarán sus empleados, reseñas, tags NFC, ofertas y visitas.`}
         />
       </div>
     </div>
@@ -540,46 +457,6 @@ function UserRow({ user }: { user: UserRow }) {
             },
           ]}
           values={{ name: user.name, email: user.email, role: user.role }}
-          deleteConfirm={`¿Eliminar al usuario ${user.name}? Se borrarán sus reseñas, visitas y datos asociados.`}
-        />
-      </div>
-    </div>
-  );
-}
-
-type EmployeeRowData = {
-  id: string;
-  name: string;
-  role: string | null;
-  active: boolean;
-  business: { name: string };
-  user: { name: string; email: string } | null;
-};
-
-function EmployeeRow({ employee }: { employee: EmployeeRowData }) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-[var(--border)] p-4">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-[var(--foreground)]">
-          {employee.name}
-          {employee.role && <span className="ml-2 font-normal text-[var(--muted-foreground)]">{employee.role}</span>}
-          {!employee.active && <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500">Inactivo</span>}
-        </p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">
-          {employee.business.name}
-          {employee.user ? ` · ${employee.user.name} (${employee.user.email})` : " · Sin usuario vinculado"}
-        </p>
-      </div>
-      <div className="shrink-0">
-        <AdminEntityActions
-          endpoint={`/api/admin/employees/${employee.id}`}
-          fields={[
-            { name: "name", label: "Nombre" },
-            { name: "role", label: "Cargo" },
-            { name: "active", label: "Activo", type: "checkbox" },
-          ]}
-          values={{ name: employee.name, role: employee.role, active: employee.active }}
-          deleteConfirm={`¿Eliminar al empleado ${employee.name}?`}
         />
       </div>
     </div>
@@ -598,31 +475,6 @@ function ReviewActions({ review }: { review: ReviewRow }) {
         { name: "rating", label: "Puntuación (1-5)", type: "number" },
       ]}
       values={{ title: review.title, content: review.content, rating: review.rating }}
-      deleteConfirm="¿Eliminar esta reseña?"
-    />
-  );
-}
-
-type OfferRow = {
-  id: string;
-  title: string;
-  description: string | null;
-  conditions: string | null;
-  featured: boolean;
-};
-
-function OfferActions({ offer }: { offer: OfferRow }) {
-  return (
-    <AdminEntityActions
-      endpoint={`/api/admin/offers/${offer.id}`}
-      fields={[
-        { name: "title", label: "Título" },
-        { name: "description", label: "Descripción", type: "textarea" },
-        { name: "conditions", label: "Condiciones" },
-        { name: "featured", label: "Destacada", type: "checkbox" },
-      ]}
-      values={{ title: offer.title, description: offer.description, conditions: offer.conditions, featured: offer.featured }}
-      deleteConfirm={`¿Eliminar la oferta "${offer.title}"?`}
     />
   );
 }
@@ -659,6 +511,9 @@ function PaymentRow({ payment }: { payment: PaymentRowData }) {
         <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}>
           {status.label}
         </span>
+        {(payment.status === "pending" || payment.status === "approved") && (
+          <AdminDeleteButton endpoint={`/api/admin/payments/${payment.id}`} />
+        )}
       </div>
     </div>
   );

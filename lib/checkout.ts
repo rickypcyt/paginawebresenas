@@ -18,7 +18,7 @@ export const CHECKOUT_PRODUCTS: Record<string, CheckoutProduct> = {
     product: "tag_a",
     name: "Tag NFC Toque Público (Tipo A)",
     description: "Tag NFC que redirige a la ficha de Google Reviews de tu negocio. Pago único, sin suscripción.",
-    amount: 30,
+    amount: 40,
   },
   starter: {
     id: "starter",

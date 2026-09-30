@@ -9,13 +9,11 @@ type Phase = "idle" | "approaching" | "detected" | "opening" | "destination";
 
 const TYPE_INFO: Record<
   NfcType,
-  { name: string; icon: typeof Building2; title: string; desc: string; destination: string; objective: string; footer: string }
+  { name: string; icon: typeof Building2; destination: string; objective: string; footer: string }
 > = {
   A: {
     name: "Toque Público",
     icon: Building2,
-    title: "Más visibilidad para tu negocio",
-    desc: "El cliente accede a la ficha de Google de tu establecimiento y puede dejar su reseña pública.",
     destination: "Google Reviews",
     objective: "Facilitar el acceso a las reseñas públicas",
     footer: "El tap redirige directo a la ficha de Google Reviews del negocio — reputación pública. Solo contamos cada lectura.",
@@ -23,8 +21,6 @@ const TYPE_INFO: Record<
   B: {
     name: "Toque Personal",
     icon: UserRound,
-    title: "Mejora la experiencia de tu equipo",
-    desc: "El cliente valora la atención recibida mediante un formulario interno asociado al empleado.",
     destination: "Plataforma Toque",
     objective: "Feedback, evolución y ranking interno",
     footer: "El tap abre nuestro formulario interno con el empleado ya identificado — alimenta el ranking del equipo y nunca sale de la plataforma.",
@@ -172,19 +168,7 @@ export function NfcSimulators() {
       <div className="grid gap-6 p-6 lg:grid-cols-[0.85fr_1.15fr]">
         {/* Info del tipo seleccionado */}
         <div className="flex flex-col justify-center">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--primary-light)] text-[var(--primary-dark)]">
-              <info.icon className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-[var(--primary-dark)]">
-                Tipo {type} · {info.name}
-              </p>
-              <h3 className="font-semibold text-[var(--foreground)]">{info.title}</h3>
-            </div>
-          </div>
-          <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">{info.desc}</p>
-          <dl className="mt-5 divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] bg-[var(--muted)]/40">
+          <dl className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] bg-[var(--muted)]/40">
             <div className="flex items-center justify-between gap-4 px-4 py-3">
               <dt className="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Destino</dt>
               <dd className="text-sm font-semibold text-[var(--foreground)]">{info.destination}</dd>

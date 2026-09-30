@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
 import { Logo } from "@/components/brand/Logo";
-import { LogOut } from "lucide-react";
+import { LogOut, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
 interface UserNavbarProps {
@@ -34,6 +34,15 @@ export function UserNavbar({ initialUser }: UserNavbarProps) {
         </Link>
 
         <div className="flex items-center gap-2">
+          {user?.role === "admin" && (
+            <Link
+              href="/admin"
+              className="flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--border)] px-3 py-1.5 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--secondary)]"
+            >
+              <ShieldCheck className="h-4 w-4 text-[var(--primary-dark)]" />
+              <span className="hidden sm:inline">Admin</span>
+            </Link>
+          )}
           <Link
             href="/dashboard"
             className="flex shrink-0 items-center gap-2 rounded-full bg-[var(--secondary)] px-3 py-1.5 transition hover:bg-[var(--border)]"

@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, Search } from "lucide-react";
+import { Building2, Search, UserRound } from "lucide-react";
+import { updateUser } from "@/lib/auth-client";
 
 interface BusinessOption {
   id: string;
@@ -10,8 +11,9 @@ interface BusinessOption {
   city: string | null;
 }
 
-export function JoinBusinessForm({ businesses }: { businesses: BusinessOption[] }) {
+export function JoinBusinessForm({ businesses, initialName }: { businesses: BusinessOption[]; initialName: string }) {
   const router = useRouter();
+  const [name, setName] = useState(initialName);
   const [search, setSearch] = useState("");
   const [businessId, setBusinessId] = useState("");
   const [jobTitle, setJobTitle] = useState("");
@@ -30,6 +32,10 @@ export function JoinBusinessForm({ businesses }: { businesses: BusinessOption[] 
     setLoading(true);
     setError(null);
     try {
+      const trimmed = name.trim();
+      if (trimmed && trimmed !== initialName) {
+        await updateUser({ name: trimmed }).catch(() => {});
+      }
       const response = await fetch("/api/employee-join-requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -50,6 +56,23 @@ export function JoinBusinessForm({ businesses }: { businesses: BusinessOption[] 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-[var(--shadow-sm)]">
+      <div>
+        <label htmlFor="join-name" className="mb-2 block text-sm font-medium text-[var(--foreground)]">Tu nombre</label>
+        <div className="relative">
+          <UserRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
+          <input
+            id="join-name"
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+            maxLength={80}
+            className="w-full rounded-xl border border-[var(--input)] bg-white py-3 pl-10 pr-4 text-sm text-[var(--foreground)] outline-none focus:border-[var(--primary)]"
+          />
+        </div>
+        <p className="mt-1.5 text-xs text-[var(--muted-foreground)]">Tomamos tu nombre de tu cuenta; corrígelo si es necesario.</p>
+      </div>
+
       <div>
         <label htmlFor="business-search" className="mb-2 block text-sm font-medium text-[var(--foreground)]">Busca tu empresa</label>
         <div className="relative">
@@ -99,7 +122,7 @@ export function JoinBusinessForm({ businesses }: { businesses: BusinessOption[] 
       </div>
 
       {error && <p className="text-sm text-[var(--destructive)]">{error}</p>}
-      <button type="submit" disabled={!businessId || loading} className="w-full rounded-full bg-[var(--foreground)] px-5 py-3 text-sm font-semibold text-[var(--background)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+      <button type="submit" disabled={!businessId || !name.trim() || loading} className="w-full rounded-full bg-[var(--foreground)] px-5 py-3 text-sm font-semibold text-[var(--background)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
         {loading ? "Enviando solicitud…" : "Solicitar acceso como empleado"}
       </button>
       <p className="text-center text-xs leading-relaxed text-[var(--muted-foreground)]">No tendrás acceso al negocio hasta que nuestro equipo apruebe tu solicitud.</p>
