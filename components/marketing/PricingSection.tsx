@@ -88,7 +88,7 @@ export function PricingSection() {
             Toque Público
           </h3>
           <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-            Para mesa, entrada o caja. El cliente acerca el móvil y llega directo a dejar su reseña en Google.
+            Para mesa, entrada o caja. El cliente acerca el teléfono y llega directo a dejar su reseña en Google.
           </p>
           <ul className="mt-5 flex-1 space-y-2 text-sm text-[var(--foreground)]">
             {[

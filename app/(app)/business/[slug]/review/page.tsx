@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { BusinessReviewForm } from "./BusinessReviewForm";
-import { ReviewLoginPrompt } from "./ReviewLoginPrompt";
 
 interface ReviewPageProps {
   params: Promise<{ slug: string }>;
@@ -33,14 +32,13 @@ export default async function BusinessReviewPage({ params, searchParams }: Revie
       </p>
       {employeeId && business.employees.length > 0 && !business.employees.some((employee) => employee.id === employeeId) ? (
         <p className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">El enlace NFC no es válido.</p>
-      ) : session?.user?.id ? (
+      ) : (
         <BusinessReviewForm
           business={business}
           employee={business.employees.find((employee) => employee.id === employeeId)}
           nfcToken={nfcToken}
+          isGuest={!session?.user?.id}
         />
-      ) : (
-        <ReviewLoginPrompt />
       )}
     </div>
   );

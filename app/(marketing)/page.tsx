@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Check, Package, Smartphone, MessageSquare, Zap, MousePointerClick, BarChart3 } from "lucide-react";
+import { Check, Package, Smartphone, MessageSquare, Zap, MousePointerClick, BarChart3, ShieldCheck } from "lucide-react";
 import { ReviewCard3D } from "@/components/marketing/ReviewCard3D";
 import { NfcSimulators } from "@/components/marketing/NfcSimulators";
 import { PlatformPreviews } from "@/components/marketing/PlatformPreviews";
@@ -31,6 +31,7 @@ const valueProps = [
   { icon: Zap, title: "Un solo toque", desc: "Sin descargar aplicaciones." },
   { icon: MousePointerClick, title: "Acceso directo", desc: "Sin búsquedas ni pasos innecesarios." },
   { icon: BarChart3, title: "Datos accionables", desc: "Feedback para el negocio y el equipo." },
+  { icon: ShieldCheck, title: "Reseñas verificadas", desc: "Cada tap genera un enlace único que caduca. Cero reseñas falsas por links compartidos." },
 ];
 
 const steps = [
@@ -41,7 +42,7 @@ const steps = [
   },
   {
     icon: Smartphone,
-    title: "El cliente acerca su móvil",
+    title: "El cliente acerca su teléfono",
     desc: "El teléfono detecta el chip y abre directamente la experiencia correspondiente.",
   },
   {
@@ -56,6 +57,7 @@ const ownerBenefits = [
   "Identifica tendencias en la calidad del servicio",
   "Consulta valoraciones y rendimiento por empleado",
   "Detecta oportunidades de formación y mejora",
+  "Cada valoración viene de un tap real: el enlace caduca a los pocos minutos",
 ];
 
 const teamBenefits = [
@@ -71,8 +73,8 @@ const faqs = [
     a: "No. El NFC abre un enlace compatible con el teléfono del cliente. En algunos dispositivos puede ser necesario activar NFC o desbloquear el teléfono.",
   },
   {
-    q: "¿Las reseñas del tipo A se publican automáticamente en Google?",
-    a: "No. El NFC dirige a la ficha de Google de tu negocio. El cliente decide si escribe y publica su reseña desde Google — nosotros solo facilitamos el acceso.",
+    q: "¿Las reseñas del tipo A se publican en Google?",
+    a: "Sí. El tag abre directamente el formulario de reseña de Google de tu negocio (el enlace oficial de Google Reviews/Maps). El cliente escribe ahí mismo y su reseña queda publicada en tu ficha de Google.",
   },
   {
     q: "¿Puede un empleado ver las valoraciones de sus compañeros?",
@@ -85,6 +87,10 @@ const faqs = [
   {
     q: "¿Qué incluye la instalación inicial?",
     a: "Incluye la personalización de los tags, el alta y configuración de tu negocio en la plataforma, la preparación de los NFC y el envío.",
+  },
+  {
+    q: "¿Alguien puede compartir el enlace del NFC para inflar las reseñas?",
+    a: "No. Cada vez que un teléfono toca el tag se genera un enlace único que caduca en pocos minutos. Si alguien lo comparte o lo reutiliza, el enlace ya no funciona — solo cuentan los taps reales.",
   },
   {
     q: "¿Puedo cambiar de plan si mi equipo crece?",
@@ -123,7 +129,7 @@ export default function LandingPage() {
         </section>
 
         {/* Barra de valor */}
-        <section className="mb-10 grid gap-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 sm:grid-cols-3 sm:p-6 md:mb-20">
+        <section className="mb-10 grid gap-4 rounded-3xl border border-[var(--border)] bg-[var(--card)] p-5 sm:grid-cols-2 sm:p-6 md:mb-20 lg:grid-cols-4">
           {valueProps.map((prop) => {
             const Icon = prop.icon;
             return (
@@ -270,12 +276,6 @@ export default function LandingPage() {
               className="rounded-full bg-[var(--foreground)] px-7 py-3 text-sm font-medium text-[var(--background)] transition hover:opacity-90"
             >
               Solicitar NFCs para mi negocio
-            </Link>
-            <Link
-              href="/business-requests"
-              className="text-sm font-medium text-[var(--primary-dark)] hover:underline"
-            >
-              ¿Más de 50 personas? Contacta con nosotros
             </Link>
           </div>
         </section>

@@ -28,7 +28,7 @@ const sections = [
     icon: Clock,
     title: "Cómo funcionan durante el servicio",
     items: [
-      "El cliente acerca su móvil al NFC del mostrador y Google se abre directo en tu ficha para reseñar.",
+      "El cliente acerca su teléfono al NFC del mostrador y Google se abre directo en tu ficha para reseñar.",
       "Cada mesero lleva su propio NFC: el cliente valora su atención de forma privada, sin exponerlo en Google.",
       "No hace falta app, registro ni pasos extra para el cliente: un toque y listo.",
     ],
@@ -53,7 +53,7 @@ export default function NfcParaRestaurantesPage() {
           NFC para restaurantes: más reseñas en cada servicio
         </h1>
         <p className="mb-12 text-lg leading-relaxed text-[var(--muted-foreground)]">
-          En un restaurante cada mesa es una oportunidad de reseña. Los tags NFC de Toque convierten ese momento en un gesto de un segundo: el cliente acerca el móvil y deja su reseña en Google, o valora en privado al mesero que le atendió.
+          En un restaurante cada mesa es una oportunidad de reseña. Los tags NFC de Toque convierten ese momento en un gesto de un segundo: el cliente acerca el teléfono y deja su reseña en Google, o valora en privado al mesero que le atendió.
         </p>
 
         <div className="space-y-8">

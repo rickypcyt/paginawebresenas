@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";import type { Metadata } from "next";
 import { getSession } from "@/lib/session";
 import { isAdmin } from "@/lib/roles";
 import { Navbar } from "@/components/navigation/Navbar";

@@ -1,8 +1,9 @@
 "use client";
 
-import { LoginButton } from "@/components/auth/LoginButton";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
 
 export function ReviewLoginPrompt() {
+  const { open } = useAuthModal();
   return (
     <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center">
       <p className="mb-2 text-4xl">✍️</p>
@@ -10,9 +11,12 @@ export function ReviewLoginPrompt() {
       <p className="mb-6 text-[var(--muted-foreground)]">
         Inicia sesión para dejar tu reseña.
       </p>
-      <LoginButton className="rounded-xl bg-[var(--primary)] px-6 py-2 font-semibold text-white hover:bg-[var(--primary-dark)]">
+      <button
+        onClick={() => open(undefined, "customer")}
+        className="rounded-xl bg-[var(--primary)] px-6 py-2 font-semibold text-white hover:bg-[var(--primary-dark)]"
+      >
         Iniciar sesión
-      </LoginButton>
+      </button>
     </div>
   );
 }

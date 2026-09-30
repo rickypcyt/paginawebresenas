@@ -105,11 +105,11 @@ function UnassignedRow({ user, businesses }: { user: UnassignedUser; businesses:
   return (
     <div ref={rowRef} className="flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50/50 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+        <p className="break-words text-sm font-semibold text-[var(--foreground)]">
           {user.name}
           <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">Sin negocio</span>
         </p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">{user.email}</p>
+        <p className="break-words text-xs text-[var(--muted-foreground)]">{user.email}</p>
         {error && <p className="mt-1 text-xs text-[var(--destructive)]">{error}</p>}
       </div>
       <div className="flex shrink-0 items-center gap-2">
@@ -140,12 +140,12 @@ function EmployeeRow({ employee }: { employee: EmployeeRowData }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-xl border border-[var(--border)] p-4">
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+        <p className="break-words text-sm font-semibold text-[var(--foreground)]">
           {employee.name}
           {employee.role && <span className="ml-2 font-normal text-[var(--muted-foreground)]">{employee.role}</span>}
           {!employee.active && <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500">Inactivo</span>}
         </p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">
+        <p className="break-words text-xs text-[var(--muted-foreground)]">
           {employee.user ? `${employee.user.name} (${employee.user.email})` : "Sin usuario vinculado"}
         </p>
       </div>

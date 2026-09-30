@@ -180,6 +180,7 @@ export type EmployeeJoinRequestStatus = (typeof EmployeeJoinRequestStatus)[keyof
 
 export const NfcTagType: {
   business_google: 'business_google',
+  business_review: 'business_review',
   employee_review: 'employee_review'
 };
 
@@ -11442,6 +11443,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
+    guestName: string | null
     businessId: string | null
   }
 
@@ -11456,6 +11458,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
+    guestName: string | null
     businessId: string | null
   }
 
@@ -11470,6 +11473,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     userId: number
+    guestName: number
     businessId: number
     _all: number
   }
@@ -11494,6 +11498,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     userId?: true
+    guestName?: true
     businessId?: true
   }
 
@@ -11508,6 +11513,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     userId?: true
+    guestName?: true
     businessId?: true
   }
 
@@ -11522,6 +11528,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     userId?: true
+    guestName?: true
     businessId?: true
     _all?: true
   }
@@ -11622,7 +11629,8 @@ export namespace Prisma {
     visitId: string | null
     createdAt: Date
     updatedAt: Date
-    userId: string
+    userId: string | null
+    guestName: string | null
     businessId: string
     _count: ReviewCountAggregateOutputType | null
     _avg: ReviewAvgAggregateOutputType | null
@@ -11656,10 +11664,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    guestName?: boolean
     businessId?: boolean
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Review$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
     votes?: boolean | Review$votesArgs<ExtArgs>
     _count?: boolean | ReviewCountOutputTypeDefaultArgs<ExtArgs>
@@ -11676,10 +11685,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    guestName?: boolean
     businessId?: boolean
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Review$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
@@ -11694,10 +11704,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    guestName?: boolean
     businessId?: boolean
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Review$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["review"]>
 
@@ -11712,14 +11723,15 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
+    guestName?: boolean
     businessId?: boolean
   }
 
-  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "rating" | "verification" | "employeeId" | "visitId" | "createdAt" | "updatedAt" | "userId" | "businessId", ExtArgs["result"]["review"]>
+  export type ReviewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "content" | "rating" | "verification" | "employeeId" | "visitId" | "createdAt" | "updatedAt" | "userId" | "guestName" | "businessId", ExtArgs["result"]["review"]>
   export type ReviewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Review$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
     votes?: boolean | Review$votesArgs<ExtArgs>
     _count?: boolean | ReviewCountOutputTypeDefaultArgs<ExtArgs>
@@ -11727,13 +11739,13 @@ export namespace Prisma {
   export type ReviewIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Review$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }
   export type ReviewIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employee?: boolean | Review$employeeArgs<ExtArgs>
     visit?: boolean | Review$visitArgs<ExtArgs>
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | Review$userArgs<ExtArgs>
     business?: boolean | BusinessDefaultArgs<ExtArgs>
   }
 
@@ -11742,7 +11754,7 @@ export namespace Prisma {
     objects: {
       employee: Prisma.$EmployeePayload<ExtArgs> | null
       visit: Prisma.$VisitPayload<ExtArgs> | null
-      user: Prisma.$UserPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
       business: Prisma.$BusinessPayload<ExtArgs>
       votes: Prisma.$ReviewVotePayload<ExtArgs>[]
     }
@@ -11756,7 +11768,8 @@ export namespace Prisma {
       visitId: string | null
       createdAt: Date
       updatedAt: Date
-      userId: string
+      userId: string | null
+      guestName: string | null
       businessId: string
     }, ExtArgs["result"]["review"]>
     composites: {}
@@ -12154,7 +12167,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     employee<T extends Review$employeeArgs<ExtArgs> = {}>(args?: Subset<T, Review$employeeArgs<ExtArgs>>): Prisma__EmployeeClient<$Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     visit<T extends Review$visitArgs<ExtArgs> = {}>(args?: Subset<T, Review$visitArgs<ExtArgs>>): Prisma__VisitClient<$Result.GetResult<Prisma.$VisitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends Review$userArgs<ExtArgs> = {}>(args?: Subset<T, Review$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     business<T extends BusinessDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BusinessDefaultArgs<ExtArgs>>): Prisma__BusinessClient<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     votes<T extends Review$votesArgs<ExtArgs> = {}>(args?: Subset<T, Review$votesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviewVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -12196,6 +12209,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Review", 'DateTime'>
     readonly updatedAt: FieldRef<"Review", 'DateTime'>
     readonly userId: FieldRef<"Review", 'String'>
+    readonly guestName: FieldRef<"Review", 'String'>
     readonly businessId: FieldRef<"Review", 'String'>
   }
     
@@ -12633,6 +12647,25 @@ export namespace Prisma {
      */
     include?: VisitInclude<ExtArgs> | null
     where?: VisitWhereInput
+  }
+
+  /**
+   * Review.user
+   */
+  export type Review$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -31539,6 +31572,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId',
+    guestName: 'guestName',
     businessId: 'businessId'
   };
 
@@ -32627,11 +32661,12 @@ export namespace Prisma {
     visitId?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    userId?: StringFilter<"Review"> | string
+    userId?: StringNullableFilter<"Review"> | string | null
+    guestName?: StringNullableFilter<"Review"> | string | null
     businessId?: StringFilter<"Review"> | string
     employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     visit?: XOR<VisitNullableScalarRelationFilter, VisitWhereInput> | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
     votes?: ReviewVoteListRelationFilter
   }
@@ -32646,7 +32681,8 @@ export namespace Prisma {
     visitId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
     businessId?: SortOrder
     employee?: EmployeeOrderByWithRelationInput
     visit?: VisitOrderByWithRelationInput
@@ -32668,11 +32704,12 @@ export namespace Prisma {
     employeeId?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    userId?: StringFilter<"Review"> | string
+    userId?: StringNullableFilter<"Review"> | string | null
+    guestName?: StringNullableFilter<"Review"> | string | null
     businessId?: StringFilter<"Review"> | string
     employee?: XOR<EmployeeNullableScalarRelationFilter, EmployeeWhereInput> | null
     visit?: XOR<VisitNullableScalarRelationFilter, VisitWhereInput> | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     business?: XOR<BusinessScalarRelationFilter, BusinessWhereInput>
     votes?: ReviewVoteListRelationFilter
   }, "id" | "visitId">
@@ -32687,7 +32724,8 @@ export namespace Prisma {
     visitId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
     businessId?: SortOrder
     _count?: ReviewCountOrderByAggregateInput
     _avg?: ReviewAvgOrderByAggregateInput
@@ -32709,7 +32747,8 @@ export namespace Prisma {
     visitId?: StringNullableWithAggregatesFilter<"Review"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Review"> | Date | string
-    userId?: StringWithAggregatesFilter<"Review"> | string
+    userId?: StringNullableWithAggregatesFilter<"Review"> | string | null
+    guestName?: StringNullableWithAggregatesFilter<"Review"> | string | null
     businessId?: StringWithAggregatesFilter<"Review"> | string
   }
 
@@ -34575,9 +34614,10 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
-    user: UserCreateNestedOneWithoutReviewsInput
+    user?: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
   }
@@ -34592,7 +34632,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     businessId: string
     votes?: ReviewVoteUncheckedCreateNestedManyWithoutReviewInput
   }
@@ -34605,9 +34646,10 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
   }
@@ -34622,7 +34664,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     votes?: ReviewVoteUncheckedUpdateManyWithoutReviewNestedInput
   }
@@ -34637,7 +34680,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     businessId: string
   }
 
@@ -34649,6 +34693,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReviewUncheckedUpdateManyInput = {
@@ -34661,7 +34706,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -36646,6 +36692,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    guestName?: SortOrder
     businessId?: SortOrder
   }
 
@@ -36664,6 +36711,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    guestName?: SortOrder
     businessId?: SortOrder
   }
 
@@ -36678,6 +36726,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
+    guestName?: SortOrder
     businessId?: SortOrder
   }
 
@@ -38804,10 +38853,12 @@ export namespace Prisma {
     update?: XOR<XOR<VisitUpdateToOneWithWhereWithoutReviewInput, VisitUpdateWithoutReviewInput>, VisitUncheckedUpdateWithoutReviewInput>
   }
 
-  export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
+  export type UserUpdateOneWithoutReviewsNestedInput = {
     create?: XOR<UserCreateWithoutReviewsInput, UserUncheckedCreateWithoutReviewsInput>
     connectOrCreate?: UserCreateOrConnectWithoutReviewsInput
     upsert?: UserUpsertWithoutReviewsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReviewsInput, UserUpdateWithoutReviewsInput>, UserUncheckedUpdateWithoutReviewsInput>
   }
@@ -39839,6 +39890,7 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
     business: BusinessCreateNestedOneWithoutReviewsInput
@@ -39855,6 +39907,7 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     businessId: string
     votes?: ReviewVoteUncheckedCreateNestedManyWithoutReviewInput
   }
@@ -40330,7 +40383,8 @@ export namespace Prisma {
     visitId?: StringNullableFilter<"Review"> | string | null
     createdAt?: DateTimeFilter<"Review"> | Date | string
     updatedAt?: DateTimeFilter<"Review"> | Date | string
-    userId?: StringFilter<"Review"> | string
+    userId?: StringNullableFilter<"Review"> | string | null
+    guestName?: StringNullableFilter<"Review"> | string | null
     businessId?: StringFilter<"Review"> | string
   }
 
@@ -40880,9 +40934,10 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
-    user: UserCreateNestedOneWithoutReviewsInput
+    user?: UserCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
   }
 
@@ -40896,7 +40951,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     votes?: ReviewVoteUncheckedCreateNestedManyWithoutReviewInput
   }
 
@@ -41644,8 +41700,9 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     visit?: VisitCreateNestedOneWithoutReviewInput
-    user: UserCreateNestedOneWithoutReviewsInput
+    user?: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
   }
@@ -41659,7 +41716,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     businessId: string
     votes?: ReviewVoteUncheckedCreateNestedManyWithoutReviewInput
   }
@@ -42964,8 +43022,9 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     employee?: EmployeeCreateNestedOneWithoutReviewsInput
-    user: UserCreateNestedOneWithoutReviewsInput
+    user?: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
     votes?: ReviewVoteCreateNestedManyWithoutReviewInput
   }
@@ -42979,7 +43038,8 @@ export namespace Prisma {
     employeeId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     businessId: string
     votes?: ReviewVoteUncheckedCreateNestedManyWithoutReviewInput
   }
@@ -43154,8 +43214,9 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneWithoutReviewsNestedInput
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
   }
@@ -43169,7 +43230,8 @@ export namespace Prisma {
     employeeId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     votes?: ReviewVoteUncheckedUpdateManyWithoutReviewNestedInput
   }
@@ -45142,9 +45204,10 @@ export namespace Prisma {
     verification?: $Enums.ReviewVerification
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     employee?: EmployeeCreateNestedOneWithoutReviewsInput
     visit?: VisitCreateNestedOneWithoutReviewInput
-    user: UserCreateNestedOneWithoutReviewsInput
+    user?: UserCreateNestedOneWithoutReviewsInput
     business: BusinessCreateNestedOneWithoutReviewsInput
   }
 
@@ -45158,7 +45221,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     businessId: string
   }
 
@@ -45251,9 +45315,10 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
   }
 
@@ -45267,7 +45332,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -45763,6 +45829,7 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    guestName?: string | null
     businessId: string
   }
 
@@ -45950,6 +46017,7 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
@@ -45966,6 +46034,7 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     votes?: ReviewVoteUncheckedUpdateManyWithoutReviewNestedInput
   }
@@ -45980,6 +46049,7 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -46430,7 +46500,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
   }
 
   export type EmployeeCreateManyBusinessInput = {
@@ -46522,9 +46593,10 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     employee?: EmployeeUpdateOneWithoutReviewsNestedInput
     visit?: VisitUpdateOneWithoutReviewNestedInput
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
   }
 
@@ -46538,7 +46610,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     votes?: ReviewVoteUncheckedUpdateManyWithoutReviewNestedInput
   }
 
@@ -46552,7 +46625,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EmployeeUpdateWithoutBusinessInput = {
@@ -46815,7 +46889,8 @@ export namespace Prisma {
     visitId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
+    guestName?: string | null
     businessId: string
   }
 
@@ -46839,8 +46914,9 @@ export namespace Prisma {
     verification?: EnumReviewVerificationFieldUpdateOperationsInput | $Enums.ReviewVerification
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     visit?: VisitUpdateOneWithoutReviewNestedInput
-    user?: UserUpdateOneRequiredWithoutReviewsNestedInput
+    user?: UserUpdateOneWithoutReviewsNestedInput
     business?: BusinessUpdateOneRequiredWithoutReviewsNestedInput
     votes?: ReviewVoteUpdateManyWithoutReviewNestedInput
   }
@@ -46854,7 +46930,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
     votes?: ReviewVoteUncheckedUpdateManyWithoutReviewNestedInput
   }
@@ -46868,7 +46945,8 @@ export namespace Prisma {
     visitId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
     businessId?: StringFieldUpdateOperationsInput | string
   }
 

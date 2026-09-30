@@ -44,7 +44,7 @@ function Section({
 }) {
   return (
     <section className="h-full rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
         {icon}
         <h2 className="font-semibold text-[var(--foreground)]">{title}</h2>
         <span className="rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-xs font-semibold text-[var(--primary-dark)]">{count}</span>
@@ -128,7 +128,7 @@ export default async function AdminDashboardPage() {
         <h1 className="text-2xl font-bold text-[var(--foreground)]">Toda la plataforma</h1>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 md:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-6">
         {[
           { label: "Usuarios", value: users.length },
           { label: "Negocios", value: businesses.length },
@@ -154,11 +154,11 @@ export default async function AdminDashboardPage() {
             {businessRequests.slice(0, INITIAL).map((request) => (
               <div key={request.id} className="flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                  <p className="break-words text-sm font-semibold text-[var(--foreground)]">
                     {request.name}
                     <span className="ml-2 rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)]">Nuevo negocio</span>
                   </p>
-                  <p className="truncate text-xs text-[var(--muted-foreground)]">
+                  <p className="break-words text-xs text-[var(--muted-foreground)]">
                     {[request.categoryName, request.city, request.address].filter(Boolean).join(" · ") || "Sin datos"}
                   </p>
                   <p className="mt-1 text-xs text-[var(--muted-foreground)]">
@@ -171,11 +171,11 @@ export default async function AdminDashboardPage() {
             {employeeJoinRequests.slice(0, INITIAL).map((request) => (
               <div key={request.id} className="flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                  <p className="break-words text-sm font-semibold text-[var(--foreground)]">
                     {request.user.name}
                     <span className="ml-2 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Quiere ser empleado</span>
                   </p>
-                  <p className="truncate text-xs text-[var(--muted-foreground)]">
+                  <p className="break-words text-xs text-[var(--muted-foreground)]">
                     {request.user.email} · {request.business.name}{request.jobTitle ? ` · ${request.jobTitle}` : ""}
                   </p>
                 </div>
@@ -186,7 +186,7 @@ export default async function AdminDashboardPage() {
               {businessRequests.slice(INITIAL).map((request) => (
                 <div key={request.id} className="mb-3 flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                    <p className="break-words text-sm font-semibold text-[var(--foreground)]">
                       {request.name}
                       <span className="ml-2 rounded-full bg-[var(--primary-light)] px-2 py-0.5 text-xs font-medium text-[var(--primary-dark)]">Nuevo negocio</span>
                     </p>
@@ -200,11 +200,11 @@ export default async function AdminDashboardPage() {
               {employeeJoinRequests.slice(INITIAL).map((request) => (
                 <div key={request.id} className="mb-3 flex flex-col justify-between gap-4 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+                    <p className="break-words text-sm font-semibold text-[var(--foreground)]">
                       {request.user.name}
                       <span className="ml-2 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Quiere ser empleado</span>
                     </p>
-                    <p className="truncate text-xs text-[var(--muted-foreground)]">
+                    <p className="break-words text-xs text-[var(--muted-foreground)]">
                       {request.user.email} · {request.business.name}
                     </p>
                   </div>
@@ -395,8 +395,8 @@ function BusinessRow({ business, userOptions }: { business: BusinessRow; userOpt
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--muted)] text-lg">🏪</span>
         )}
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-[var(--foreground)]">{business.name}</p>
-          <p className="mt-1 truncate text-xs text-[var(--muted-foreground)]">
+          <p className="break-words text-sm font-semibold text-[var(--foreground)]">{business.name}</p>
+          <p className="mt-1 break-words text-xs text-[var(--muted-foreground)]">
           {business.owner ? `Jefe: ${business.owner.name}` : "Sin dueño"}
           {" · "}{business._count.employees} empleados
           {" · "}{business._count.reviews} reseñas
@@ -431,14 +431,14 @@ type UserRow = { id: string; name: string; email: string; role: string };
 
 function UserRow({ user }: { user: UserRow }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-[var(--border)] p-4">
+    <div className="flex flex-col justify-between gap-3 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center sm:gap-4">
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-[var(--foreground)]">{user.name}</p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">
+        <p className="break-words text-sm font-semibold text-[var(--foreground)]">{user.name}</p>
+        <p className="break-words text-xs text-[var(--muted-foreground)]">
           {user.email} · <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-xs font-medium text-[var(--accent-foreground)]">{user.role}</span>
         </p>
       </div>
-      <div className="shrink-0">
+      <div className="flex shrink-0 justify-end sm:justify-start">
         <AdminEntityActions
           endpoint={`/api/admin/users/${user.id}`}
           fields={[
@@ -495,16 +495,16 @@ type PaymentRowData = {
 function PaymentRow({ payment }: { payment: PaymentRowData }) {
   const status = PAYMENT_STATUS_LABELS[payment.status] ?? PAYMENT_STATUS_LABELS.pending;
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-[var(--border)] p-4">
+    <div className="flex flex-col justify-between gap-3 rounded-xl border border-[var(--border)] p-4 sm:flex-row sm:items-center sm:gap-4">
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-[var(--foreground)]">
+        <p className="break-words text-sm font-semibold text-[var(--foreground)]">
           {payment.businessName} · {PAYMENT_PRODUCT_LABELS[payment.product] ?? payment.product}
         </p>
-        <p className="truncate text-xs text-[var(--muted-foreground)]">
+        <p className="break-words text-xs text-[var(--muted-foreground)]">
           {payment.buyerName} ({payment.buyerEmail}) · <span className="font-mono">{payment.reference}</span> · {payment.createdAt.toLocaleDateString("es")}
         </p>
       </div>
-      <div className="flex shrink-0 items-center gap-3">
+      <div className="flex shrink-0 flex-wrap items-center justify-end gap-3 sm:justify-start">
         <span className="text-sm font-bold text-[var(--foreground)]">
           ${Number(payment.amount).toFixed(2)}
         </span>

@@ -216,6 +216,7 @@ exports.Prisma.ReviewScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
+  guestName: 'guestName',
   businessId: 'businessId'
 };
 
@@ -426,6 +427,7 @@ exports.EmployeeJoinRequestStatus = exports.$Enums.EmployeeJoinRequestStatus = {
 
 exports.NfcTagType = exports.$Enums.NfcTagType = {
   business_google: 'business_google',
+  business_review: 'business_review',
   employee_review: 'employee_review'
 };
 

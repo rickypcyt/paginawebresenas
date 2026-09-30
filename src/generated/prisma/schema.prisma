@@ -156,6 +156,7 @@ model EmployeeJoinRequest {
 
 enum NfcTagType {
   business_google
+  business_review
   employee_review
 }
 
@@ -189,8 +190,9 @@ model Review {
   visit        Visit?             @relation(fields: [visitId], references: [id], onDelete: SetNull)
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
-  userId       String
-  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guestName    String?
   businessId   String
   business     Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
   votes        ReviewVote[]

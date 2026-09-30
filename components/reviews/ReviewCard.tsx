@@ -10,6 +10,7 @@ interface ReviewCardProps {
     visit?: { createdAt: Date } | null;
     createdAt: Date;
     user?: { name?: string | null; image?: string | null } | null;
+    guestName?: string | null;
     business?: { name: string } | null;
     employee?: { name: string } | null;
   };
@@ -30,11 +31,11 @@ export function ReviewCard({ review }: ReviewCardProps) {
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--primary-light)] text-sm font-bold text-[var(--primary-dark)]">
-            {review.user?.name?.charAt(0).toUpperCase() || "👤"}
+            {(review.user?.name || review.guestName)?.charAt(0).toUpperCase() || "👤"}
           </div>
           <div>
             <p className="text-sm font-semibold text-[var(--foreground)]">
-              {review.user?.name || "Usuario"}
+              {review.user?.name || review.guestName || "Anónimo"}
             </p>
             {review.business && (
               <p className="text-xs text-[var(--muted-foreground)]">

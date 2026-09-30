@@ -14,12 +14,15 @@ interface ReviewFormProps {
   };
   employee?: { id: string; name: string; role?: string | null };
   nfcToken?: string;
+  isGuest?: boolean;
 }
 
-export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormProps) {
+export function BusinessReviewForm({ business, employee, nfcToken, isGuest }: ReviewFormProps) {
   const [title, setTitle] = useState("");
+  const [guestName, setGuestName] = useState("");
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(5);
+  const [hoverRating, setHoverRating] = useState(0);
   const [loading, setLoading] = useState(false);
   const [published, setPublished] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -44,6 +47,7 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
         businessId: business.id,
         employeeId: employee?.id,
         nfcToken,
+        guestName: guestName.trim() || undefined,
       }),
     });
 
@@ -111,34 +115,21 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
-      <div>
-        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Título</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          placeholder="Ej. Excelente atención"
-          className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
-        />
-      </div>
-
-      <div>
-        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Puntuación</label>
-        <div className="flex items-center gap-3">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setRating(n)}
-              className={`text-2xl ${n <= rating ? "text-[var(--star)]" : "text-gray-300"}`}
-              aria-label={`${n} estrellas`}
-            >
-              ★
-            </button>
-          ))}
+      {isGuest && (
+        <div>
+          <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
+            Tu nombre <span className="font-normal text-[var(--muted-foreground)]">(opcional — o quédate en anónimo)</span>
+          </label>
+          <input
+            type="text"
+            value={guestName}
+            onChange={(e) => setGuestName(e.target.value)}
+            maxLength={80}
+            placeholder="Anónimo"
+            className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
+          />
         </div>
-      </div>
+      )}
 
       <div>
         <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Reseña</label>
@@ -147,9 +138,35 @@ export function BusinessReviewForm({ business, employee, nfcToken }: ReviewFormP
           onChange={(e) => setContent(e.target.value)}
           required
           rows={4}
-          placeholder="Cuenta tu reseña..."
+          placeholder="Cuenta tu experiencia..."
           className="w-full rounded-lg border border-[var(--input)] bg-white px-3 py-2 text-[var(--foreground)]"
         />
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-medium text-[var(--foreground)]">Valoración</label>
+        <div className="flex items-center justify-center gap-2">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => setRating(n)}
+              onMouseEnter={() => setHoverRating(n)}
+              onMouseLeave={() => setHoverRating(0)}
+              className={`flex h-11 w-11 items-center justify-center rounded-full text-xl transition-all duration-150 ${
+                n <= (hoverRating || rating)
+                  ? "scale-110 bg-[var(--star)]/15 text-[var(--star)]"
+                  : "bg-[var(--muted)] text-gray-300 hover:text-gray-400"
+              }`}
+              aria-label={`${n} estrellas`}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-center text-xs text-[var(--muted-foreground)]">
+          {["", "Muy mala", "Mala", "Regular", "Buena", "Excelente"][hoverRating || rating]}
+        </p>
       </div>
 
       <button
