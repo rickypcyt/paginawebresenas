@@ -48,20 +48,20 @@ function GoogleReviewScreen() {
     <div className="flex h-full flex-col bg-white px-3 pb-3 pt-2 text-[#202124]">
       <div className="mb-3 flex items-center justify-between border-b border-gray-100 pb-2">
         <GoogleMark />
-        <span className="h-5 w-5 rounded-full bg-[#4285f4] text-center text-[9px] font-semibold leading-5 text-white">PN</span>
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#4285f4] text-sm font-semibold text-white">PN</span>
       </div>
       {sent ? (
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           <CheckCircle2 className="mb-3 h-10 w-10 text-[#34a853]" />
           <p className="text-sm font-semibold">¡Gracias por tu reseña!</p>
-          <p className="mt-2 text-[10px] leading-relaxed text-gray-500">Tu opinión ya está visible en Google.</p>
+          <p className="mt-2 text-sm leading-relaxed text-gray-500">Tu opinión ya está visible en Google.</p>
         </div>
       ) : (
         <>
-          <p className="text-center text-[10px] text-gray-500">Publicar públicamente</p>
+          <p className="text-center text-sm text-gray-500">Publicar públicamente</p>
           <div className="mx-auto mt-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-lg font-semibold text-amber-700">CL</div>
           <h4 className="mt-2 text-center text-sm font-semibold">Café Luz</h4>
-          <p className="mt-1 text-center text-[10px] text-gray-500">Comparte tu experiencia</p>
+          <p className="mt-1 text-center text-sm text-gray-500">Comparte tu experiencia</p>
           <div className="my-4 flex justify-center gap-1">
             {[1, 2, 3, 4, 5].map((value) => (
               <button key={value} type="button" onClick={() => setRating(value)} aria-label={`${value} estrellas`}>
@@ -69,8 +69,8 @@ function GoogleReviewScreen() {
               </button>
             ))}
           </div>
-          <textarea className="h-20 resize-none rounded-lg border border-gray-200 p-2 text-[10px] outline-none focus:border-[#4285f4]" placeholder="Comparte detalles de tu experiencia…" />
-          <button type="button" disabled={!rating} onClick={() => setSent(true)} className="mt-auto rounded-full bg-[#1a73e8] px-3 py-2 text-[10px] font-semibold text-white disabled:opacity-40">Publicar</button>
+          <textarea className="h-20 resize-none rounded-lg border border-gray-200 p-2 text-sm outline-none focus:border-[#4285f4]" placeholder="Comparte detalles de tu experiencia…" />
+          <button type="button" disabled={!rating} onClick={() => setSent(true)} className="mt-auto rounded-full bg-[#1a73e8] px-3 py-2 text-sm font-semibold text-white disabled:opacity-40">Publicar</button>
         </>
       )}
     </div>
@@ -91,22 +91,22 @@ function EmployeeReviewScreen() {
         <div className="flex flex-1 flex-col items-center justify-center text-center">
           <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-green-100"><Check className="h-6 w-6 text-green-600" /></span>
           <p className="text-sm font-semibold">Feedback enviado</p>
-          <p className="mt-2 text-[10px] leading-relaxed text-gray-500">Tu valoración privada ayudará a mejorar la atención.</p>
+          <p className="mt-2 text-sm leading-relaxed text-gray-500">Tu valoración privada ayudará a mejorar la atención.</p>
         </div>
       ) : (
         <>
-          <p className="text-center text-[9px] font-medium uppercase tracking-wider text-green-700">Atención de</p>
+          <p className="text-center text-sm font-medium uppercase tracking-wider text-green-700">Atención de</p>
           <div className="mx-auto mt-2 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-sm font-bold text-green-700">MG</div>
           <h4 className="mt-2 text-center text-sm font-semibold">María González</h4>
-          <p className="text-center text-[10px] text-gray-500">Café Luz · Mesera</p>
-          <p className="mt-4 text-[10px] font-medium">¿Cómo fue tu atención?</p>
+          <p className="text-center text-sm text-gray-500">Café Luz · Mesera</p>
+          <p className="mt-4 text-sm font-medium">¿Cómo fue tu atención?</p>
           <div className="mt-2 flex justify-between gap-1">
             {[1, 2, 3, 4, 5].map((value) => (
-              <button key={value} type="button" onClick={() => setRating(value)} className={`flex h-7 w-7 items-center justify-center rounded-lg border text-[10px] font-semibold transition ${value === rating ? "border-green-500 bg-green-500 text-white" : "border-gray-200 bg-white"}`}>{value}</button>
+              <button key={value} type="button" onClick={() => setRating(value)} className={`flex h-9 w-9 items-center justify-center rounded-lg border text-sm font-semibold transition ${value === rating ? "border-green-500 bg-green-500 text-white" : "border-gray-200 bg-white"}`}>{value}</button>
             ))}
           </div>
-          <textarea value={comment} onChange={(event) => setComment(event.target.value)} className="mt-3 h-16 resize-none rounded-lg border border-gray-200 bg-white p-2 text-[10px] outline-none focus:border-green-500" placeholder="Cuéntanos sobre tu experiencia…" />
-          <button type="button" disabled={!rating || !comment.trim()} onClick={() => setSent(true)} className="mt-auto flex items-center justify-center gap-1 rounded-full bg-green-600 px-3 py-2 text-[10px] font-semibold text-white disabled:opacity-40"><Send className="h-3 w-3" /> Enviar feedback</button>
+          <textarea value={comment} onChange={(event) => setComment(event.target.value)} className="mt-3 h-20 resize-none rounded-lg border border-gray-200 bg-white p-2 text-sm outline-none focus:border-green-500" placeholder="Cuéntanos sobre tu experiencia…" />
+          <button type="button" disabled={!rating || !comment.trim()} onClick={() => setSent(true)} className="mt-auto flex items-center justify-center gap-1 rounded-full bg-green-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-40"><Send className="h-4 w-4" /> Enviar feedback</button>
         </>
       )}
     </div>
@@ -170,15 +170,15 @@ export function NfcSimulators() {
         <div className="flex flex-col justify-center">
           <dl className="divide-y divide-[var(--border)] rounded-xl border border-[var(--border)] bg-[var(--muted)]/40">
             <div className="flex items-center justify-between gap-4 px-4 py-3">
-              <dt className="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Destino</dt>
+              <dt className="text-sm font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Destino</dt>
               <dd className="text-sm font-semibold text-[var(--foreground)]">{info.destination}</dd>
             </div>
             <div className="flex items-center justify-between gap-4 px-4 py-3">
-              <dt className="shrink-0 text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Objetivo</dt>
+              <dt className="shrink-0 text-sm font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">Objetivo</dt>
               <dd className="text-right text-sm text-[var(--foreground)]">{info.objective}</dd>
             </div>
           </dl>
-          <p className="mt-4 text-xs leading-relaxed text-[var(--muted-foreground)]">{info.footer}</p>
+          <p className="mt-4 text-sm leading-relaxed text-[var(--muted-foreground)]">{info.footer}</p>
         </div>
 
         {/* Demo interactivo */}
@@ -194,7 +194,7 @@ export function NfcSimulators() {
                 <div className="relative flex h-24 w-40 items-center justify-center rounded-2xl border border-gray-300 bg-white shadow-xl">
                   <div className="absolute -top-2 h-4 w-20 rounded-full bg-green-500/20 blur-md" />
                   <Logo markOnly size={22} />
-                  <span className="absolute bottom-2 text-[9px] font-semibold tracking-wider text-gray-500">NFC TIPO {type}</span>
+                  <span className="absolute bottom-2 text-sm font-semibold tracking-wider text-gray-500">NFC TIPO {type}</span>
                   {(phase === "approaching" || phase === "detected") && [0, 1, 2].map((ring) => <span key={ring} className="absolute h-16 w-16 animate-ping rounded-full border border-green-500/50" style={{ animationDelay: `${ring * 180}ms`, animationDuration: "1.4s" }} />)}
                 </div>
               </div>
@@ -202,11 +202,11 @@ export function NfcSimulators() {
                 <PhoneFrame pulse={phase === "detected"}>
                   <div className="flex h-full flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 text-center">
                     {phase === "detected" ? (
-                      <><CheckCircle2 className="mb-3 h-10 w-10 text-green-500" /><p className="text-xs font-semibold">NFC detectado</p><p className="mt-1 text-[9px] text-gray-500">Toque {type === "A" ? "Público" : "Personal"}</p></>
+                      <><CheckCircle2 className="mb-3 h-10 w-10 text-green-500" /><p className="text-sm font-semibold">NFC detectado</p><p className="mt-1 text-sm text-gray-500">Toque {type === "A" ? "Público" : "Personal"}</p></>
                     ) : phase === "opening" ? (
-                      <><LoaderCircle className="mb-3 h-9 w-9 animate-spin text-green-600" /><p className="text-xs font-semibold">Abriendo enlace…</p></>
+                      <><LoaderCircle className="mb-3 h-9 w-9 animate-spin text-green-600" /><p className="text-sm font-semibold">Abriendo enlace…</p></>
                     ) : (
-                      <><Wifi className="mb-3 h-9 w-9 rotate-90 text-gray-400" /><p className="text-xs font-semibold">Listo para detectar</p></>
+                      <><Wifi className="mb-3 h-9 w-9 rotate-90 text-gray-400" /><p className="text-sm font-semibold">Listo para detectar</p></>
                     )}
                   </div>
                 </PhoneFrame>
@@ -214,10 +214,10 @@ export function NfcSimulators() {
               {phase === "idle" && (
                 <div className="absolute inset-x-0 top-40 flex flex-col items-center gap-2 text-gray-500">
                   <MousePointerClick className="h-6 w-6 animate-bounce" />
-                  <p className="text-xs font-semibold">Toca la pantalla para probar el tap</p>
+                  <p className="text-sm font-semibold">Toca la pantalla para probar el tap</p>
                 </div>
               )}
-              <p className="absolute bottom-2 left-0 right-0 text-center text-[10px] font-medium text-gray-500">
+              <p className="absolute bottom-2 left-0 right-0 text-center text-sm font-medium text-gray-500">
                 {phase === "approaching" ? "Acercando al chip NFC…" : phase === "detected" ? "Vibración y confirmación instantánea" : phase === "opening" ? "Redirigiendo al destino seguro…" : ""}
               </p>
             </>

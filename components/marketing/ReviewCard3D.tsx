@@ -654,7 +654,7 @@ export function ReviewCard3D() {
               key={id}
               type="button"
               onClick={() => setModel(id)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition sm:px-4 sm:py-2 sm:text-sm ${
+              className={`rounded-full px-4 py-2 text-sm font-medium whitespace-nowrap transition ${
                 model === id
                   ? "bg-[var(--primary)] text-white"
                   : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
@@ -674,7 +674,7 @@ export function ReviewCard3D() {
         />
       </div>
 
-      <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full border border-[var(--border)] bg-white/80 px-3.5 py-1.5 text-xs whitespace-nowrap text-[var(--muted-foreground)] backdrop-blur">
+      <div className="pointer-events-none absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full border border-[var(--border)] bg-white/80 px-4 py-2 text-sm whitespace-nowrap text-[var(--muted-foreground)] backdrop-blur">
         Arrastra para girar<span className="hidden sm:inline"> · rueda o pellizca para acercar</span>
       </div>
     </div>

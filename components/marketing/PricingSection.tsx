@@ -81,7 +81,7 @@ export function PricingSection() {
       {type === "A" ? (
         /* Tipo A — compra única */
         <div className="mx-auto flex max-w-md flex-col rounded-3xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--primary-dark)]">
+          <p className="text-sm font-semibold uppercase tracking-wide text-[var(--primary-dark)]">
             Google
           </p>
           <h3 className="mt-1 text-xl font-semibold text-[var(--foreground)]">
@@ -107,7 +107,7 @@ export function PricingSection() {
             $40
             <span className="text-sm font-normal text-[var(--muted-foreground)]"> /unidad</span>
           </p>
-          <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+          <p className="mt-1 text-sm text-[var(--muted-foreground)]">
             Pago único · <span className="font-semibold text-[var(--foreground)]">sin mensualidad</span>
           </p>
           <Link
@@ -136,22 +136,22 @@ function PlanGrid() {
     <div className="rounded-3xl border border-[var(--border)] bg-[var(--secondary)] p-4 sm:p-6">
       <h3 className="mb-4 font-semibold text-[var(--foreground)]">Planes por tamaño de equipo</h3>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 pt-3 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 xl:grid-cols-4 [&::-webkit-scrollbar]:hidden">
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`relative flex flex-col rounded-3xl p-5 ${
+            className={`relative flex w-[80%] shrink-0 snap-start flex-col rounded-3xl p-5 sm:w-auto ${
               plan.featured
                 ? "border-2 border-[var(--primary)] bg-[var(--card)] shadow-[var(--shadow-lg)]"
                 : "border border-[var(--border)] bg-[var(--card)]"
             }`}
           >
             {plan.featured && (
-              <span className="absolute -top-3 left-4 rounded-full bg-[var(--primary)] px-3 py-1 text-xs font-semibold text-[var(--primary-foreground)]">
+              <span className="absolute -top-3 left-4 rounded-full bg-[var(--primary)] px-3 py-1 text-sm font-semibold text-[var(--primary-foreground)]">
                 Más popular
               </span>
             )}
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
+            <p className="text-sm font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
               {plan.tagline}
             </p>
             <h3 className="mt-1 text-xl font-semibold text-[var(--foreground)]">
@@ -172,7 +172,7 @@ function PlanGrid() {
               {plan.monthly}
               <span className="text-sm font-normal text-[var(--muted-foreground)]">/mes</span>
             </p>
-            <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+            <p className="mt-1 text-sm text-[var(--muted-foreground)]">
               Tag por empleado: <span className="font-semibold text-[var(--foreground)]">{plan.tagPrice}</span> (pago único)
             </p>
             <Link

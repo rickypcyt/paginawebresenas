@@ -133,13 +133,13 @@ export default function LandingPage() {
           {valueProps.map((prop) => {
             const Icon = prop.icon;
             return (
-              <div key={prop.title} className="flex items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--primary-light)] text-[var(--primary-dark)]">
-                  <Icon className="h-5 w-5" />
+              <div key={prop.title} className="flex items-center gap-4">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--primary-light)] text-[var(--primary-dark)]">
+                  <Icon className="h-6 w-6" />
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-[var(--foreground)]">{prop.title}</p>
-                  <p className="text-xs text-[var(--muted-foreground)]">{prop.desc}</p>
+                  <p className="text-base font-semibold text-[var(--foreground)]">{prop.title}</p>
+                  <p className="text-sm text-[var(--muted-foreground)]">{prop.desc}</p>
                 </div>
               </div>
             );
@@ -232,7 +232,7 @@ export default function LandingPage() {
               El tag Tipo A se compra una sola vez. Los planes Tipo B incluyen acceso a la plataforma y un tag NFC por empleado — mientras más empleados, menor el precio por tag.
             </p>
           </div>
-          <div className="mb-8 text-center text-xs text-[var(--muted-foreground)]">
+          <div className="mb-8 text-center text-sm text-[var(--muted-foreground)]">
             Precios en USD, impuestos no incluidos. Los tags incluyen personalización, preparación y envío.
           </div>
 
