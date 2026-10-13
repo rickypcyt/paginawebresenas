@@ -29,10 +29,18 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
     return rateLimitResponse();
   }
 
-  const body = await req.json();
-  const { product: productKey, buyerName, buyerEmail, buyerPhone, businessName } =
-    body ?? {};
-  const quantity = Number(body?.quantity ?? 1);
+  const body = await req.json().catch(() => null);
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Body inválido" }, { status: 400 });
+  }
+
+  const payload = body as Record<string, unknown>;
+  const productKey = typeof payload.product === "string" ? payload.product : undefined;
+  const buyerName = typeof payload.buyerName === "string" ? payload.buyerName.trim().slice(0, 120) : "";
+  const buyerEmail = typeof payload.buyerEmail === "string" ? payload.buyerEmail.trim().toLowerCase().slice(0, 254) : "";
+  const buyerPhone = typeof payload.buyerPhone === "string" ? payload.buyerPhone.trim().slice(0, 40) : "";
+  const businessName = typeof payload.businessName === "string" ? payload.businessName.trim().slice(0, 120) : "";
+  const quantity = Number(payload.quantity ?? 1);
 
   const product = getCheckoutProduct(productKey);
   if (!product) {
@@ -94,32 +102,45 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
     return NextResponse.json({ processUrl, mock: true });
   }
 
-  const session = await createSession({
-    reference,
-    description,
-    total,
-    currency,
-    returnUrl,
-    cancelUrl: returnUrl,
-    ipAddress: ip,
-    userAgent,
-    buyer: { name: buyerName, email: buyerEmail, mobile: buyerPhone },
-  });
+  let session: Awaited<ReturnType<typeof createSession>>;
+  try {
+    session = await createSession({
+      reference,
+      description,
+      total,
+      currency,
+      returnUrl,
+      cancelUrl: returnUrl,
+      ipAddress: ip,
+      userAgent,
+      buyer: { name: buyerName, email: buyerEmail, mobile: buyerPhone },
+    });
+  } catch (error) {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: "failed" },
+    });
+    throw error;
+  }
+
+  if (!session.requestId || !session.processUrl) {
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: "failed" },
+    });
+    return NextResponse.json(
+      { error: "PlacetoPay devolvió una sesión incompleta" },
+      { status: 502 }
+    );
+  }
 
   await prisma.payment.update({
     where: { id: payment.id },
     data: {
-      requestId: session.requestId ? String(session.requestId) : null,
-      processUrl: session.processUrl ?? null,
+      requestId: String(session.requestId),
+      processUrl: session.processUrl,
     },
   });
-
-  if (!session.processUrl) {
-    return NextResponse.json(
-      { error: "PlacetoPay no devolvió una URL de pago" },
-      { status: 502 }
-    );
-  }
 
   return NextResponse.json({ processUrl: session.processUrl });
 });

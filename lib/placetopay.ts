@@ -84,9 +84,11 @@ export function verifyNotificationSignature(body: {
   return crypto.timingSafeEqual(expectedBuf, givenBuf);
 }
 
+export type PaymentStatus = "pending" | "approved" | "rejected" | "expired" | "failed";
+
 export function mapPlacetopayStatus(
   status: PlacetopayStatus | undefined
-): "pending" | "approved" | "rejected" | "expired" | "failed" {
+): PaymentStatus {
   switch (status) {
     case "APPROVED":
       return "approved";
@@ -101,6 +103,13 @@ export function mapPlacetopayStatus(
     default:
       return "pending";
   }
+}
+
+export function canUpdatePaymentStatus(
+  current: PaymentStatus,
+  next: PaymentStatus
+): boolean {
+  return current === "pending" && next !== "pending";
 }
 
 export async function createSession(input: {

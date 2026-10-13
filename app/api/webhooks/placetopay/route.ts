@@ -3,17 +3,9 @@ import prisma from "@/lib/prisma";
 import {
   verifyNotificationSignature,
   mapPlacetopayStatus,
+  canUpdatePaymentStatus,
 } from "@/lib/placetopay";
 import { withErrorHandler } from "@/lib/api-utils";
-import type { PaymentStatus } from "@/src/generated/prisma";
-
-// Estados terminales: una vez alcanzados no pueden retroceder a "pending".
-const TERMINAL: ReadonlySet<PaymentStatus> = new Set([
-  "approved",
-  "rejected",
-  "expired",
-  "failed",
-]);
 
 export const POST = withErrorHandler(async (req: NextRequest) => {
   let body: unknown;
@@ -52,14 +44,9 @@ export const POST = withErrorHandler(async (req: NextRequest) => {
 
   const nextStatus = mapPlacetopayStatus(status?.status);
 
-  // Las notificaciones pueden llegar desordenadas: un pago terminal no vuelve a pending.
-  if (TERMINAL.has(payment.status) && nextStatus === "pending") {
-    return NextResponse.json({ ok: true });
-  }
-
-  if (payment.status !== nextStatus) {
+  if (canUpdatePaymentStatus(payment.status, nextStatus)) {
     await prisma.payment.update({
-      where: { id: payment.id },
+      where: { id: payment.id, status: "pending" },
       data: { status: nextStatus },
     });
   }

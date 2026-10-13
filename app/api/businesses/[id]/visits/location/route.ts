@@ -40,7 +40,7 @@ export const POST = withErrorHandler(async (
     select: { latitude: true, longitude: true, name: true },
   });
 
-  if (!business || !business.latitude || !business.longitude) {
+  if (!business || business.latitude === null || business.longitude === null) {
     return NextResponse.json({ error: "Negocio sin ubicación" }, { status: 400 });
   }
 
