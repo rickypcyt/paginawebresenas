@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 
 export function AdminImageInput({
@@ -33,9 +34,11 @@ export function AdminImageInput({
   return (
     <div className="flex items-center gap-3">
       {value ? (
-        <img
+        <Image
           src={value}
           alt="Logo"
+          width={56}
+          height={56}
           className="h-14 w-14 shrink-0 rounded-xl border border-[var(--border)] object-cover"
         />
       ) : (

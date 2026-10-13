@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -48,10 +49,11 @@ export default async function AdminBusinessDetailPage({ params }: AdminBusinessD
         </Link>
         <div className="mt-2 flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
           {business.imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={business.imageUrl}
               alt={business.name}
+              width={64}
+              height={64}
               className="h-16 w-16 shrink-0 rounded-xl border border-[var(--border)] object-cover"
             />
           ) : (

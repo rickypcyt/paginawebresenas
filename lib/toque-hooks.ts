@@ -14,13 +14,6 @@ async function api(method: string, url: string, body?: unknown) {
   return r.status === 204 ? {} : r.json().catch(() => ({}));
 }
 
-const withFile = (json: Record<string, unknown>, file: File | null, field = "logo") => {
-  const f = new FormData();
-  f.append("data", JSON.stringify(json));
-  if (file) f.append(field, file);
-  return f;
-};
-
 /* ---------------- DUEÑO ---------------- */
 export const ownerHooks = {
   saveProfile: async ({

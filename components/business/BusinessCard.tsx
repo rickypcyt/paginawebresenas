@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { StarRating } from "../ui/StarRating";
 
@@ -26,10 +27,12 @@ export function BusinessCard({ business }: BusinessCardProps) {
     >
       <div className="relative flex h-36 items-center justify-center overflow-hidden bg-[var(--primary-light)]">
         {business.imageUrl ? (
-          <img
+          <Image
             src={business.imageUrl}
             alt={business.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <span className="text-4xl opacity-60">🏪</span>

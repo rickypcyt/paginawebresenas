@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.imgur.com" },
       { protocol: "https", hostname: "picsum.photos" },
       { protocol: "https", hostname: "loremflickr.com" },
+      { protocol: "https", hostname: "api.qrserver.com" },
+      { protocol: "https", hostname: "**" },
     ],
     unoptimized: true,
   },

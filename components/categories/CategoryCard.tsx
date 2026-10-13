@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 interface CategoryCardProps {
@@ -18,10 +19,12 @@ export function CategoryCard({ category }: CategoryCardProps) {
     >
       {category.imageUrl ? (
         <>
-          <img
+          <Image
             src={category.imageUrl}
             alt={category.name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           <div className="relative z-10">

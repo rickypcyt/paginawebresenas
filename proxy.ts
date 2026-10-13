@@ -7,7 +7,7 @@ const protectedPaths = [
   { prefix: "/employee", roles: ["user", "employee"] },
 ];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const match = protectedPaths.find((p) => pathname.startsWith(p.prefix));

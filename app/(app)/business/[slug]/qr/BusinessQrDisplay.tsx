@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export function BusinessQrDisplay({ businessId }: { businessId: string }) {
@@ -42,9 +43,11 @@ export function BusinessQrDisplay({ businessId }: { businessId: string }) {
     <div className="space-y-6">
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center">
         <h2 className="mb-2 text-xl font-bold text-[var(--foreground)]">QR diario</h2>
-        <img
+        <Image
           src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(dailyUrl)}`}
           alt="QR diario"
+          width={250}
+          height={250}
           className="mx-auto mb-3 rounded-xl border border-[var(--border)]"
         />
         <p className="text-sm text-[var(--muted-foreground)]">Cambia cada medianoche</p>
@@ -52,9 +55,11 @@ export function BusinessQrDisplay({ businessId }: { businessId: string }) {
 
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 text-center">
         <h2 className="mb-2 text-xl font-bold text-[var(--foreground)]">QR dinámico</h2>
-        <img
+        <Image
           src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(dynamicUrl)}`}
           alt="QR dinámico"
+          width={250}
+          height={250}
           className="mx-auto mb-3 rounded-xl border border-[var(--border)]"
         />
         <p className="text-sm text-[var(--muted-foreground)]">Se actualiza cada {data.expiresIn} segundos</p>

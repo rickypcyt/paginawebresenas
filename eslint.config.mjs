@@ -12,8 +12,16 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "src/generated/**",
+    "toque-paquete/**",
     "next-env.d.ts",
   ]),
+  {
+    files: ["public/toque/*.js"],
+    rules: {
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
