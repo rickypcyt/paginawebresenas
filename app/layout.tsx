@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   description:
     "Plataforma para gestionar NFCs que llevan a los clientes a reseñas de Google o a valorar a empleados.",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
   ),
   openGraph: {
     type: "website",

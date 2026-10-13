@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "src/generated/**",
     "toque-paquete/**",
+    "A/**",
     "next-env.d.ts",
   ]),
   {

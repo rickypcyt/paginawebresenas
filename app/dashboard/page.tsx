@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { isAdmin, isBusiness, isEmployee } from "@/lib/roles";
+import { getEmployeeData, getOwnerData } from "@/lib/toque-data";
 import DashboardPanel from "./DashboardPanel";
 
 export default async function DashboardPage({ searchParams }: { searchParams: Promise<{ businessId?: string }> }) {
@@ -10,21 +11,15 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   const role = session.user.role;
   if (isAdmin(role)) redirect("/admin");
 
-  let url: string;
+  let data: unknown = null;
   if (isEmployee(role)) {
-    url = "/api/toque/employee";
+    data = await getEmployeeData();
   } else if (isBusiness(role)) {
     const { businessId } = await searchParams;
-    url = businessId ? `/api/toque/owner?businessId=${businessId}` : "/api/toque/owner";
+    data = await getOwnerData(businessId);
   } else {
     redirect("/businesses");
   }
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${url}`, {
-    credentials: "include",
-  });
-
-  const data = res.ok ? await res.json() : null;
 
   return <DashboardPanel initialData={data} />;
 }

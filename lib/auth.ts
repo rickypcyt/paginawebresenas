@@ -3,8 +3,17 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "@/lib/prisma";
 
-const betterAuthURL =
-  process.env.BETTER_AUTH_URL || "http://localhost:3000";
+function productionUrl(): string {
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  if (process.env.VERCEL_BRANCH_URL) {
+    return `https://${process.env.VERCEL_BRANCH_URL}`;
+  }
+  return "http://localhost:3000";
+}
+
+const betterAuthURL = process.env.BETTER_AUTH_URL || productionUrl();
 const isSecureURL = betterAuthURL.startsWith("https");
 
 // Orígenes extra de confianza vía env (ej. túnel ngrok en desarrollo), separados por coma.
