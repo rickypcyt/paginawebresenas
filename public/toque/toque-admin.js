@@ -1123,7 +1123,7 @@ function nav(){let g='';
   $('#nav').classList.toggle('more-open',moreOpen);
   $('#nav').innerHTML=items+`<button class="nav-more" type="button" aria-expanded="${moreOpen}" aria-label="Mostrar más secciones">${ic('plus')}<span class="lbl-s">Más</span></button>`;
   $('#nav').querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{moreOpen=false;go(b.dataset.k);});
-  $('.nav-more').onclick=()=>{moreOpen=!moreOpen;nav();};
+  $('.nav-more').onclick=e=>{moreOpen=!moreOpen;$('#nav').classList.toggle('more-open',moreOpen);e.currentTarget.setAttribute('aria-expanded',String(moreOpen));};
 }
 function go(k,opt){cur=k;bizOpen=opt??null;if(opt)bizTab='team';render();scrollTop();}
 const viewKey=()=>cur+'|'+(bizOpen||'')+'|'+(bizOpen?bizTab:'')+'|'+period;
