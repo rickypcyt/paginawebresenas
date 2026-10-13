@@ -33,13 +33,19 @@ export function PublicNavbar() {
           ))}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <button
             onClick={() => open("/dashboard")}
-            className="rounded-full px-4 py-1.5 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--secondary)]"
+            className="rounded-full px-3 py-1.5 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--secondary)] sm:px-4"
           >
             Acceder
           </button>
+          <Link
+            href="/business-requests"
+            className="rounded-full bg-[var(--foreground)] px-3 py-1.5 text-sm font-medium text-[var(--background)] transition hover:opacity-90 sm:px-4"
+          >
+            Solicitar Toque
+          </Link>
         </div>
       </div>
     </header>

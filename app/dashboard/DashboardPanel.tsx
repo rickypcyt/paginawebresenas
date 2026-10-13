@@ -70,7 +70,7 @@ export default function DashboardPanel({ initialData }: { initialData: unknown }
         data={data}
         hooks={employeeHooksTyped}
         onLogout={() => signOut()}
-        theme="dark"
+        theme="light"
       />
     );
   }
@@ -81,7 +81,7 @@ export default function DashboardPanel({ initialData }: { initialData: unknown }
       data={data}
       hooks={ownerHooksTyped}
       onLogout={() => signOut()}
-      theme="dark"
+      theme="light"
     />
   );
 }

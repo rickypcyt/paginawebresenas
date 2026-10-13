@@ -47,7 +47,7 @@ export default function AdminPanel({ initialData }: { initialData: unknown }) {
       data={data}
       hooks={adminHooksTyped}
       onLogout={() => signOut()}
-      theme="dark"
+      theme="light"
     />
   );
 }

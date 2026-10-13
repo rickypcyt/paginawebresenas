@@ -177,8 +177,11 @@ const CSS = `:host{all:initial;display:block}
     .kpis{grid-template-columns:repeat(2,1fr);gap:10px}
     h1{font-size:22px}
     .row{flex-wrap:wrap}
-    .row .acts{width:100%;justify-content:flex-end}
+    .row .acts{width:100%;justify-content:flex-start;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;padding-bottom:2px}
+    .row .acts::-webkit-scrollbar{display:none}
+    .row .acts>*{flex:0 0 auto}
     .row .acts.inline{width:auto}
+    table{display:block;max-width:100%;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
     .tbl-wrap{display:none}
     .pay-cards{display:block!important}
   }
@@ -727,7 +730,7 @@ const CSS = `:host{all:initial;display:block}
   @media (prefers-reduced-motion:reduce){.app,.app *,.app *::before,.app *::after{animation:none!important;transition:none!important}}
 `;
 
-const BASE = 'https://paginawebresenas.vercel.app';
+const BASE = globalThis.location?.origin || '';
 const DAY = 864e5;
 const GOOD_CHIPS = ['Amable','Rápido','Buena recomendación','Atento','Simpático'];
 const BAD_CHIPS = ['Tardó mucho','Poco atento','Se equivocó en el pedido','Poco amable'];
@@ -819,9 +822,10 @@ const shell = (D, hideHeader) => shellV11({nohead: hideHeader, sub: 'Empleado', 
   pill: `<span class="pill">${TOP_I.clock}<span class="t" id="hdrLeft"></span></span>`});
 
 function boot(host, root, opts){
+  if (!opts.data) throw new Error('ToqueEmpleado requiere datos reales');
   const NOW = new Date();
-  const DATA = normalizeEmployee(opts.data || demoEmployeeData());
-  const DEMO = opts.data ? '' : '<span class="demo-tag">Datos de ejemplo</span>';
+  const DATA = normalizeEmployee(opts.data);
+  const DEMO = '';
   root.innerHTML = '<style>' + CSS + '</style>' + shell(DATA, host.hasAttribute('hide-header'));
 const PERIODS=[['this-month','Este mes'],['last-month','Mes anterior'],['all-time','Todo']];
 function range(p){const y=NOW.getFullYear(),m=NOW.getMonth();
@@ -844,7 +848,7 @@ const pts=n=>(Number.isInteger(n)?String(n):n.toFixed(1).replace('.',','));
 const $=s=>root.querySelector(s);
 const H=()=>host.hooks||{};
 
-const THEME_KEY='toque-theme';
+const THEME_KEY='toque-theme-v2';
 const sysDark=()=>{const d=document.documentElement.getAttribute('data-theme');if(d==='dark')return true;if(d==='light')return false;try{return matchMedia('(prefers-color-scheme: dark)').matches;}catch{return false;}};
 const storedTheme=()=>{try{const s=localStorage.getItem(THEME_KEY);return s==='dark'||s==='light'?s:null;}catch{return null;}};
 const attrTheme=()=>{const a=host.getAttribute('theme');return a==='dark'||a==='light'?a:null;};
@@ -942,10 +946,10 @@ function bellToggle(force){const w=$('#npanel');if(!w)return;const open=force===
 const onRootClick=e=>{const w=$('#npanel');if(w&&!w.hidden&&!e.composedPath().some(n=>n&&(n.id==='npanel'||n.id==='bell')))bellToggle(false);};
 const onRootEsc=e=>{if(e.key==='Escape'){const w=$('#npanel');if(w&&!w.hidden){bellToggle(false);$('#bell').focus();}}};
 root.addEventListener('click',onRootClick);root.addEventListener('keydown',onRootEsc);
-let topWired=false;
+let topWired=false,searchTimer=0;
 function wireTop(){topWired=true;
   const b=$('#bell');if(b)b.onclick=()=>bellToggle();
-  const q=$('#q');if(q&&typeof onSearch==='function')q.oninput=e=>onSearch(e.target.value);
+  const q=$('#q');if(q&&typeof onSearch==='function')q.oninput=e=>{clearTimeout(searchTimer);const value=e.target.value;searchTimer=setTimeout(()=>onSearch(value),180);};
   const c=$('#cta');if(c&&typeof ctaAction==='function')c.onclick=()=>ctaAction();}
 function afterRender(){if(!topWired)wireTop();
   root.querySelectorAll('.rv-car').forEach(carWire);
@@ -1134,6 +1138,6 @@ export class ToqueEmpleado extends HTMLElement {
   get theme(){ return this.#app ? this.#app.getTheme() : null; }
   set theme(v){ this.#app?.setTheme(v); }
   #unmount(){ this.#app?.destroy(); this.#app = null; this.shadowRoot.innerHTML = ''; }
-  #mount(){ this.#unmount(); this.#app = boot(this, this.shadowRoot, {data: this.#data}); }
+  #mount(){ this.#unmount(); if(!this.#data) return; this.#app = boot(this, this.shadowRoot, {data: this.#data}); }
 }
 if(!customElements.get('toque-empleado')) customElements.define('toque-empleado', ToqueEmpleado);

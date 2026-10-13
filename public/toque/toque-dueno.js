@@ -176,8 +176,11 @@ const CSS = `:host{all:initial;display:block}
     .kpis{grid-template-columns:repeat(2,1fr);gap:10px}
     h1{font-size:22px}
     .row{flex-wrap:wrap}
-    .row .acts{width:100%;justify-content:flex-end}
+    .row .acts{width:100%;justify-content:flex-start;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;padding-bottom:2px}
+    .row .acts::-webkit-scrollbar{display:none}
+    .row .acts>*{flex:0 0 auto}
     .row .acts.inline{width:auto}
+    table{display:block;max-width:100%;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
     .tbl-wrap{display:none}
     .pay-cards{display:block!important}
   }
@@ -278,6 +281,9 @@ const CSS = `:host{all:initial;display:block}
   .form .hint{font-weight:400;font-size:11.5px}
   .logo-up{display:flex;align-items:center;gap:14px;padding:18px;border-bottom:1px solid var(--line)}
   .logo-up .ini{width:64px;height:64px;font-size:22px;border-radius:16px}
+  .logo-action{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:150px}
+  .logo-file-name{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:11.5px}
+  @media(max-width:620px){.logo-up{align-items:flex-start;flex-wrap:wrap}.logo-action{width:100%;align-items:stretch}.logo-action .btn{justify-content:center}.logo-file-name{max-width:100%;text-align:center}}
   .savebar{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
   @media(max-width:1000px){.grid3{grid-template-columns:1fr}.rv-layout{grid-template-columns:1fr}.sumgrid{grid-template-columns:1fr 1fr}.sumgrid>div:first-child{grid-column:1/-1}}
   @media(max-width:860px){
@@ -726,7 +732,7 @@ const CSS = `:host{all:initial;display:block}
   @media (prefers-reduced-motion:reduce){.app,.app *,.app *::before,.app *::after{animation:none!important;transition:none!important}}
 `;
 
-const BASE = 'https://paginawebresenas.vercel.app';
+const BASE = globalThis.location?.origin || '';
 const DAY = 864e5;
 const GOOD_CHIPS = ['Amable','Rápido','Buena recomendación','Atento','Simpático'];
 const BAD_CHIPS = ['Tardó mucho','Poco atento','Se equivocó en el pedido','Poco amable'];
@@ -838,9 +844,10 @@ const shell = (D, hideHeader) => shellV11({nohead: hideHeader, sub: 'Dueño', na
 
 
 function boot(host, root, opts){
+  if (!opts.data) throw new Error('ToqueDueno requiere datos reales');
   const NOW = new Date();
-  let DATA = normalizeOwner(opts.data || demoOwnerData());
-  const DEMO = opts.data ? '' : '<span class="demo-tag">Datos de ejemplo</span>';
+  let DATA = normalizeOwner(opts.data);
+  const DEMO = '';
   root.innerHTML = '<style>' + CSS + '</style>' + shell(DATA, host.hasAttribute('hide-header'));
 /* periodos (los mismos del panel actual) */
 const PERIODS=[['this-month','Este mes'],['last-month','Mes anterior'],['last-30-days','Últimos 30 días'],['all-time','Todo']];
@@ -878,7 +885,7 @@ const pts=n=>(Number.isInteger(n)?n:n.toFixed(1).replace('.',','));
 const $=s=>root.querySelector(s);
 const H=()=>host.hooks||{};
 
-const THEME_KEY='toque-theme';
+const THEME_KEY='toque-theme-v2';
 const sysDark=()=>{const d=document.documentElement.getAttribute('data-theme');if(d==='dark')return true;if(d==='light')return false;try{return matchMedia('(prefers-color-scheme: dark)').matches;}catch{return false;}};
 const storedTheme=()=>{try{const s=localStorage.getItem(THEME_KEY);return s==='dark'||s==='light'?s:null;}catch{return null;}};
 const attrTheme=()=>{const a=host.getAttribute('theme');return a==='dark'||a==='light'?a:null;};
@@ -976,10 +983,10 @@ function bellToggle(force){const w=$('#npanel');if(!w)return;const open=force===
 const onRootClick=e=>{const w=$('#npanel');if(w&&!w.hidden&&!e.composedPath().some(n=>n&&(n.id==='npanel'||n.id==='bell')))bellToggle(false);};
 const onRootEsc=e=>{if(e.key==='Escape'){const w=$('#npanel');if(w&&!w.hidden){bellToggle(false);$('#bell').focus();}}};
 root.addEventListener('click',onRootClick);root.addEventListener('keydown',onRootEsc);
-let topWired=false;
+let topWired=false,searchTimer=0;
 function wireTop(){topWired=true;
   const b=$('#bell');if(b)b.onclick=()=>bellToggle();
-  const q=$('#q');if(q&&typeof onSearch==='function')q.oninput=e=>onSearch(e.target.value);
+  const q=$('#q');if(q&&typeof onSearch==='function')q.oninput=e=>{clearTimeout(searchTimer);const value=e.target.value;searchTimer=setTimeout(()=>onSearch(value),180);};
   const c=$('#cta');if(c&&typeof ctaAction==='function')c.onclick=()=>ctaAction();}
 function afterRender(){if(!topWired)wireTop();
   root.querySelectorAll('.rv-car').forEach(carWire);
@@ -1144,7 +1151,7 @@ prof(){
   return head('Perfil del negocio','Así te ven tus clientes y tu equipo')+
   `<form id="pf">
   <section class="card" style="margin-bottom:16px">
-    <div class="logo-up"><div class="ini biz" id="logoPrev">${b.logoUrl?`<img src="${esc(b.logoUrl)}" alt="Logo de ${esc(b.name)}">`:ini(b.name)}</div><div style="flex:1"><b style="font-size:16px">${esc(b.name)}</b> <span class="tag g" style="margin-left:6px">Verificado</span><p style="color:var(--muted);font-size:12.5px;margin-top:3px">JPG, PNG o WebP · máx. 2 MB</p></div><label class="btn" style="cursor:pointer">${ic('img')}Cambiar logo<input type="file" accept="image/*" hidden id="logoIn"></label></div>
+    <div class="logo-up"><div class="ini biz" id="logoPrev">${b.logoUrl?`<img src="${esc(b.logoUrl)}" alt="Logo de ${esc(b.name)}">`:ini(b.name)}</div><div style="flex:1"><b style="font-size:16px">${esc(b.name)}</b> <span class="tag g" style="margin-left:6px">Verificado</span><p style="color:var(--muted);font-size:12.5px;margin-top:3px">JPG, PNG o WebP · máx. 2 MB</p></div><div class="logo-action"><label class="btn" style="cursor:pointer">${ic('img')}Seleccionar imagen<input type="file" accept="image/jpeg,image/png,image/webp" hidden id="logoIn"></label><span class="logo-file-name" id="logoFileName">Ningún archivo seleccionado</span></div></div>
     <div class="form">${f('name','Nombre del negocio',b.name,'',true)}
       <label>Categoría<select name="category">${[...new Set([...CATEGORIES,b.category].filter(Boolean))].map(c=>`<option ${c===b.category?'selected':''}>${esc(c)}</option>`).join('')}</select></label>
       ${f('hours','Horario',b.hours,'Lun a Sáb · 8:00 a 20:00')}
@@ -1236,9 +1243,9 @@ const wire={
       const ok=await commit('saveProfile',{business,owner,logo:logoFile},res=>{Object.assign(DATA.business,business,res.business);Object.assign(DATA.owner,owner,res.owner);paintHeader();},'Cambios guardados');
       if(!ok&&!dead)btn.disabled=false;};
     $('#pfReset').onclick=()=>{render();toast('Cambios descartados');};
-    $('#logoIn').onchange=ev=>{const f=ev.target.files[0];if(!f)return;
-      if(!/^image\/(jpeg|png|webp)$/.test(f.type)||f.size>2*1024*1024){ev.target.value='';toast('Usa JPG, PNG o WebP de hasta 2 MB');return;}
-      logoFile=f;const u=URL.createObjectURL(f);$('#logoPrev').innerHTML=`<img src="${u}" alt="Vista previa del logo">`;toast('Logo listo para guardar');};
+    $('#logoIn').onchange=ev=>{const f=ev.target.files[0];if(!f){$('#logoFileName').textContent='Ningún archivo seleccionado';return;}
+      if(!/^image\/(jpeg|png|webp)$/.test(f.type)||f.size>2*1024*1024){ev.target.value='';$('#logoFileName').textContent='Ningún archivo seleccionado';toast('Usa JPG, PNG o WebP de hasta 2 MB');return;}
+      logoFile=f;$('#logoFileName').textContent=f.name;$('#logoFileName').title=f.name;const u=URL.createObjectURL(f);$('#logoPrev').innerHTML=`<img src="${u}" alt="Vista previa del logo">`;toast('Logo listo para guardar');};
   },
   team(){
     $('#addEmp').onclick=()=>empForm(null);
@@ -1309,6 +1316,6 @@ export class ToqueDueno extends HTMLElement {
   get theme(){ return this.#app ? this.#app.getTheme() : null; }
   set theme(v){ this.#app?.setTheme(v); }
   #unmount(){ this.#app?.destroy(); this.#app = null; this.shadowRoot.innerHTML = ''; }
-  #mount(){ this.#unmount(); this.#app = boot(this, this.shadowRoot, {data: this.#data}); }
+  #mount(){ this.#unmount(); if(!this.#data) return; this.#app = boot(this, this.shadowRoot, {data: this.#data}); }
 }
 if(!customElements.get('toque-dueno')) customElements.define('toque-dueno', ToqueDueno);

@@ -164,9 +164,13 @@ const CSS = `:host{all:initial;display:block}
     .shell{grid-template-columns:1fr}
     .side{position:fixed;top:auto;bottom:0;left:0;right:0;height:auto;z-index:30;border-right:none;border-top:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
     .side small{display:none}
-    .nav{flex-direction:row;justify-content:space-around}
-    .nav button{flex-direction:column;height:52px;gap:3px;font-size:10.5px;justify-content:center;padding:0 4px;position:relative;flex:1}
+    .nav{flex-direction:row;justify-content:space-around;flex-wrap:wrap}
+    .nav button{flex-direction:column;height:52px;gap:3px;font-size:10.5px;justify-content:center;padding:0 4px;position:relative;flex:1 1 calc(20% - 4px)}
     .nav button .lbl-l{display:none}
+    .nav button.mobile-extra{display:none}
+    .nav button.mobile-extra.on,.nav.more-open button.mobile-extra{display:flex}
+    .nav-more{display:flex!important}
+    .nav.more-open .nav-more svg{transform:rotate(45deg)}
     .nav .cnt{position:absolute;top:3px;left:calc(50% + 6px);margin:0;height:17px;min-width:17px;font-size:10px;padding:0 4px}
     .nav .cnt:not(.hot){display:none}
     .main{padding:20px 16px 96px}
@@ -178,12 +182,15 @@ const CSS = `:host{all:initial;display:block}
     .kpis{grid-template-columns:repeat(2,1fr);gap:10px}
     h1{font-size:22px}
     .row{flex-wrap:wrap}
-    .row .acts{width:100%;justify-content:flex-end}
+    .row .acts{width:100%;justify-content:flex-start;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;padding-bottom:2px}
+    .row .acts::-webkit-scrollbar{display:none}
+    .row .acts>*{flex:0 0 auto}
     .row .acts.inline{width:auto}
+    table{display:block;max-width:100%;overflow-x:auto;white-space:nowrap;scrollbar-width:thin}
     .tbl-wrap{display:none}
     .pay-cards{display:block!important}
   }
-  .lbl-s{display:none}
+  .lbl-s,.nav-more{display:none}
   @media(max-width:860px){.lbl-s{display:inline}}
   .pay-cards{display:none}
   .demo-tag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:100px;font-size:11px;font-weight:600;background:var(--band);color:var(--muted);margin-left:8px;vertical-align:middle;letter-spacing:0}
@@ -280,6 +287,14 @@ const CSS = `:host{all:initial;display:block}
   .form .hint{font-weight:400;font-size:11.5px}
   .logo-up{display:flex;align-items:center;gap:14px;padding:18px;border-bottom:1px solid var(--line)}
   .logo-up .ini{width:64px;height:64px;font-size:22px;border-radius:16px}
+  .file-field{display:flex!important;flex-direction:column;gap:7px!important;color:var(--muted);font-size:12.5px;font-weight:500}
+  .file-box{display:flex;align-items:center;gap:10px;min-height:46px;padding:5px 6px 5px 12px;border:1px dashed var(--line2);border-radius:12px;background:var(--surface2);transition:border-color .15s,background .15s}
+  .file-box:hover,.file-box:focus-within{border-color:var(--green);background:var(--gsoft)}
+  .file-box input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+  .file-name{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12.5px;font-weight:400}
+  .file-pick{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 11px;border:1px solid var(--line2);border-radius:9px;background:var(--surface);color:var(--ink);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .file-pick:hover{border-color:var(--green);color:var(--gdark)}
+  .file-help{font-size:11.5px;font-weight:400;color:var(--muted)}
   .savebar{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
   @media(max-width:1000px){.grid3{grid-template-columns:1fr}.rv-layout{grid-template-columns:1fr}.sumgrid{grid-template-columns:1fr 1fr}.sumgrid>div:first-child{grid-column:1/-1}}
   @media(max-width:860px){
@@ -735,7 +750,7 @@ const CSS = `:host{all:initial;display:block}
   @media (prefers-reduced-motion:reduce){.app,.app *,.app *::before,.app *::after{animation:none!important;transition:none!important}}
 `;
 
-const BASE = 'https://paginawebresenas.vercel.app';
+const BASE = globalThis.location?.origin || '';
 const DAY = 864e5;
 const GOOD_CHIPS = ['Amable','Rápido','Buena recomendación','Atento','Simpático'];
 const BAD_CHIPS = ['Tardó mucho','Poco atento','Se equivocó en el pedido','Poco amable'];
@@ -873,11 +888,12 @@ const shell = (D, hideHeader) => shellV11({nohead: hideHeader, sub: 'Admin', nam
 
 
 function boot(host, root, opts){
+  if (!opts.data) throw new Error('ToqueAdmin requiere datos reales');
   const NOW = new Date();
-  const D = normalizeAdmin(opts.data || demoAdminData());
+  const D = normalizeAdmin(opts.data);
   const DB = D.db;
   const DATA = {reviews: D.reviews, taps: D.taps};
-  const DEMO = opts.data ? '' : '<span class="demo-tag">Datos de ejemplo</span>';
+  const DEMO = '';
   root.innerHTML = '<style>' + CSS + '</style>' + shell(D, host.hasAttribute('hide-header'));
 /* periodos (los mismos del panel actual) */
 const PERIODS=[['this-month','Este mes'],['last-month','Mes anterior'],['last-30-days','Últimos 30 días'],['all-time','Todo']];
@@ -922,7 +938,7 @@ const PROD={tag_a:'Tag Tipo A',plan_starter:'Plan Starter',plan_business:'Plan N
 const $=s=>root.querySelector(s);
 const H=()=>host.hooks||{};
 
-const THEME_KEY='toque-theme';
+const THEME_KEY='toque-theme-v2';
 const sysDark=()=>{const d=document.documentElement.getAttribute('data-theme');if(d==='dark')return true;if(d==='light')return false;try{return matchMedia('(prefers-color-scheme: dark)').matches;}catch{return false;}};
 const storedTheme=()=>{try{const s=localStorage.getItem(THEME_KEY);return s==='dark'||s==='light'?s:null;}catch{return null;}};
 const attrTheme=()=>{const a=host.getAttribute('theme');return a==='dark'||a==='light'?a:null;};
@@ -1020,10 +1036,10 @@ function bellToggle(force){const w=$('#npanel');if(!w)return;const open=force===
 const onRootClick=e=>{const w=$('#npanel');if(w&&!w.hidden&&!e.composedPath().some(n=>n&&(n.id==='npanel'||n.id==='bell')))bellToggle(false);};
 const onRootEsc=e=>{if(e.key==='Escape'){const w=$('#npanel');if(w&&!w.hidden){bellToggle(false);$('#bell').focus();}}};
 root.addEventListener('click',onRootClick);root.addEventListener('keydown',onRootEsc);
-let topWired=false;
+let topWired=false,searchTimer=0;
 function wireTop(){topWired=true;
   const b=$('#bell');if(b)b.onclick=()=>bellToggle();
-  const q=$('#q');if(q&&typeof onSearch==='function')q.oninput=e=>onSearch(e.target.value);
+  const q=$('#q');if(q&&typeof onSearch==='function')q.oninput=e=>{clearTimeout(searchTimer);const value=e.target.value;searchTimer=setTimeout(()=>onSearch(value),180);};
   const c=$('#cta');if(c&&typeof ctaAction==='function')c.onclick=()=>ctaAction();}
 function afterRender(){if(!topWired)wireTop();
   root.querySelectorAll('.rv-car').forEach(carWire);
@@ -1100,11 +1116,14 @@ const MODS=[
   {k:'pay',t:'Pagos',s:'Pagos',i:'card',g:'Menú',c:()=>DB.payments.length},
   {k:'act',t:'Actividad',s:'Actividad',i:'pulse',g:'Sistema',live:true},
 ];
-let dead=false,cur='dash',bizOpen=null,bizTab='team',userQ='',userRole='all',closed=new Set(),reqF='all',payF='all',period='all-time',topQ='',empF='all',tagF='all',revF='all',actF='all';
+let dead=false,cur='dash',bizOpen=null,bizTab='team',userQ='',userRole='all',closed=new Set(),reqF='all',payF='all',period='all-time',topQ='',empF='all',tagF='all',revF='all',actF='all',moreOpen=false;
 function nav(){let g='';
-  $('#nav').innerHTML=MODS.map(m=>{const n=m.c?m.c():null;const sec=m.g!==g?(g=m.g,`<small class="nav-sec">${m.g}</small>`):'';
-    return sec+`<button class="${cur===m.k?'on':''}" data-k="${m.k}" aria-current="${cur===m.k?'page':'false'}">${ic(m.i)}<span class="lbl-l">${m.t}</span><span class="lbl-s">${m.s}</span>${m.live?'<span class="cnt live">En vivo</span>':n!==null?`<span class="cnt ${m.hot&&n>0?'hot':''}">${n}</span>`:''}</button>`}).join('');
-  $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>go(b.dataset.k));
+  const items=MODS.map((m,i)=>{const n=m.c?m.c():null;const sec=m.g!==g?(g=m.g,`<small class="nav-sec">${m.g}</small>`):'';
+    return sec+`<button class="${cur===m.k?'on':''}${i>=4?' mobile-extra':''}" data-k="${m.k}" aria-current="${cur===m.k?'page':'false'}">${ic(m.i)}<span class="lbl-l">${m.t}</span><span class="lbl-s">${m.s}</span>${m.live?'<span class="cnt live">En vivo</span>':n!==null?`<span class="cnt ${m.hot&&n>0?'hot':''}">${n}</span>`:''}</button>`}).join('');
+  $('#nav').classList.toggle('more-open',moreOpen);
+  $('#nav').innerHTML=items+`<button class="nav-more" type="button" aria-expanded="${moreOpen}" aria-label="Mostrar más secciones">${ic('plus')}<span class="lbl-s">Más</span></button>`;
+  $('#nav').querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{moreOpen=false;go(b.dataset.k);});
+  $('.nav-more').onclick=()=>{moreOpen=!moreOpen;nav();};
 }
 function go(k,opt){cur=k;bizOpen=opt??null;if(opt)bizTab='team';render();scrollTop();}
 const viewKey=()=>cur+'|'+(bizOpen||'')+'|'+(bizOpen?bizTab:'')+'|'+period;
@@ -1419,7 +1438,9 @@ function form(title,fields,save){
       $('#ms').disabled=true;
       const ok=await save(Object.fromEntries(new FormData($('#mf'))));
       if(ok!==false)close();else if($('#ms'))$('#ms').disabled=false;};
-    $('#ms').onclick=submit;$('#mf').onsubmit=submit;});
+    $('#ms').onclick=submit;$('#mf').onsubmit=submit;
+    const file=$('#mf input[type="file"]'),fileName=$('#logoFileName');
+    if(file&&fileName)file.onchange=()=>{const picked=file.files&&file.files[0];fileName.textContent=picked?picked.name:'Ningún archivo seleccionado';fileName.title=picked?picked.name:'';};});
 }
 function userForm(u){
   form(u?'Editar usuario':'Nuevo usuario',
@@ -1432,7 +1453,7 @@ function userForm(u){
 }
 function bizForm(){
   form('Nuevo negocio',
-    `<label>Nombre del negocio<input name="name" required></label><label>Dueño (jefe)${sel('ownerId',[['','Sin asignar'],...DB.users.map(u=>[u.id,u.name+' ('+u.email+')'])],'')}</label><label>Logo<input name="logo" type="file" accept="image/jpeg,image/png,image/webp"></label>`,
+    `<label>Nombre del negocio<input name="name" required></label><label>Dueño (jefe)${sel('ownerId',[['','Sin asignar'],...DB.users.map(u=>[u.id,u.name+' ('+u.email+')'])],'')}</label><div class="file-field"><span>Logo del negocio</span><div class="file-box"><span class="file-name" id="logoFileName">Ningún archivo seleccionado</span><label class="file-pick" for="logoFile">${ic('img')}Seleccionar imagen</label><input id="logoFile" name="logo" type="file" accept="image/jpeg,image/png,image/webp"></div><span class="file-help">JPG, PNG o WebP · máximo 2 MB</span></div>`,
     d=>{const name=(d.name||'').trim();if(!name){toast('El nombre del negocio es obligatorio');return false;}
       const logo=d.logo&&d.logo.size?d.logo:null;
       if(logo&&(!/^image\/(jpeg|png|webp)$/.test(logo.type)||logo.size>2*1024*1024)){toast('Usa JPG, PNG o WebP de hasta 2 MB');return false;}
@@ -1467,6 +1488,6 @@ export class ToqueAdmin extends HTMLElement {
   get theme(){ return this.#app ? this.#app.getTheme() : null; }
   set theme(v){ this.#app?.setTheme(v); }
   #unmount(){ this.#app?.destroy(); this.#app = null; this.shadowRoot.innerHTML = ''; }
-  #mount(){ this.#unmount(); this.#app = boot(this, this.shadowRoot, {data: this.#data}); }
+  #mount(){ this.#unmount(); if(!this.#data) return; this.#app = boot(this, this.shadowRoot, {data: this.#data}); }
 }
 if(!customElements.get('toque-admin')) customElements.define('toque-admin', ToqueAdmin);

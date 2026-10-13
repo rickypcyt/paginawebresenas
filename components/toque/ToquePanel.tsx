@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, createElement } from "react";
+import { useEffect, useRef } from "react";
 
 export type ToqueTag = "toque-admin" | "toque-dueno" | "toque-empleado";
 
@@ -51,7 +51,7 @@ export default function ToquePanel({
   data,
   hooks,
   onLogout,
-  theme = "dark",
+  theme = "light",
   hideHeader,
 }: ToquePanelProps) {
   const ref = useRef<HTMLElement>(null);
@@ -68,7 +68,6 @@ export default function ToquePanel({
         if (data) (el as unknown as Record<string, unknown>).data = data;
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.error("[ToquePanel]", err);
       });
 
@@ -85,9 +84,21 @@ export default function ToquePanel({
     return () => el.removeEventListener("toque:logout", handler);
   }, [onLogout]);
 
-  return createElement(tag as string, {
+  if (data == null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white text-sm text-[#6e6e73]">
+        No hay datos disponibles para este panel.
+      </div>
+    );
+  }
+
+  const props = {
     ref,
     theme,
     ...(hideHeader ? { "hide-header": "" } : {}),
-  });
+  };
+
+  if (tag === "toque-admin") return <toque-admin {...props} />;
+  if (tag === "toque-dueno") return <toque-dueno {...props} />;
+  return <toque-empleado {...props} />;
 }
